@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const handleLogoutEvent = () => logout();
         window.addEventListener('auth:logout', handleLogoutEvent);
         return () => window.removeEventListener('auth:logout', handleLogoutEvent);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- logout is excluded to prevent infinite loop since it changes on each render cycle
     }, [initAuth]);
 
     // Memoized pour éviter les re-renders inutiles des composants enfants

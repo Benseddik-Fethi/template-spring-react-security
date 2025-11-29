@@ -73,9 +73,11 @@ public class RateLimitFilter extends OncePerRequestFilter {
         String bucketKey = ip + (isAuth ? ":auth" : ":api");
 
         // Récupérer ou créer le bucket pour cette clé
+        // Note: cache.get() avec mapping function ne retourne jamais null, mais on garde
+        // une vérification défensive en cas d'erreur inattendue dans la création du bucket
         Bucket bucket = cache.get(bucketKey, key -> createBucket(limit));
 
-        if (!bucket.tryConsume(1)) {
+        if (bucket == null || !bucket.tryConsume(1)) {
             // Rate limit dépassé
             log.warn("Rate limit dépassé pour IP: {} sur {}", ip, path);
             response.setStatus(429); // Too Many Requests
