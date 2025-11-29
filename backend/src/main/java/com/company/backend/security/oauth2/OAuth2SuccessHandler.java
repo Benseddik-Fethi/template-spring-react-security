@@ -1,20 +1,19 @@
-package com.company.templatespringreactsecurity.security.oauth2;
+package com.company.backend.security.oauth2;
 
-import com.company.templatespringreactsecurity.config.JwtProperties;
-import com.company.templatespringreactsecurity.domain.*;
-import com.company.templatespringreactsecurity.repository.AuditLogRepository;
-import com.company.templatespringreactsecurity.repository.SessionRepository;
-import com.company.templatespringreactsecurity.repository.UserRepository;
-import com.company.templatespringreactsecurity.security.CookieUtils;
-import com.company.templatespringreactsecurity.service.JwtService;
-import com.company.templatespringreactsecurity.util.IpAddressResolver;
+import com.company.backend.config.JwtProperties;
+import com.company.backend.domain.*;
+import com.company.backend.repository.AuditLogRepository;
+import com.company.backend.repository.SessionRepository;
+import com.company.backend.repository.UserRepository;
+import com.company.backend.security.CookieUtils;
+import com.company.backend.service.JwtService;
+import com.company.backend.util.IpAddressResolver;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;

@@ -1,4 +1,4 @@
-package com.company.templatespringreactsecurity.security.jwt;
+package com.company.backend.security.jwt;
 
 
 import jakarta.servlet.http.HttpServletRequest;

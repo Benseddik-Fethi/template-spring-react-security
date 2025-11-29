@@ -1,6 +1,6 @@
-package com.company.templatespringreactsecurity.repository;
+package com.company.backend.repository;
 
-import com.company.templatespringreactsecurity.domain.VerificationToken;
+import com.company.backend.domain.VerificationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

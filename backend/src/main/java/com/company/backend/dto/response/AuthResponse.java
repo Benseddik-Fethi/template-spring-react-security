@@ -1,4 +1,4 @@
-package com.company.templatespringreactsecurity.dto.response;
+package com.company.backend.dto.response;
 
 /**
  * DTO de réponse d'authentification.

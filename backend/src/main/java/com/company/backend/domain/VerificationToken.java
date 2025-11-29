@@ -1,4 +1,4 @@
-package com.company.templatespringreactsecurity.domain;
+package com.company.backend.domain;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,8 +1,8 @@
-package com.company.templatespringreactsecurity.config;
+package com.company.backend.config;
 
-import com.company.templatespringreactsecurity.repository.PasswordResetTokenRepository;
-import com.company.templatespringreactsecurity.repository.SessionRepository;
-import com.company.templatespringreactsecurity.repository.VerificationTokenRepository;
+import com.company.backend.repository.PasswordResetTokenRepository;
+import com.company.backend.repository.SessionRepository;
+import com.company.backend.repository.VerificationTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;

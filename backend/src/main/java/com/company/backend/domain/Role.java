@@ -1,4 +1,4 @@
-package com.company.templatespringreactsecurity.domain;
+package com.company.backend.domain;
 
 /**
  * Rôles utilisateur dans l'application.

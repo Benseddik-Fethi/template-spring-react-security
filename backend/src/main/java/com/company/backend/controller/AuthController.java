@@ -1,14 +1,14 @@
-package com.company.templatespringreactsecurity.controller;
+package com.company.backend.controller;
 
-import com.company.templatespringreactsecurity.dto.request.LoginRequest;
-import com.company.templatespringreactsecurity.dto.request.OAuthCodeExchangeRequest;
-import com.company.templatespringreactsecurity.dto.request.RefreshTokenRequest;
-import com.company.templatespringreactsecurity.dto.request.RegisterRequest;
-import com.company.templatespringreactsecurity.dto.response.AuthResponse;
-import com.company.templatespringreactsecurity.dto.response.UserResponse;
-import com.company.templatespringreactsecurity.security.CookieUtils;
-import com.company.templatespringreactsecurity.security.CustomUserDetails;
-import com.company.templatespringreactsecurity.service.AuthService;
+import com.company.backend.dto.request.LoginRequest;
+import com.company.backend.dto.request.OAuthCodeExchangeRequest;
+import com.company.backend.dto.request.RefreshTokenRequest;
+import com.company.backend.dto.request.RegisterRequest;
+import com.company.backend.dto.response.AuthResponse;
+import com.company.backend.dto.response.UserResponse;
+import com.company.backend.security.CookieUtils;
+import com.company.backend.security.CustomUserDetails;
+import com.company.backend.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;

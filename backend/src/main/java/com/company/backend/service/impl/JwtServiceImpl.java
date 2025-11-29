@@ -1,8 +1,8 @@
-package com.company.templatespringreactsecurity.service.impl;
+package com.company.backend.service.impl;
 
-import com.company.templatespringreactsecurity.config.JwtProperties;
-import com.company.templatespringreactsecurity.domain.User;
-import com.company.templatespringreactsecurity.service.JwtService;
+import com.company.backend.config.JwtProperties;
+import com.company.backend.domain.User;
+import com.company.backend.service.JwtService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;

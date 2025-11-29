@@ -1,9 +1,9 @@
-package com.company.templatespringreactsecurity.config;
+package com.company.backend.config;
 
-import com.company.templatespringreactsecurity.domain.AuthProvider;
-import com.company.templatespringreactsecurity.domain.Role;
-import com.company.templatespringreactsecurity.domain.User;
-import com.company.templatespringreactsecurity.repository.UserRepository;
+import com.company.backend.domain.AuthProvider;
+import com.company.backend.domain.Role;
+import com.company.backend.domain.User;
+import com.company.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;

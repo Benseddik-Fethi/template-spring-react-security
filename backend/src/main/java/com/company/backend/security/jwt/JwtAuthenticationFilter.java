@@ -1,8 +1,8 @@
-package com.company.templatespringreactsecurity.security.jwt;
+package com.company.backend.security.jwt;
 
-import com.company.templatespringreactsecurity.security.CookieUtils;
-import com.company.templatespringreactsecurity.security.CustomUserDetailsService;
-import com.company.templatespringreactsecurity.service.JwtService;
+import com.company.backend.security.CookieUtils;
+import com.company.backend.security.CustomUserDetailsService;
+import com.company.backend.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

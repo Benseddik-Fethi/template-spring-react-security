@@ -1,10 +1,10 @@
-package com.company.templatespringreactsecurity.service;
+package com.company.backend.service;
 
-import com.company.templatespringreactsecurity.dto.request.ChangePasswordRequest;
-import com.company.templatespringreactsecurity.dto.request.ForgotPasswordRequest;
-import com.company.templatespringreactsecurity.dto.request.ResendVerificationRequest;
-import com.company.templatespringreactsecurity.dto.request.ResetPasswordRequest;
-import com.company.templatespringreactsecurity.dto.response.UserResponse;
+import com.company.backend.dto.request.ChangePasswordRequest;
+import com.company.backend.dto.request.ForgotPasswordRequest;
+import com.company.backend.dto.request.ResendVerificationRequest;
+import com.company.backend.dto.request.ResetPasswordRequest;
+import com.company.backend.dto.response.UserResponse;
 
 import java.util.UUID;
 

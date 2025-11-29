@@ -1,12 +1,12 @@
-package com.company.templatespringreactsecurity.controller;
+package com.company.backend.controller;
 
-import com.company.templatespringreactsecurity.dto.request.ChangePasswordRequest;
-import com.company.templatespringreactsecurity.dto.request.ForgotPasswordRequest;
-import com.company.templatespringreactsecurity.dto.request.ResendVerificationRequest;
-import com.company.templatespringreactsecurity.dto.request.ResetPasswordRequest;
-import com.company.templatespringreactsecurity.dto.response.UserResponse;
-import com.company.templatespringreactsecurity.security.CustomUserDetails;
-import com.company.templatespringreactsecurity.service.UserService;
+import com.company.backend.dto.request.ChangePasswordRequest;
+import com.company.backend.dto.request.ForgotPasswordRequest;
+import com.company.backend.dto.request.ResendVerificationRequest;
+import com.company.backend.dto.request.ResetPasswordRequest;
+import com.company.backend.dto.response.UserResponse;
+import com.company.backend.security.CustomUserDetails;
+import com.company.backend.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

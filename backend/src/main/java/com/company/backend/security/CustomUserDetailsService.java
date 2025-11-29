@@ -1,7 +1,7 @@
-package com.company.templatespringreactsecurity.security;
+package com.company.backend.security;
 
-import com.company.templatespringreactsecurity.domain.User;
-import com.company.templatespringreactsecurity.repository.UserRepository;
+import com.company.backend.domain.User;
+import com.company.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,9 +1,9 @@
-package com.company.templatespringreactsecurity.security;
+package com.company.backend.security;
 
+import com.company.backend.config.SecurityProperties;
+import com.company.backend.util.IpAddressResolver;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.company.templatespringreactsecurity.config.SecurityProperties;
-import com.company.templatespringreactsecurity.util.IpAddressResolver;
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
 import io.github.bucket4j.Refill;

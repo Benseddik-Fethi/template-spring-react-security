@@ -1,11 +1,11 @@
-package com.company.templatespringreactsecurity.config;
+package com.company.backend.config;
 
-import com.company.templatespringreactsecurity.security.RateLimitFilter;
-import com.company.templatespringreactsecurity.security.jwt.JwtAccessDeniedHandler;
-import com.company.templatespringreactsecurity.security.jwt.JwtAuthenticationEntryPoint;
-import com.company.templatespringreactsecurity.security.jwt.JwtAuthenticationFilter;
-import com.company.templatespringreactsecurity.security.oauth2.OAuth2FailureHandler;
-import com.company.templatespringreactsecurity.security.oauth2.OAuth2SuccessHandler;
+import com.company.backend.security.RateLimitFilter;
+import com.company.backend.security.jwt.JwtAccessDeniedHandler;
+import com.company.backend.security.jwt.JwtAuthenticationEntryPoint;
+import com.company.backend.security.jwt.JwtAuthenticationFilter;
+import com.company.backend.security.oauth2.OAuth2FailureHandler;
+import com.company.backend.security.oauth2.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

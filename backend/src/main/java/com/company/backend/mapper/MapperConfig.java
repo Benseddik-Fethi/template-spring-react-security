@@ -1,4 +1,4 @@
-package com.company.templatespringreactsecurity.mapper;
+package com.company.backend.mapper;
 
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;

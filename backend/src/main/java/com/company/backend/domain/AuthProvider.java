@@ -1,4 +1,4 @@
-package com.company.templatespringreactsecurity.domain;
+package com.company.backend.domain;
 
 /**
  * Fournisseurs d'authentification supportés.

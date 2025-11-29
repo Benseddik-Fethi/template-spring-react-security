@@ -1,7 +1,7 @@
-package com.company.templatespringreactsecurity.dto.response;
+package com.company.backend.dto.response;
 
-import com.company.templatespringreactsecurity.domain.Role;
-import com.company.templatespringreactsecurity.domain.User;
+import com.company.backend.domain.Role;
+import com.company.backend.domain.User;
 
 import java.time.Instant;
 import java.util.UUID;

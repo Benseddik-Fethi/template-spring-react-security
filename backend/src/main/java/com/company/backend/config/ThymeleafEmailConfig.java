@@ -1,4 +1,4 @@
-package com.company.templatespringreactsecurity.config;
+package com.company.backend.config;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;

@@ -1,6 +1,6 @@
-package com.company.templatespringreactsecurity.repository;
+package com.company.backend.repository;
 
-import com.company.templatespringreactsecurity.domain.AuditLog;
+import com.company.backend.domain.AuditLog;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

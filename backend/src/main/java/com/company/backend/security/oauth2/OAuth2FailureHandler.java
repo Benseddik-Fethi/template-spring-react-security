@@ -1,4 +1,4 @@
-package com.company.templatespringreactsecurity.security.oauth2;
+package com.company.backend.security.oauth2;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

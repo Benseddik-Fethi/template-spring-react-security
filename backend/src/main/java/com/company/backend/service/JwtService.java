@@ -1,6 +1,6 @@
-package com.company.templatespringreactsecurity.service;
+package com.company.backend.service;
 
-import com.company.templatespringreactsecurity.domain.User;
+import com.company.backend.domain.User;
 
 import java.util.Optional;
 import java.util.UUID;

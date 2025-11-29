@@ -1,4 +1,4 @@
-package com.company.templatespringreactsecurity.service;
+package com.company.backend.service;
 
 /**
  * Service d'envoi d'emails.

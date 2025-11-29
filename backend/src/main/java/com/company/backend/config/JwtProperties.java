@@ -1,4 +1,4 @@
-package com.company.templatespringreactsecurity.config;
+package com.company.backend.config;
 
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.boot.context.properties.ConfigurationProperties;

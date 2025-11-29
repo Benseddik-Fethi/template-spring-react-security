@@ -184,7 +184,7 @@ spring.mail:
 logging:
   level:
     root: INFO
-    com.company.templatespringreactsecurity: DEBUG
+    com.company.backend: DEBUG
     org.springframework.security: INFO
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE

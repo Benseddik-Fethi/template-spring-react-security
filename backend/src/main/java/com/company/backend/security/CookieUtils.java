@@ -1,6 +1,6 @@
-package com.company.templatespringreactsecurity.security;
+package com.company.backend.security;
 
-import com.company.templatespringreactsecurity.config.JwtProperties;
+import com.company.backend.config.JwtProperties;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

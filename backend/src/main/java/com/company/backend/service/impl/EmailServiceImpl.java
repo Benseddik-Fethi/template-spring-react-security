@@ -1,6 +1,6 @@
-package com.company.templatespringreactsecurity.service.impl;
+package com.company.backend.service.impl;
 
-import com.company.templatespringreactsecurity.service.EmailService;
+import com.company.backend.service.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;

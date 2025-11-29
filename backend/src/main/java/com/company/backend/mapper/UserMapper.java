@@ -1,7 +1,7 @@
-package com.company.templatespringreactsecurity.mapper;
+package com.company.backend.mapper;
 
-import com.company.templatespringreactsecurity.domain.User;
-import com.company.templatespringreactsecurity.dto.response.UserResponse;
+import com.company.backend.domain.User;
+import com.company.backend.dto.response.UserResponse;
 import org.mapstruct.Mapper;
 
 @Mapper(config = MapperConfig.class)
