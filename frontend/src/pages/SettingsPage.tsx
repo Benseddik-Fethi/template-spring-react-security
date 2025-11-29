@@ -29,10 +29,24 @@ export default function SettingsPage() {
         return theme === "dark" || (theme === "system" && isSystemDark);
     }, [theme]);
 
+    // Memoize l'état du thème automatique
+    const isSystemTheme = useMemo(() => theme === "system", [theme]);
+
     // Memoize le handler pour éviter les recréations
     const toggleTheme = useCallback((checked: boolean) => {
         const newTheme = checked ? "dark" : "light";
         setTheme(newTheme);
+    }, [setTheme]);
+
+    // Handler pour le thème automatique
+    const toggleSystemTheme = useCallback((checked: boolean) => {
+        if (checked) {
+            setTheme("system");
+        } else {
+            // Définit le thème sur le thème système actuel
+            const isSystemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+            setTheme(isSystemDark ? "dark" : "light");
+        }
     }, [setTheme]);
     return (
         <div className="space-y-6 pb-10">
@@ -153,7 +167,10 @@ export default function SettingsPage() {
                             <div className="space-y-6">
                                 {/* Option Dark Mode */}
                                 <div
-                                    className="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-950 rounded-2xl border border-gray-100 dark:border-slate-800">
+                                    className={cn(
+                                        "flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-950 rounded-2xl border border-gray-100 dark:border-slate-800",
+                                        isSystemTheme && "opacity-50 cursor-not-allowed"
+                                    )}>
                                     <div className="flex items-center gap-4">
                                         <div
                                             className={cn("w-12 h-12 rounded-xl flex items-center justify-center transition-colors",
@@ -164,30 +181,44 @@ export default function SettingsPage() {
                                         <div>
                                             <p className="font-bold text-gray-800 dark:text-white">Mode Sombre</p>
                                             <p className="text-sm text-gray-500 dark:text-gray-400">
-                                                {isDarkMode ? "Activé (Thème sombre)" : "Désactivé (Thème clair)"}
+                                                {isSystemTheme
+                                                    ? "Contrôlé par le système"
+                                                    : isDarkMode ? "Activé (Thème sombre)" : "Désactivé (Thème clair)"}
                                             </p>
                                         </div>
                                     </div>
                                     <Switch
+                                        checked={isDarkMode}
                                         onCheckedChange={toggleTheme}
+                                        disabled={isSystemTheme}
                                         className="data-[state=checked]:bg-indigo-500 data-[state=unchecked]:bg-gray-200"
                                     />
                                 </div>
 
                                 <div
-                                    className="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-950 rounded-2xl border border-gray-100 dark:border-slate-800 opacity-50 cursor-not-allowed">
+                                    className="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-950 rounded-2xl border border-gray-100 dark:border-slate-800">
                                     <div className="flex items-center gap-4">
                                         <div
-                                            className="w-12 h-12 rounded-xl bg-gray-200 flex items-center justify-center text-gray-500">
+                                            className={cn(
+                                                "w-12 h-12 rounded-xl flex items-center justify-center transition-colors",
+                                                isSystemTheme ? "bg-indigo-100 text-indigo-600" : "bg-gray-200 text-gray-500"
+                                            )}>
                                             <Palette size={24}/>
                                         </div>
                                         <div>
                                             <p className="font-bold text-gray-800 dark:text-white">Thème automatique</p>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">Synchroniser avec le
-                                                système</p>
+                                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                                                {isSystemTheme
+                                                    ? "Le thème suit le système"
+                                                    : "Synchroniser avec le système"}
+                                            </p>
                                         </div>
                                     </div>
-                                    <Switch disabled checked={false}/>
+                                    <Switch
+                                        checked={isSystemTheme}
+                                        onCheckedChange={toggleSystemTheme}
+                                        className="data-[state=checked]:bg-indigo-500 data-[state=unchecked]:bg-gray-200"
+                                    />
                                 </div>
                             </div>
                         </Card>
