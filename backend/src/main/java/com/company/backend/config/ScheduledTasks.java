@@ -118,22 +118,25 @@ public class ScheduledTasks {
      * 🛡️ SÉCURITÉ : Nettoyage des tokens de réinitialisation de mot de passe expirés.
      *
      * Exécution : Tous les jours à 1h45 du matin
-     * Objectif : Supprimer les tokens de reset expirés (1h)
+     * Objectif : Supprimer les tokens de reset expirés (1h) et les tokens utilisés
      *
      * CRON : "0 45 1 * * ?" = seconde 0, minute 45, heure 1, tous les jours
      */
     @Scheduled(cron = "0 45 1 * * ?")
     @Transactional
     public void cleanupExpiredPasswordResetTokens() {
-        log.info("🧹 Démarrage du nettoyage des tokens de reset de mot de passe expirés...");
+        log.info("🧹 Démarrage du nettoyage des tokens de reset de mot de passe...");
 
         try {
-            int deletedCount = passwordResetTokenRepository.deleteExpiredTokens(Instant.now());
+            int expiredCount = passwordResetTokenRepository.deleteExpiredTokens(Instant.now());
+            int usedCount = passwordResetTokenRepository.deleteUsedTokens();
 
-            if (deletedCount > 0) {
-                log.info("✅ Tokens de reset expirés supprimés: {}", deletedCount);
+            int totalDeleted = expiredCount + usedCount;
+            if (totalDeleted > 0) {
+                log.info("✅ Tokens de reset supprimés: {} (expirés: {}, utilisés: {})", 
+                        totalDeleted, expiredCount, usedCount);
             } else {
-                log.debug("✅ Aucun token de reset expiré à supprimer");
+                log.debug("✅ Aucun token de reset à supprimer");
             }
         } catch (Exception e) {
             log.error("❌ Erreur lors du nettoyage des tokens de reset", e);

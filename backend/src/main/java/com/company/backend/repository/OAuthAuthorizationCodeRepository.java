@@ -18,9 +18,11 @@ public interface OAuthAuthorizationCodeRepository extends JpaRepository<OAuthAut
 
     /**
      * Recherche un code valide (non expiré et non utilisé).
+     * Utilise JOIN FETCH pour charger l'utilisateur en une seule requête (évite N+1).
      */
     @Query("""
         SELECT c FROM OAuthAuthorizationCode c 
+        JOIN FETCH c.user
         WHERE c.code = :code 
         AND c.used = false 
         AND c.expiresAt > :now

@@ -63,12 +63,19 @@ public class RateLimitFilter extends OncePerRequestFilter {
         String path = request.getServletPath();
 
         // Déterminer la limite selon le type d'endpoint
-        int limit = isAuthEndpoint(path)
+        boolean isAuth = isAuthEndpoint(path);
+        int limit = isAuth
                 ? securityProperties.rateLimit().authRequestsPerMinute()
                 : securityProperties.rateLimit().requestsPerMinute();
 
-        // Récupérer ou créer le bucket pour cette IP
-        Bucket bucket = cache.get(ip, key -> createBucket(limit));
+        // Utiliser une clé composite (IP + type d'endpoint) pour appliquer des limites différentes
+        // aux endpoints d'authentification et aux autres endpoints
+        String bucketKey = ip + (isAuth ? ":auth" : ":api");
+
+        // Récupérer ou créer le bucket pour cette clé
+        // Note: cache.get() avec mapping function ne retourne jamais null, mais on garde
+        // une vérification défensive en cas d'erreur inattendue dans la création du bucket
+        Bucket bucket = cache.get(bucketKey, key -> createBucket(limit));
 
         if (bucket == null || !bucket.tryConsume(1)) {
             // Rate limit dépassé

@@ -40,6 +40,18 @@ public class JwtServiceImpl implements JwtService {
     private static final String TOKEN_TYPE_ACCESS = "access";
     private static final String TOKEN_TYPE_REFRESH = "refresh";
 
+    /**
+     * ThreadLocal pour réutiliser MessageDigest par thread (performance).
+     * MessageDigest n'est pas thread-safe, donc on utilise ThreadLocal.
+     */
+    private static final ThreadLocal<MessageDigest> SHA256_DIGEST = ThreadLocal.withInitial(() -> {
+        try {
+            return MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException("SHA-256 not available", e);
+        }
+    });
+
     private final SecretKey secretKey;
     private final JwtProperties jwtProperties;
     private final JwtParser jwtParser;
@@ -163,14 +175,10 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public String hashToken(String refreshToken) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(refreshToken.getBytes(StandardCharsets.UTF_8));
-            return HexFormat.of().formatHex(hash);
-        } catch (NoSuchAlgorithmException e) {
-            // SHA-256 est toujours disponible en Java
-            throw new IllegalStateException("SHA-256 not available", e);
-        }
+        MessageDigest digest = SHA256_DIGEST.get();
+        digest.reset(); // Réinitialiser pour une utilisation réutilisable
+        byte[] hash = digest.digest(refreshToken.getBytes(StandardCharsets.UTF_8));
+        return HexFormat.of().formatHex(hash);
     }
 
     /**
