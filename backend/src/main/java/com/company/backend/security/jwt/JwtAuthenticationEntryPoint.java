@@ -19,7 +19,14 @@ import java.util.Map;
 
 /**
  * Point d'entrée pour les erreurs d'authentification.
- * Retourne une réponse JSON 401 au lieu d'une redirection.
+ * <p>
+ * Retourne une réponse JSON 401 (Unauthorized) au lieu d'une redirection
+ * lorsqu'un utilisateur non authentifié tente d'accéder à une ressource protégée.
+ * </p>
+ *
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @Component
 @RequiredArgsConstructor
@@ -28,6 +35,14 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     private final ObjectMapper objectMapper;
 
+    /**
+     * Gère les erreurs d'authentification.
+     *
+     * @param request       la requête HTTP
+     * @param response      la réponse HTTP
+     * @param authException l'exception d'authentification
+     * @throws IOException en cas d'erreur d'écriture
+     */
     @Override
     public void commence(
             HttpServletRequest request,

@@ -18,8 +18,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Handler pour les erreurs d'accès refusé (403).
- * Retourne une réponse JSON au lieu d'une page d'erreur.
+ * Handler pour les erreurs d'accès refusé (403 Forbidden).
+ * <p>
+ * Retourne une réponse JSON au lieu d'une page d'erreur HTML
+ * lorsqu'un utilisateur authentifié n'a pas les permissions nécessaires.
+ * </p>
+ *
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @Component
 @RequiredArgsConstructor
@@ -28,6 +35,15 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 
     private final ObjectMapper objectMapper;
 
+    /**
+     * Gère les erreurs d'accès refusé.
+     *
+     * @param request               la requête HTTP
+     * @param response              la réponse HTTP
+     * @param accessDeniedException l'exception d'accès refusé
+     * @throws IOException      en cas d'erreur d'écriture
+     * @throws ServletException en cas d'erreur servlet
+     */
     @Override
     public void handle(
             HttpServletRequest request,

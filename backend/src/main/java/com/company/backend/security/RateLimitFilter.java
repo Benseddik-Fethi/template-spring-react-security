@@ -22,15 +22,16 @@ import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 🛡️ SÉCURITÉ NIVEAU BANCAIRE : Rate Limiting par IP.
+ * Filtre de rate limiting par adresse IP.
+ * <p>
+ * Protège l'application contre les attaques DDoS au niveau applicatif,
+ * le brute force distribué et l'abus d'API. Utilise l'algorithme Token Bucket
+ * avec cache Caffeine pour le stockage en mémoire.
+ * </p>
  *
- * Protection contre :
- * - DDoS application-level
- * - Brute force distribué
- * - Abus d'API
- *
- * Utilise Bucket4j (Token Bucket Algorithm) avec cache Caffeine.
- * Pour production : remplacer Caffeine par Redis (cache distribué).
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @Component
 @RequiredArgsConstructor
@@ -40,8 +41,6 @@ public class RateLimitFilter extends OncePerRequestFilter {
     private final SecurityProperties securityProperties;
     private final IpAddressResolver ipAddressResolver;
 
-    // Cache en mémoire (Caffeine) : IP -> Bucket
-    // ⚠️ En production : utiliser Redis pour un cache distribué entre instances
     private final Cache<String, Bucket> cache = Caffeine.newBuilder()
             .expireAfterAccess(1, TimeUnit.HOURS)
             .maximumSize(100_000)
@@ -62,36 +61,28 @@ public class RateLimitFilter extends OncePerRequestFilter {
         String ip = ipAddressResolver.resolveClientIp(request);
         String path = request.getServletPath();
 
-        // Déterminer la limite selon le type d'endpoint
         boolean isAuth = isAuthEndpoint(path);
         int limit = isAuth
                 ? securityProperties.rateLimit().authRequestsPerMinute()
                 : securityProperties.rateLimit().requestsPerMinute();
 
-        // Utiliser une clé composite (IP + type d'endpoint) pour appliquer des limites différentes
-        // aux endpoints d'authentification et aux autres endpoints
         String bucketKey = ip + (isAuth ? ":auth" : ":api");
 
-        // Récupérer ou créer le bucket pour cette clé
-        // Note: cache.get() avec mapping function ne retourne jamais null, mais on garde
-        // une vérification défensive en cas d'erreur inattendue dans la création du bucket
         Bucket bucket = cache.get(bucketKey, key -> createBucket(limit));
 
         if (bucket == null || !bucket.tryConsume(1)) {
-            // Rate limit dépassé
             log.warn("Rate limit dépassé pour IP: {} sur {}", ip, path);
-            response.setStatus(429); // Too Many Requests
+            response.setStatus(429);
             response.setContentType("application/json");
             response.getWriter().write(
-                String.format(
-                    "{\"error\":\"Too Many Requests\",\"message\":\"Limite de %d requêtes/minute dépassée. Réessayez plus tard.\"}",
-                    limit
-                )
+                    String.format(
+                            "{\"error\":\"Too Many Requests\",\"message\":\"Limite de %d requêtes/minute dépassée. Réessayez plus tard.\"}",
+                            limit
+                    )
             );
             return;
         }
 
-        // Ajouter header avec nombre de requêtes restantes
         long remaining = bucket.getAvailableTokens();
         response.setHeader("X-RateLimit-Limit", String.valueOf(limit));
         response.setHeader("X-RateLimit-Remaining", String.valueOf(remaining));
@@ -101,11 +92,14 @@ public class RateLimitFilter extends OncePerRequestFilter {
 
     /**
      * Crée un bucket avec la limite spécifiée (Token Bucket Algorithm).
+     *
+     * @param requestsPerMinute le nombre de requêtes autorisées par minute
+     * @return le bucket configuré
      */
     private Bucket createBucket(int requestsPerMinute) {
         Bandwidth limit = Bandwidth.classic(
-            requestsPerMinute,
-            Refill.intervally(requestsPerMinute, Duration.ofMinutes(1))
+                requestsPerMinute,
+                Refill.intervally(requestsPerMinute, Duration.ofMinutes(1))
         );
         return Bucket.builder()
                 .addLimit(limit)
@@ -113,19 +107,21 @@ public class RateLimitFilter extends OncePerRequestFilter {
     }
 
     /**
-     * Détermine si l'endpoint est un endpoint d'authentification (limite plus stricte).
+     * Détermine si l'endpoint est un endpoint d'authentification.
+     *
+     * @param path le chemin de la requête
+     * @return {@code true} si c'est un endpoint d'authentification
      */
     private boolean isAuthEndpoint(String path) {
         return path.startsWith("/api/v1/auth/login") ||
-               path.startsWith("/api/v1/auth/register") ||
-               path.startsWith("/api/v1/auth/refresh") ||
-               path.startsWith("/api/v1/users/forgot-password") ||
-               path.startsWith("/api/v1/users/reset-password");
+                path.startsWith("/api/v1/auth/register") ||
+                path.startsWith("/api/v1/auth/refresh") ||
+                path.startsWith("/api/v1/users/forgot-password") ||
+                path.startsWith("/api/v1/users/reset-password");
     }
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        // Ne pas appliquer le rate limiting sur les endpoints de santé
         String path = request.getServletPath();
         return path.startsWith("/actuator/health");
     }

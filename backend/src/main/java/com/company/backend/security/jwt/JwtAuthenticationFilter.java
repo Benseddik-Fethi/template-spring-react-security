@@ -23,12 +23,15 @@ import java.util.UUID;
 
 /**
  * Filtre JWT pour intercepter et valider les tokens d'authentification.
+ * <p>
+ * Exécuté une seule fois par requête pour extraire et valider le token JWT,
+ * puis configurer le contexte de sécurité Spring si l'authentification réussit.
+ * Le token est lu depuis le cookie HTTP-only ou le header Authorization.
+ * </p>
  *
- * 🛡️ Sécurité :
- * - Exécuté une seule fois par requête (OncePerRequestFilter)
- * - Lit le token depuis : Cookie HTTP-only OU Header Authorization
- * - Valide le token avant de définir l'authentification
- * - Vérifie que c'est un access token (pas un refresh token)
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @Component
 @RequiredArgsConstructor
@@ -63,14 +66,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     /**
-     * Extrait le token JWT : d'abord depuis le cookie, sinon depuis le header.
+     * Extrait le token JWT de la requête.
+     * <p>
+     * Priorité de lecture :
+     * <ol>
+     *   <li>Cookie HTTP-only (plus sécurisé)</li>
+     *   <li>Header Authorization Bearer (fallback pour clients sans cookies)</li>
+     * </ol>
+     * </p>
      *
-     * Priorité :
-     * 1. Cookie HTTP-only (plus sécurisé)
-     * 2. Header Authorization: Bearer xxx (pour les clients qui ne supportent pas les cookies)
+     * @param request la requête HTTP
+     * @return le token JWT ou null
      */
     private String extractTokenFromRequest(HttpServletRequest request) {
-        // 1. Essayer d'abord le cookie HTTP-only
         String token = cookieUtils.getAccessTokenFromCookie(request).orElse(null);
 
         if (token != null) {
@@ -78,7 +86,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return token;
         }
 
-        // 2. Fallback sur le header Authorization
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
             log.trace("Token extrait du header Authorization");
@@ -89,7 +96,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     /**
-     * Authentifie l'utilisateur à partir du token JWT.
+     * Authentifie l'utilisateur à partir du token JWT valide.
+     *
+     * @param token   le token JWT
+     * @param request la requête HTTP
      */
     private void authenticateWithToken(String token, HttpServletRequest request) {
         if (!jwtService.isTokenValid(token)) {

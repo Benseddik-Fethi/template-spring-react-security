@@ -12,11 +12,16 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 
 /**
- * Handler d'échec OAuth2.
+ * Handler d'échec pour l'authentification OAuth2.
+ * <p>
  * Redirige vers le frontend avec un message d'erreur générique.
+ * Les détails techniques ne sont pas exposés dans l'URL pour des raisons
+ * de sécurité (protection contre la fuite d'informations).
+ * </p>
  *
- * 🛡️ SÉCURITÉ : Ne pas exposer les détails techniques de l'exception dans l'URL
- * (visibles dans historique navigateur, logs proxy, headers Referer).
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @Component
 @Slf4j
@@ -25,6 +30,14 @@ public class OAuth2FailureHandler extends SimpleUrlAuthenticationFailureHandler 
     @Value("${app.security.cors.allowed-origins:http://localhost:5173}")
     private String frontendUrl;
 
+    /**
+     * Gère l'échec de l'authentification OAuth2.
+     *
+     * @param request   la requête HTTP
+     * @param response  la réponse HTTP
+     * @param exception l'exception d'authentification
+     * @throws IOException en cas d'erreur de redirection
+     */
     @Override
     public void onAuthenticationFailure(
             HttpServletRequest request,
@@ -32,13 +45,11 @@ public class OAuth2FailureHandler extends SimpleUrlAuthenticationFailureHandler 
             AuthenticationException exception
     ) throws IOException {
 
-        // Logger les détails complets côté serveur (avec stacktrace si nécessaire)
         log.error("OAuth2 authentication failed - Type: {} - Message: {}",
                 exception.getClass().getSimpleName(),
                 exception.getMessage());
         log.debug("OAuth2 failure details", exception);
 
-        // Redirection avec message générique (pas d'exposition de détails techniques)
         String targetUrl = UriComponentsBuilder.fromUriString(frontendUrl + "/auth/error")
                 .queryParam("error", "oauth2_error")
                 .queryParam("message", "L'authentification a échoué. Veuillez réessayer.")
