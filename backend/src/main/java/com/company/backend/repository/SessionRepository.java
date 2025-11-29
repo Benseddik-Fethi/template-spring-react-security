@@ -19,9 +19,11 @@ public interface SessionRepository extends JpaRepository<Session, UUID> {
 
     /**
      * Recherche une session active par hash du refresh token.
+     * Utilise JOIN FETCH pour charger l'utilisateur en une seule requête (évite N+1).
      */
     @Query("""
         SELECT s FROM Session s 
+        JOIN FETCH s.user
         WHERE s.refreshTokenHash = :tokenHash 
         AND s.revokedAt IS NULL 
         AND s.expiresAt > :now

@@ -18,9 +18,11 @@ public interface PasswordResetTokenRepository extends JpaRepository<PasswordRese
 
     /**
      * Recherche un token valide (non expiré et non utilisé).
+     * Utilise JOIN FETCH pour charger l'utilisateur en une seule requête (évite N+1).
      */
     @Query("""
         SELECT t FROM PasswordResetToken t 
+        JOIN FETCH t.user
         WHERE t.token = :token 
         AND t.used = false 
         AND t.expiresAt > :now

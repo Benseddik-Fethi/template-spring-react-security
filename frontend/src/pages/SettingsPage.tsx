@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useCallback, useMemo, useState} from "react";
 import {useAuth} from "@/context/AuthContext";
 import {useTheme} from "@/components/ThemeProvider";
 import {Card} from "@/components/ui/card";
@@ -9,33 +9,31 @@ import {Bell, Camera, HelpCircle, LogOut, Mail, MapPin, Moon, Palette, Phone, Sh
 import {cn} from "@/lib/utils";
 import {Input} from "@/components/ui/input";
 
+// Définir les items du menu en dehors du composant pour éviter les recréations
+const menuItems = [
+    {id: "profile", label: "Mon profil", icon: User},
+    {id: "notifications", label: "Notifications", icon: Bell},
+    {id: "security", label: "Sécurité", icon: Shield},
+    {id: "appearance", label: "Apparence", icon: Palette},
+    {id: "help", label: "Aide", icon: HelpCircle},
+] as const;
+
 export default function SettingsPage() {
     const {user, logout} = useAuth();
     const {theme, setTheme} = useTheme();
     const [activeSection, setActiveSection] = useState("profile");
 
-    const isSystemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const isDarkMode = theme === "dark" || (theme === "system" && isSystemDark);
-
-    const toggleTheme = (checked: boolean) => {
-        console.log("1. [SettingsPage] Clic détecté ! Valeur reçue :", checked);
-
-        const newTheme = checked ? "dark" : "light";
-        console.log("2. [SettingsPage] J'envoie ce thème au Provider :", newTheme);
-
-        setTheme(newTheme);
-    };
-
-    const menuItems = [
-        {id: "profile", label: "Mon profil", icon: User},
-        {id: "notifications", label: "Notifications", icon: Bell},
-        {id: "security", label: "Sécurité", icon: Shield},
-        {id: "appearance", label: "Apparence", icon: Palette},
-        {id: "help", label: "Aide", icon: HelpCircle},
-    ];
-    useEffect(() => {
-        console.log("🔄 Le thème a été mis à jour :", theme);
+    // Memoize le calcul du mode sombre pour éviter les recalculs inutiles
+    const isDarkMode = useMemo(() => {
+        const isSystemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        return theme === "dark" || (theme === "system" && isSystemDark);
     }, [theme]);
+
+    // Memoize le handler pour éviter les recréations
+    const toggleTheme = useCallback((checked: boolean) => {
+        const newTheme = checked ? "dark" : "light";
+        setTheme(newTheme);
+    }, [setTheme]);
     return (
         <div className="space-y-6 pb-10">
             <div>

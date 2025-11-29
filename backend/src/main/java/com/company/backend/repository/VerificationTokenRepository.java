@@ -18,9 +18,11 @@ public interface VerificationTokenRepository extends JpaRepository<VerificationT
 
     /**
      * Recherche un token valide (non expiré).
+     * Utilise JOIN FETCH pour charger l'utilisateur en une seule requête (évite N+1).
      */
     @Query("""
         SELECT t FROM VerificationToken t 
+        JOIN FETCH t.user
         WHERE t.token = :token 
         AND t.expiresAt > :now
     """)
