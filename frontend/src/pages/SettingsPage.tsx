@@ -56,8 +56,8 @@ export default function SettingsPage() {
                                     className={cn(
                                         "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-sm font-medium",
                                         isActive
-                                            ? "bg-gradient-to-r from-rose-400 to-pink-400 text-white shadow-md"
-                                            : "text-gray-600 dark:text-gray-300 hover:bg-rose-50 dark:hover:bg-slate-800"
+                                            ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-md"
+                                            : "text-gray-600 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-slate-800"
                                     )}
                                 >
                                     <Icon size={18}/>
@@ -89,11 +89,11 @@ export default function SettingsPage() {
                                 className="flex items-center gap-6 mb-8 pb-8 border-b border-gray-100 dark:border-slate-800">
                                 <div className="relative">
                                     <div
-                                        className="w-24 h-24 bg-gradient-to-br from-amber-300 to-rose-300 rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-lg">
+                                        className="w-24 h-24 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-lg">
                                         {user?.firstName?.charAt(0)}
                                     </div>
                                     <button
-                                        className="absolute -bottom-1 -right-1 w-8 h-8 bg-white dark:bg-slate-800 rounded-full shadow-md flex items-center justify-center text-gray-400 hover:text-rose-500 transition-colors">
+                                        className="absolute -bottom-1 -right-1 w-8 h-8 bg-white dark:bg-slate-800 rounded-full shadow-md flex items-center justify-center text-gray-400 hover:text-indigo-500 transition-colors">
                                         <Camera size={14}/>
                                     </button>
                                 </div>
@@ -101,7 +101,7 @@ export default function SettingsPage() {
                                     <h3 className="font-bold text-gray-800 dark:text-white text-xl">{user?.firstName} {user?.lastName}</h3>
                                     <p className="text-gray-500 dark:text-gray-400">{user?.email}</p>
                                     <span
-                                        className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-100 text-rose-800 mt-2">
+                                        className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 mt-2">
                     Propriétaire
                   </span>
                                 </div>
@@ -147,7 +147,7 @@ export default function SettingsPage() {
                         <Card
                             className="p-8 animate-in fade-in slide-in-from-right-4 dark:bg-slate-900 border-white/10">
                             <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-6 flex items-center gap-2">
-                                <Palette className="text-rose-500"/> Apparence
+                                <Palette className="text-indigo-500"/> Apparence
                             </h2>
 
                             <div className="space-y-6">

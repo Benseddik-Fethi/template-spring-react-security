@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronRight, Eye, EyeOff, Lock, Mail, PawPrint } from "lucide-react";
+import { ChevronRight, Eye, EyeOff, Lock, Mail, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -39,14 +39,14 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-amber-50 flex items-center justify-center p-6 relative overflow-hidden dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100 flex items-center justify-center p-6 relative overflow-hidden dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
             <Card className="w-full max-w-md relative z-10 border-white/50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm shadow-xl dark:border-slate-800">
                 <CardHeader className="text-center pt-10">
-                    <div className="mx-auto w-20 h-20 bg-gradient-to-br from-rose-400 to-pink-500 rounded-3xl mb-4 flex items-center justify-center shadow-lg shadow-rose-200 dark:shadow-none">
-                        <PawPrint size={40} className="text-white"/>
+                    <div className="mx-auto w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-3xl mb-4 flex items-center justify-center shadow-lg shadow-indigo-200 dark:shadow-none">
+                        <Shield size={40} className="text-white"/>
                     </div>
-                    <CardTitle className="text-3xl font-bold text-rose-500 mb-1">
-                        PetCare
+                    <CardTitle className="text-3xl font-bold text-indigo-600 mb-1">
+                        Mon App
                     </CardTitle>
                     <CardDescription className="text-gray-500 dark:text-gray-400 font-medium">
                         Bienvenue ! Connectez-vous pour continuer
@@ -59,7 +59,7 @@ export default function LoginPage() {
                             <Label className="text-gray-600 dark:text-gray-300 font-medium pl-1">Email</Label>
                             <Input
                                 icon={Mail}
-                                className="h-12 bg-slate-50 dark:bg-slate-950 border-transparent focus:bg-white dark:focus:bg-slate-900 focus:border-rose-200 rounded-xl pl-11 text-gray-600 dark:text-white shadow-sm"
+                                className="h-12 bg-slate-50 dark:bg-slate-950 border-transparent focus:bg-white dark:focus:bg-slate-900 focus:border-indigo-200 rounded-xl pl-11 text-gray-600 dark:text-white shadow-sm"
                                 placeholder="votre@email.com"
                                 type="email"
                                 value={email}
@@ -72,7 +72,7 @@ export default function LoginPage() {
                             <div className="relative">
                                 <Input
                                     icon={Lock}
-                                    className="h-12 bg-slate-50 dark:bg-slate-950 border-transparent focus:bg-white dark:focus:bg-slate-900 focus:border-rose-200 rounded-xl pl-11 pr-10 text-gray-600 dark:text-white shadow-sm"
+                                    className="h-12 bg-slate-50 dark:bg-slate-950 border-transparent focus:bg-white dark:focus:bg-slate-900 focus:border-indigo-200 rounded-xl pl-11 pr-10 text-gray-600 dark:text-white shadow-sm"
                                     placeholder="••••••••"
                                     type={showPassword ? "text" : "password"}
                                     value={password}
@@ -90,16 +90,16 @@ export default function LoginPage() {
 
                         <div className="flex items-center justify-between pt-1">
                             <div className="flex items-center space-x-2">
-                                <Checkbox id="remember" className="border-gray-300 data-[state=checked]:bg-rose-500" />
+                                <Checkbox id="remember" className="border-gray-300 data-[state=checked]:bg-indigo-500" />
                                 <Label htmlFor="remember" className="text-sm text-gray-500 dark:text-gray-400 cursor-pointer">Se souvenir de moi</Label>
                             </div>
-                            <Link to="/auth/forgot-password" className="text-sm text-rose-500 hover:text-rose-600 font-semibold">
+                            <Link to="/auth/forgot-password" className="text-sm text-indigo-500 hover:text-indigo-600 font-semibold">
                                 Mot de passe oublié ?
                             </Link>
                         </div>
 
                         <Button
-                            className="w-full h-14 text-base font-bold rounded-2xl bg-gradient-to-r from-[#FF6B6B] to-[#FF8E8E] hover:opacity-90 shadow-md shadow-rose-100 dark:shadow-none text-white"
+                            className="w-full h-14 text-base font-bold rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90 shadow-md shadow-indigo-100 dark:shadow-none text-white"
                             onClick={handleLogin}>
                             Se connecter <ChevronRight className="ml-2 h-5 w-5"/>
                         </Button>
@@ -121,7 +121,7 @@ export default function LoginPage() {
                     </div>
 
                     <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6 font-medium">
-                        Pas encore de compte ? <Link to="/register" className="text-rose-500 font-bold hover:underline ml-1">Créer un compte</Link>
+                        Pas encore de compte ? <Link to="/register" className="text-indigo-500 font-bold hover:underline ml-1">Créer un compte</Link>
                     </p>
                 </CardContent>
             </Card>
