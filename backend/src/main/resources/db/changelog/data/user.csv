@@ -1,0 +1,3 @@
+id;email;password_hash;first_name;last_name;role;provider;email_verified;created_at;updated_at;failed_login_attempts
+550e8400-e29b-41d4-a716-446655440000;admin@template.com;$argon2id$v=19$m=65536,t=4,p=4$U29tZVNhbHQ$W9X...;Admin;System;ADMIN;EMAIL;true;now();now();0
+550e8400-e29b-41d4-a716-446655440001;user@template.com;$argon2id$v=19$m=65536,t=4,p=4$U29tZVNhbHQ$W9X...;Jean;Dupont;USER;EMAIL;true;now();now();0

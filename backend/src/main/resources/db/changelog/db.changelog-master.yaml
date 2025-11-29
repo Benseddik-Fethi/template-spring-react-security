@@ -1,0 +1,34 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# LIQUIBASE - Master Changelog
+# Gestion versionnée du schéma de base de données
+# ═══════════════════════════════════════════════════════════════════════════════
+
+databaseChangeLog:
+  # ─────────────────────────────────────────────────────────────────────────────
+  # CORE - Utilisateurs et Authentification
+  # ─────────────────────────────────────────────────────────────────────────────
+  - include:
+      file: db/changelog/v1/001-create-users-table.yaml
+  - include:
+      file: db/changelog/v1/002-create-sessions-table.yaml
+  - include:
+      file: db/changelog/v1/003-create-audit-logs-table.yaml
+  - include:
+      file: db/changelog/v1/004-create-accounts-table.yaml
+  - include:
+      file: db/changelog/v1/005-create-verification-tokens-table.yaml
+  - include:
+      file: db/changelog/v1/006-create-password-reset-tokens-table.yaml
+
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # ALTERATIONS
+  # ─────────────────────────────────────────────────────────────────────────────
+  - include:
+      file: db/changelog/v1/007-add-email-verified-to-users.yaml
+  - include:
+      file: db/changelog/v1/008-create-oauth-authorization-codes-table.yaml
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # TEST DATA (dev/test context only)
+  # ─────────────────────────────────────────────────────────────────────────────
