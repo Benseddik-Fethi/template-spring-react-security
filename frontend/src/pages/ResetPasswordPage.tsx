@@ -37,7 +37,7 @@ export default function ResetPasswordPage() {
             return;
         }
 
-        api.get(`/users/reset-password/validate?token=${token}`)
+        api.get(`/users/reset-password/validate?token=${encodeURIComponent(token)}`)
             .then((response) => {
                 if (response.data.valid) {
                     setStatus("valid");
