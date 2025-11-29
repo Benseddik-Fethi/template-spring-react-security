@@ -20,6 +20,18 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+/**
+ * Contrôleur REST pour l'authentification.
+ * <p>
+ * Expose les endpoints d'inscription, connexion, déconnexion,
+ * rafraîchissement des tokens et récupération de l'utilisateur courant.
+ * Les tokens sont stockés dans des cookies HTTP-only pour la sécurité.
+ * </p>
+ *
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
+ */
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -30,7 +42,10 @@ public class AuthController {
 
     /**
      * Inscrit un nouvel utilisateur.
-     * ✅ NE connecte PAS l'utilisateur. Renvoie un message de succès.
+     *
+     * @param request     les informations d'inscription
+     * @param httpRequest la requête HTTP
+     * @return un message de confirmation
      */
     @PostMapping("/register")
     public ResponseEntity<Map<String, String>> register(
@@ -39,13 +54,19 @@ public class AuthController {
     ) {
         authService.register(request, httpRequest);
 
-        // PAS DE COOKIES ICI
-
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
                 "message", "Compte créé avec succès. Veuillez vérifier vos emails."
         ));
     }
 
+    /**
+     * Authentifie un utilisateur.
+     *
+     * @param request      les identifiants de connexion
+     * @param httpRequest  la requête HTTP
+     * @param httpResponse la réponse HTTP pour les cookies
+     * @return la réponse d'authentification avec les tokens
+     */
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(
             @Valid @RequestBody LoginRequest request,
@@ -58,6 +79,14 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Rafraîchit les tokens d'authentification.
+     *
+     * @param request      le refresh token (optionnel si cookie présent)
+     * @param httpRequest  la requête HTTP
+     * @param httpResponse la réponse HTTP pour les cookies
+     * @return la nouvelle réponse d'authentification
+     */
     @PostMapping("/refresh")
     public ResponseEntity<AuthResponse> refreshToken(
             @RequestBody(required = false) RefreshTokenRequest request,
@@ -77,6 +106,13 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Échange un code d'autorisation OAuth2 contre les tokens.
+     *
+     * @param request      le code d'autorisation
+     * @param httpResponse la réponse HTTP pour les cookies
+     * @return la réponse d'authentification
+     */
     @PostMapping("/oauth/exchange")
     public ResponseEntity<AuthResponse> exchangeOAuthCode(
             @Valid @RequestBody OAuthCodeExchangeRequest request,
@@ -88,6 +124,14 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Déconnecte l'utilisateur de la session courante.
+     *
+     * @param request      le refresh token (optionnel si cookie présent)
+     * @param httpRequest  la requête HTTP
+     * @param httpResponse la réponse HTTP pour supprimer les cookies
+     * @return un message de confirmation
+     */
     @PostMapping("/logout")
     public ResponseEntity<Map<String, String>> logout(
             @RequestBody(required = false) RefreshTokenRequest request,
@@ -102,6 +146,13 @@ public class AuthController {
         return ResponseEntity.ok(Map.of("message", "Déconnexion réussie"));
     }
 
+    /**
+     * Déconnecte l'utilisateur de toutes ses sessions.
+     *
+     * @param httpRequest  la requête HTTP
+     * @param httpResponse la réponse HTTP pour supprimer les cookies
+     * @return un message de confirmation
+     */
     @PostMapping("/logout-all")
     public ResponseEntity<Map<String, String>> logoutAll(
             HttpServletRequest httpRequest,
@@ -112,6 +163,12 @@ public class AuthController {
         return ResponseEntity.ok(Map.of("message", "Toutes les sessions ont été révoquées"));
     }
 
+    /**
+     * Récupère les informations de l'utilisateur authentifié.
+     *
+     * @param userDetails les détails de l'utilisateur courant
+     * @return les informations de l'utilisateur
+     */
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getCurrentUser(
             @AuthenticationPrincipal CustomUserDetails userDetails

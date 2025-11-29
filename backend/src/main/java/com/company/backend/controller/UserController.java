@@ -17,17 +17,14 @@ import java.util.Map;
 
 /**
  * Contrôleur REST pour la gestion du compte utilisateur.
+ * <p>
+ * Expose les endpoints de vérification d'email, réinitialisation
+ * de mot de passe et gestion du profil utilisateur.
+ * </p>
  *
- * Endpoints publics :
- * - POST /api/v1/users/verify-email - Vérifier l'email
- * - POST /api/v1/users/resend-verification - Renvoyer l'email de vérification
- * - POST /api/v1/users/forgot-password - Demander reset password
- * - GET  /api/v1/users/reset-password/validate - Valider token reset
- * - POST /api/v1/users/reset-password - Réinitialiser le password
- *
- * Endpoints authentifiés :
- * - POST /api/v1/users/change-password - Changer le password
- * - GET  /api/v1/users/profile - Récupérer le profil
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @RestController
 @RequestMapping("/api/v1/users")
@@ -36,12 +33,11 @@ public class UserController {
 
     private final UserService userService;
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    // VÉRIFICATION D'EMAIL (Public)
-    // ═══════════════════════════════════════════════════════════════════════════
-
     /**
      * Vérifie l'adresse email avec le token reçu par email.
+     *
+     * @param token le token de vérification
+     * @return le résultat de la vérification
      */
     @PostMapping("/verify-email")
     public ResponseEntity<Map<String, Object>> verifyEmail(@RequestParam String token) {
@@ -62,7 +58,9 @@ public class UserController {
 
     /**
      * Renvoie l'email de vérification.
-     * 🛡️ Message générique pour ne pas révéler si l'email existe.
+     *
+     * @param request l'email de l'utilisateur
+     * @return un message générique (sécurité)
      */
     @PostMapping("/resend-verification")
     public ResponseEntity<Map<String, String>> resendVerification(
@@ -75,13 +73,11 @@ public class UserController {
         ));
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    // RÉINITIALISATION DE MOT DE PASSE (Public)
-    // ═══════════════════════════════════════════════════════════════════════════
-
     /**
      * Demande une réinitialisation de mot de passe.
-     * 🛡️ Message générique pour ne pas révéler si l'email existe.
+     *
+     * @param request l'email de l'utilisateur
+     * @return un message générique (sécurité)
      */
     @PostMapping("/forgot-password")
     public ResponseEntity<Map<String, String>> forgotPassword(
@@ -96,7 +92,9 @@ public class UserController {
 
     /**
      * Vérifie si un token de réinitialisation est valide.
-     * Utilisé par le frontend pour afficher le formulaire.
+     *
+     * @param token le token à vérifier
+     * @return la validité du token
      */
     @GetMapping("/reset-password/validate")
     public ResponseEntity<Map<String, Boolean>> validateResetToken(@RequestParam String token) {
@@ -105,7 +103,10 @@ public class UserController {
     }
 
     /**
-     * Réinitialise le mot de passe avec le token.
+     * Réinitialise le mot de passe avec un token valide.
+     *
+     * @param request le token et le nouveau mot de passe
+     * @return un message de confirmation
      */
     @PostMapping("/reset-password")
     public ResponseEntity<Map<String, String>> resetPassword(
@@ -118,12 +119,12 @@ public class UserController {
         ));
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    // GESTION DU COMPTE (Authentifié)
-    // ═══════════════════════════════════════════════════════════════════════════
-
     /**
      * Change le mot de passe de l'utilisateur connecté.
+     *
+     * @param userDetails les détails de l'utilisateur courant
+     * @param request     le mot de passe actuel et le nouveau
+     * @return un message de confirmation
      */
     @PostMapping("/change-password")
     public ResponseEntity<Map<String, String>> changePassword(
@@ -139,6 +140,9 @@ public class UserController {
 
     /**
      * Récupère le profil de l'utilisateur connecté.
+     *
+     * @param userDetails les détails de l'utilisateur courant
+     * @return les informations du profil
      */
     @GetMapping("/profile")
     public ResponseEntity<UserResponse> getProfile(
@@ -150,6 +154,9 @@ public class UserController {
 
     /**
      * Demande l'envoi d'un email de vérification (utilisateur connecté).
+     *
+     * @param userDetails les détails de l'utilisateur courant
+     * @return un message de confirmation
      */
     @PostMapping("/send-verification")
     public ResponseEntity<Map<String, String>> sendVerificationEmail(
