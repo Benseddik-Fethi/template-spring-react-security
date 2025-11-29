@@ -97,35 +97,23 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = verificationToken.getUser();
+        UUID userId = user.getId();
 
         // Idempotence : Si l'utilisateur est déjà vérifié, c'est un succès.
         if (Boolean.TRUE.equals(user.getEmailVerified())) {
-            // Nettoyage optionnel du token s'il existe encore
-            try {
-                verificationTokenRepository.delete(verificationToken);
-                verificationTokenRepository.flush();
-            } catch (Exception e) {
-                log.debug("Le token a déjà été supprimé par un autre thread (Race condition normale)");
-            }
+            // Nettoyage du token (bulk delete - pas d'exception si déjà supprimé)
+            verificationTokenRepository.deleteByUserId(userId);
             return true;
         }
 
+        // Marquer l'email comme vérifié
         user.setEmailVerified(true);
         userRepository.save(user);
 
-        // Suppression sécurisée du token (Race condition handling)
-        try {
-            verificationTokenRepository.delete(verificationToken);
-            // On force le flush pour attraper l'erreur de verrouillage optimiste ici
-            verificationTokenRepository.flush();
-        } catch (Exception e) {
-            // Si une erreur survient ici, c'est que le token a été supprimé par une autre requête concurrente.
-            // Comme l'objectif était de vérifier l'utilisateur (ce qui est fait), on considère ça comme un succès.
-            log.warn("Conflit de suppression du token géré (Race Condition): {}", e.getMessage());
-        }
+        // Suppression du token (bulk delete - gère les race conditions sans exception)
+        verificationTokenRepository.deleteByUserId(userId);
 
         // Envoyer un email de bienvenue
-        // (Note: on pourrait aussi vérifier ici si l'email a déjà été envoyé pour éviter les doublons)
         try {
             emailService.sendWelcomeEmail(
                     user.getEmail(),
