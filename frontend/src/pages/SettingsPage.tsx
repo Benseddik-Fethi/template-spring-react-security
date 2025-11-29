@@ -29,7 +29,7 @@ export default function SettingsPage() {
         return theme === "dark" || (theme === "system" && isSystemDark);
     }, [theme]);
 
-    // Calcul si le thème automatique est activé
+    // Memoize l'état du thème automatique
     const isSystemTheme = useMemo(() => theme === "system", [theme]);
 
     // Memoize le handler pour éviter les recréations
