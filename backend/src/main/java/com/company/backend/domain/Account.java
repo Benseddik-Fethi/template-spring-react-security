@@ -9,10 +9,16 @@ import java.time.Instant;
 import java.util.UUID;
 
 /**
- * Entité Account - Comptes OAuth2 liés à un utilisateur.
- *
+ * Entité représentant un compte OAuth2 lié à un utilisateur.
+ * <p>
  * Permet à un utilisateur d'avoir plusieurs méthodes de connexion
- * (ex: email + Google + Facebook).
+ * (email + Google + Facebook par exemple). Chaque compte OAuth2
+ * est identifié par le fournisseur et l'ID unique chez ce fournisseur.
+ * </p>
+ *
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @Entity
 @Table(name = "accounts",
@@ -43,9 +49,6 @@ public class Account {
     @Column(nullable = false, length = 20)
     private AuthProvider provider;
 
-    /**
-     * ID unique chez le fournisseur OAuth (ex: Google sub, Facebook id).
-     */
     @Column(name = "provider_account_id", nullable = false, length = 255)
     private String providerAccountId;
 

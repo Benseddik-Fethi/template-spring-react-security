@@ -8,12 +8,16 @@ import java.time.Instant;
 import java.util.UUID;
 
 /**
- * Code d'autorisation temporaire pour OAuth2.
+ * Entité représentant un code d'autorisation temporaire pour OAuth2.
+ * <p>
+ * Ce code est généré après une authentification OAuth2 réussie et permet
+ * au frontend d'échanger ce code contre les tokens d'accès. Le code expire
+ * après 30 secondes et est supprimé après utilisation pour garantir la sécurité.
+ * </p>
  *
- * 🛡️ Sécurité :
- * - Expiration très courte (30 secondes)
- * - Usage unique (supprimé après échange)
- * - Stocke les tokens de manière sécurisée côté serveur
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @Entity
 @Table(name = "oauth_authorization_codes", indexes = {
@@ -31,9 +35,6 @@ public class OAuthAuthorizationCode {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    /**
-     * Code unique envoyé dans l'URL de callback.
-     */
     @Column(nullable = false, unique = true, length = 64)
     private String code;
 
@@ -41,27 +42,15 @@ public class OAuthAuthorizationCode {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    /**
-     * Access token pré-généré (stocké côté serveur).
-     */
     @Column(name = "access_token", nullable = false, length = 1000)
     private String accessToken;
 
-    /**
-     * Refresh token pré-généré (stocké côté serveur).
-     */
     @Column(name = "refresh_token", nullable = false, length = 1000)
     private String refreshToken;
 
-    /**
-     * Expiration du code (30 secondes).
-     */
     @Column(name = "expires_at", nullable = false)
     private Instant expiresAt;
 
-    /**
-     * Indique si le code a été utilisé.
-     */
     @Column(nullable = false)
     @Builder.Default
     private Boolean used = false;
@@ -70,19 +59,17 @@ public class OAuthAuthorizationCode {
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    // MÉTHODES UTILITAIRES
-    // ═══════════════════════════════════════════════════════════════════════════
-
     /**
      * Vérifie si le code est valide (non expiré et non utilisé).
+     *
+     * @return {@code true} si le code est valide, {@code false} sinon
      */
     public boolean isValid() {
         return !used && Instant.now().isBefore(expiresAt);
     }
 
     /**
-     * Marque le code comme utilisé.
+     * Marque le code comme utilisé pour empêcher sa réutilisation.
      */
     public void markAsUsed() {
         this.used = true;
@@ -90,6 +77,11 @@ public class OAuthAuthorizationCode {
 
     /**
      * Crée un nouveau code d'autorisation avec expiration dans 30 secondes.
+     *
+     * @param user         l'utilisateur authentifié
+     * @param accessToken  le token d'accès pré-généré
+     * @param refreshToken le token de rafraîchissement pré-généré
+     * @return le code d'autorisation créé
      */
     public static OAuthAuthorizationCode create(User user, String accessToken, String refreshToken) {
         return OAuthAuthorizationCode.builder()

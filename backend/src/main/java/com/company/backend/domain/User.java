@@ -11,7 +11,16 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Entité User - Utilisateur de l'application.
+ * Entité représentant un utilisateur de l'application.
+ * <p>
+ * Cette entité gère les informations d'identification, les données de profil,
+ * les paramètres de sécurité (verrouillage de compte, tentatives de connexion)
+ * et les relations avec les sessions et les logs d'audit.
+ * </p>
+ *
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @Entity
 @Table(name = "users", indexes = {
@@ -65,7 +74,6 @@ public class User {
     @Builder.Default
     private Boolean emailVerified = false;
 
-    // Protection brute force
     @Column(name = "failed_login_attempts")
     @Builder.Default
     private Integer failedLoginAttempts = 0;
@@ -84,10 +92,6 @@ public class User {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    // RELATIONS
-    // ═══════════════════════════════════════════════════════════════════════════
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Session> sessions = new ArrayList<>();
@@ -96,19 +100,21 @@ public class User {
     @Builder.Default
     private List<AuditLog> auditLogs = new ArrayList<>();
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    // MÉTHODES UTILITAIRES
-    // ═══════════════════════════════════════════════════════════════════════════
-
     /**
-     * Vérifie si le compte est actuellement verrouillé.
+     * Vérifie si le compte utilisateur est actuellement verrouillé.
+     *
+     * @return {@code true} si le compte est verrouillé, {@code false} sinon
      */
     public boolean isAccountLocked() {
         return lockedUntil != null && Instant.now().isBefore(lockedUntil);
     }
 
     /**
-     * Enregistre une tentative de connexion échouée.
+     * Enregistre une tentative de connexion échouée et verrouille le compte
+     * si le nombre maximum de tentatives est atteint.
+     *
+     * @param maxAttempts         nombre maximum de tentatives avant verrouillage
+     * @param lockDurationMinutes durée du verrouillage en minutes
      */
     public void recordFailedLogin(int maxAttempts, int lockDurationMinutes) {
         this.failedLoginAttempts = (this.failedLoginAttempts == null ? 0 : this.failedLoginAttempts) + 1;
@@ -120,7 +126,8 @@ public class User {
     }
 
     /**
-     * Réinitialise les tentatives de connexion après un succès.
+     * Réinitialise les compteurs de tentatives de connexion échouées
+     * après une connexion réussie.
      */
     public void resetFailedLoginAttempts() {
         this.failedLoginAttempts = 0;
@@ -130,6 +137,8 @@ public class User {
 
     /**
      * Retourne le nom complet de l'utilisateur.
+     *
+     * @return le nom complet ou l'email si aucun nom n'est défini
      */
     public String getFullName() {
         if (firstName == null && lastName == null) {

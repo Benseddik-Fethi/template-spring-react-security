@@ -7,7 +7,17 @@ import java.util.List;
 
 /**
  * Propriétés de sécurité applicative.
- * Chargées depuis application.yml sous le préfixe "app.security".
+ * <p>
+ * Chargées depuis le fichier application.yml sous le préfixe "app.security".
+ * Configure les paramètres CORS, le rate limiting et la protection brute force.
+ * </p>
+ *
+ * @param cors       configuration CORS
+ * @param rateLimit  configuration du rate limiting
+ * @param bruteForce configuration de la protection brute force
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @ConfigurationProperties(prefix = "app.security")
 public record SecurityProperties(
@@ -15,6 +25,16 @@ public record SecurityProperties(
         RateLimit rateLimit,
         BruteForce bruteForce
 ) {
+
+    /**
+     * Configuration CORS (Cross-Origin Resource Sharing).
+     *
+     * @param allowedOrigins   origines autorisées
+     * @param allowedMethods   méthodes HTTP autorisées
+     * @param allowedHeaders   en-têtes autorisés
+     * @param allowCredentials autoriser les credentials
+     * @param maxAge           durée de cache du preflight en secondes
+     */
     public record Cors(
             List<String> allowedOrigins,
             List<String> allowedMethods,
@@ -41,6 +61,13 @@ public record SecurityProperties(
         }
     }
 
+    /**
+     * Configuration du rate limiting.
+     *
+     * @param enabled               activer le rate limiting
+     * @param requestsPerMinute     limite de requêtes générales par minute
+     * @param authRequestsPerMinute limite de requêtes d'authentification par minute
+     */
     public record RateLimit(
             Boolean enabled,
             Integer requestsPerMinute,
@@ -59,6 +86,12 @@ public record SecurityProperties(
         }
     }
 
+    /**
+     * Configuration de la protection brute force.
+     *
+     * @param maxAttempts  nombre maximum de tentatives avant verrouillage
+     * @param lockDuration durée du verrouillage
+     */
     public record BruteForce(
             Integer maxAttempts,
             Duration lockDuration

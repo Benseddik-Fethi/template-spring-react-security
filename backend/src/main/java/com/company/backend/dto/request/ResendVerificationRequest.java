@@ -4,10 +4,20 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 /**
- * DTO pour demander le renvoi de l'email de vérification.
+ * DTO de requête pour demander le renvoi de l'email de vérification.
+ * <p>
+ * Permet à un utilisateur de recevoir à nouveau l'email de vérification
+ * si le premier n'a pas été reçu ou a expiré.
+ * </p>
+ *
+ * @param email l'adresse email du compte à vérifier
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 public record ResendVerificationRequest(
         @NotBlank(message = "L'email est obligatoire")
         @Email(message = "Format d'email invalide")
         String email
-) {}
+) {
+}

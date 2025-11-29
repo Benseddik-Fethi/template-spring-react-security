@@ -5,9 +5,18 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 /**
- * DTO pour réinitialiser le mot de passe avec un token.
+ * DTO de requête pour la réinitialisation du mot de passe avec un token.
+ * <p>
+ * Utilisé lorsqu'un utilisateur clique sur le lien de réinitialisation
+ * reçu par email. Le token valide la demande et le nouveau mot de passe
+ * doit respecter les critères de sécurité stricts.
+ * </p>
  *
- * 🔒 Sécurité niveau bancaire : 12 caractères minimum avec complexité stricte.
+ * @param token       le token de réinitialisation reçu par email
+ * @param newPassword le nouveau mot de passe souhaité
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 public record ResetPasswordRequest(
         @NotBlank(message = "Le token est obligatoire")
@@ -20,4 +29,5 @@ public record ResetPasswordRequest(
                 message = "Le mot de passe doit contenir : 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial"
         )
         String newPassword
-) {}
+) {
+}

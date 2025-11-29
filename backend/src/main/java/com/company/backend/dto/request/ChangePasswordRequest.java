@@ -5,9 +5,18 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 /**
- * DTO pour changer le mot de passe (utilisateur connecté).
+ * DTO de requête pour le changement de mot de passe d'un utilisateur connecté.
+ * <p>
+ * Requiert le mot de passe actuel pour validation et un nouveau mot de passe
+ * respectant les critères de sécurité : minimum 12 caractères avec au moins
+ * une minuscule, une majuscule, un chiffre et un caractère spécial.
+ * </p>
  *
- * 🔒 Sécurité niveau bancaire : 12 caractères minimum avec complexité stricte.
+ * @param currentPassword le mot de passe actuel de l'utilisateur
+ * @param newPassword     le nouveau mot de passe souhaité
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 public record ChangePasswordRequest(
         @NotBlank(message = "Le mot de passe actuel est obligatoire")
@@ -20,4 +29,5 @@ public record ChangePasswordRequest(
                 message = "Le mot de passe doit contenir : 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial"
         )
         String newPassword
-) {}
+) {
+}

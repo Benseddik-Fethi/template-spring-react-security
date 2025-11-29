@@ -8,7 +8,16 @@ import java.time.Instant;
 import java.util.UUID;
 
 /**
- * Entité Session - Stocke les refresh tokens hashés.
+ * Entité représentant une session utilisateur avec son refresh token.
+ * <p>
+ * Stocke le hash SHA-256 du refresh token pour permettre la validation
+ * et la révocation des sessions. Le token brut n'est jamais stocké
+ * pour des raisons de sécurité.
+ * </p>
+ *
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @Entity
 @Table(name = "sessions", indexes = {
@@ -31,10 +40,6 @@ public class Session {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    /**
-     * Hash SHA-256 du refresh token.
-     * Le token brut n'est JAMAIS stocké.
-     */
     @Column(name = "refresh_token_hash", nullable = false, length = 64)
     private String refreshTokenHash;
 
@@ -54,22 +59,36 @@ public class Session {
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    // MÉTHODES UTILITAIRES
-    // ═══════════════════════════════════════════════════════════════════════════
-
+    /**
+     * Vérifie si la session est valide (non révoquée et non expirée).
+     *
+     * @return {@code true} si la session est valide, {@code false} sinon
+     */
     public boolean isValid() {
         return revokedAt == null && Instant.now().isBefore(expiresAt);
     }
 
+    /**
+     * Révoque la session en enregistrant la date de révocation.
+     */
     public void revoke() {
         this.revokedAt = Instant.now();
     }
 
+    /**
+     * Vérifie si la session a été révoquée.
+     *
+     * @return {@code true} si la session est révoquée, {@code false} sinon
+     */
     public boolean isRevoked() {
         return revokedAt != null;
     }
 
+    /**
+     * Vérifie si la session a expiré.
+     *
+     * @return {@code true} si la session est expirée, {@code false} sinon
+     */
     public boolean isExpired() {
         return Instant.now().isAfter(expiresAt);
     }

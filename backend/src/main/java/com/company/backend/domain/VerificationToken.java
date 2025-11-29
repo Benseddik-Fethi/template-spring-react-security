@@ -9,11 +9,16 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 /**
- * Entité VerificationToken - Token de vérification d'email.
+ * Entité représentant un token de vérification d'adresse email.
+ * <p>
+ * Utilisé pour confirmer l'adresse email d'un utilisateur lors de
+ * l'inscription. Le token expire après 24 heures et est supprimé
+ * après utilisation pour garantir un usage unique.
+ * </p>
  *
- * 🛡️ Sécurité :
- * - Expiration 24 heures
- * - Usage unique (supprimé après vérification)
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @Entity
 @Table(name = "verification_tokens", indexes = {
@@ -48,22 +53,30 @@ public class VerificationToken {
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    // MÉTHODES UTILITAIRES
-    // ═══════════════════════════════════════════════════════════════════════════
-
+    /**
+     * Vérifie si le token a expiré.
+     *
+     * @return {@code true} si le token est expiré, {@code false} sinon
+     */
     public boolean isExpired() {
         return Instant.now().isAfter(expiresAt);
     }
 
+    /**
+     * Vérifie si le token est valide (non expiré).
+     *
+     * @return {@code true} si le token est valide, {@code false} sinon
+     */
     public boolean isValid() {
         return !isExpired();
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    // FACTORY METHOD
-    // ═══════════════════════════════════════════════════════════════════════════
-
+    /**
+     * Crée un nouveau token de vérification avec la durée d'expiration par défaut.
+     *
+     * @param user l'utilisateur associé au token
+     * @return le token de vérification créé
+     */
     public static VerificationToken create(User user) {
         return VerificationToken.builder()
                 .token(UUID.randomUUID().toString())
@@ -72,6 +85,13 @@ public class VerificationToken {
                 .build();
     }
 
+    /**
+     * Crée un nouveau token de vérification avec une durée d'expiration personnalisée.
+     *
+     * @param user            l'utilisateur associé au token
+     * @param expirationHours durée de validité en heures
+     * @return le token de vérification créé
+     */
     public static VerificationToken create(User user, int expirationHours) {
         return VerificationToken.builder()
                 .token(UUID.randomUUID().toString())
