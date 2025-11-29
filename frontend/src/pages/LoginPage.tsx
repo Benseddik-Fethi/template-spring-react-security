@@ -93,9 +93,9 @@ export default function LoginPage() {
                                 <Checkbox id="remember" className="border-gray-300 data-[state=checked]:bg-rose-500" />
                                 <Label htmlFor="remember" className="text-sm text-gray-500 dark:text-gray-400 cursor-pointer">Se souvenir de moi</Label>
                             </div>
-                            <button className="text-sm text-rose-500 hover:text-rose-600 font-semibold">
+                            <Link to="/auth/forgot-password" className="text-sm text-rose-500 hover:text-rose-600 font-semibold">
                                 Mot de passe oublié ?
-                            </button>
+                            </Link>
                         </div>
 
                         <Button

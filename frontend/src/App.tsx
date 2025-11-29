@@ -11,6 +11,8 @@ import AuthCallbackPage from "@/pages/AuthCallbackPage.tsx";
 import EmailSentPage from "@/pages/EmailSentPage.tsx";
 import VerifyEmailPage from "@/pages/VerifyEmailPage.tsx";
 import ResendVerificationPage from "@/pages/ResendVerificationPage.tsx";
+import ForgotPasswordPage from "@/pages/ForgotPasswordPage.tsx";
+import ResetPasswordPage from "@/pages/ResetPasswordPage.tsx";
 function RootRedirect() {
     const {user, isLoading} = useAuth();
     if (isLoading) return <div className="min-h-screen flex items-center justify-center">Chargement...</div>;
@@ -32,6 +34,8 @@ function App() {
             <Route path="/auth/verify-email-sent" element={<EmailSentPage/>}/>
             <Route path="/auth/verify-email" element={<VerifyEmailPage/>}/>
             <Route path="/auth/resend-verification" element={<ResendVerificationPage/>}/>
+            <Route path="/auth/forgot-password" element={<ForgotPasswordPage/>}/>
+            <Route path="/auth/reset-password" element={<ResetPasswordPage/>}/>
 
             {/* Espace sécurisé (Dashboard) */}
             <Route element={<ProtectedRoute/>}>
