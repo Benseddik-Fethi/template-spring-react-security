@@ -74,8 +74,6 @@ export function ThemeProvider({
 
 export const useTheme = () => {
     const context = useContext(ThemeProviderContext);
-
-    // Maintenant, cette vérification servira vraiment à quelque chose
     if (context === undefined)
         throw new Error("⛔ ERREUR FATALE : useTheme est utilisé HORS du ThemeProvider ! Vérifie main.tsx");
 

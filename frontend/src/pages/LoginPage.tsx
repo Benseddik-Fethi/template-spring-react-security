@@ -7,7 +7,6 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { api } from "@/lib/api";
-import { useGoogleLogin } from '@react-oauth/google';
 import { Link } from "react-router-dom";
 import { isAxiosError } from "axios";
 import { FacebookIcon, GoogleIcon } from "@/components/ui/Icons";
@@ -32,20 +31,12 @@ export default function LoginPage() {
         }
     };
 
-    const googleLogin = useGoogleLogin({
-        onSuccess: async (tokenResponse) => {
-            try {
-                // Note: Vérifie si ton backend attend 'idToken' ou 'accessToken'.
-                // Avec useGoogleLogin par défaut, c'est un accessToken.
-                const { data } = await api.post('/auth/oauth/google', {
-                    idToken: tokenResponse.access_token // À adapter selon ton backend
-                });
-                login(data.user);
-            } catch (err) {
-                console.error(err);
-            }
-        },
-    });
+    // ✅ NOUVEAU : Redirection vers le Backend Spring Security
+    const handleGoogleLogin = () => {
+        // Cette URL déclenche le flow OAuth2 côté serveur
+        // Assure-toi que le port 8080 est bien celui de ton backend
+        window.location.href = "http://localhost:8080/oauth2/authorization/google";
+    };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-amber-50 flex items-center justify-center p-6 relative overflow-hidden dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
@@ -120,7 +111,8 @@ export default function LoginPage() {
                     </div>
 
                     <div className="flex gap-4">
-                        <Button variant="outline" className="flex-1 h-12 rounded-xl border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-950 font-semibold shadow-sm" onClick={() => googleLogin()}>
+                        {/* ✅ Modification ICI : Appel de handleGoogleLogin */}
+                        <Button variant="outline" className="flex-1 h-12 rounded-xl border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-950 font-semibold shadow-sm" onClick={handleGoogleLogin}>
                             <GoogleIcon className="mr-2 h-5 w-5"/> Google
                         </Button>
                         <Button variant="outline" className="flex-1 h-12 rounded-xl border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-950 font-semibold shadow-sm">

@@ -1,11 +1,11 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from 'axios';
 
-// URL de base (vérifie ton port backend, ici 4000)
-export const API_URL = 'http://localhost:4000/api';
+// ✅ CORRECTION : Port 8080 (Standard Spring Boot)
+export const API_URL = 'http://localhost:8080/api/v1';
 
 export const api = axios.create({
     baseURL: API_URL,
-    withCredentials: true, // Indispensable pour les cookies (Refresh Token)
+    withCredentials: true, // Indispensable pour les cookies HttpOnly (Session & Refresh Token)
     headers: {
         'Content-Type': 'application/json',
     },
@@ -47,14 +47,13 @@ api.interceptors.response.use(
 
             try {
                 // On tente de rafraîchir le token via le cookie HttpOnly
-                // Ton backend attend POST /auth/refresh et renvoie { token, user }
                 const { data } = await api.post('/auth/refresh');
 
                 // On met à jour le token en mémoire
-                setAccessToken(data.token);
+                setAccessToken(data.accessToken); // Note: Vérifie si ton back renvoie 'token' ou 'accessToken'
 
                 // On met à jour le header de la requête originale et on relance
-                originalRequest.headers['Authorization'] = `Bearer ${data.token}`;
+                originalRequest.headers['Authorization'] = `Bearer ${data.accessToken}`;
                 return api(originalRequest);
             } catch (refreshError) {
                 // Si le refresh échoue, on déconnecte

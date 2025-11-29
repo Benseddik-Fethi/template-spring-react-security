@@ -1,11 +1,16 @@
 import {Navigate, Route, Routes} from 'react-router-dom';
-import RegisterPage from './pages/RegisterPage';
-import LoginPage from './pages/LoginPage';
-import DashboardPage from './pages/DashboardPage';
-import {ProtectedRoute} from './components/ProtectedRoute';
-import DashboardLayout from './layouts/DashboardLayout';
-import SettingsPage from "@/pages/SettingsPage.tsx";
 
+import SettingsPage from "@/pages/SettingsPage";
+import {useAuth} from "@/context/AuthContext";
+import RegisterPage from "@/pages/RegisterPage.tsx";
+import LoginPage from "@/pages/LoginPage.tsx";
+import {ProtectedRoute} from "@/components/ProtectedRoute.tsx";
+import DashboardLayout from "@/layouts/DashboardLayout.tsx";
+import DashboardPage from "@/pages/DashboardPage.tsx";
+import AuthCallbackPage from "@/pages/AuthCallbackPage.tsx";
+import EmailSentPage from "@/pages/EmailSentPage.tsx";
+import VerifyEmailPage from "@/pages/VerifyEmailPage.tsx";
+import ResendVerificationPage from "@/pages/ResendVerificationPage.tsx";
 function RootRedirect() {
     const {user, isLoading} = useAuth();
     if (isLoading) return <div className="min-h-screen flex items-center justify-center">Chargement...</div>;

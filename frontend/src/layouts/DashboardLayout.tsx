@@ -2,6 +2,7 @@
 import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import {Home, LogOut, Settings, ShieldCheck, User} from "lucide-react"; // Icônes génériques
 import {cn} from "@/lib/utils";
+import {useAuth} from "@/context/AuthContext";
 
 export default function DashboardLayout() {
     const {user, logout} = useAuth();

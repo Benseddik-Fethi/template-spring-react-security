@@ -5,7 +5,6 @@ import {Input} from "@/components/ui/input";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import {Separator} from "@/components/ui/separator";
 import {api} from "@/lib/api";
-import {useGoogleLogin} from '@react-oauth/google';
 import {Link} from "react-router-dom";
 import {FacebookIcon, GoogleIcon} from "@/components/ui/Icons";
 import {isAxiosError} from "axios";
@@ -35,6 +34,8 @@ export default function RegisterPage() {
                 firstName: formData.firstName,
                 lastName: formData.lastName
             });
+            // Attention : Selon ta logique back, le register connecte-t-il directement ?
+            // Si oui, login(data.user). Sinon, redirection vers login.
             login(data.user);
         } catch (error) {
             if (isAxiosError(error)) {
@@ -45,18 +46,10 @@ export default function RegisterPage() {
         }
     };
 
-    const googleLogin = useGoogleLogin({
-        onSuccess: async (tokenResponse) => {
-            try {
-                const {data} = await api.post('/auth/oauth/google', {
-                    idToken: tokenResponse.access_token
-                });
-                login(data.user);
-            } catch (err) {
-                console.error(err);
-            }
-        },
-    });
+    // ✅ NOUVEAU : Redirection vers le Backend
+    const handleGoogleLogin = () => {
+        window.location.href = "http://localhost:8080/oauth2/authorization/google";
+    };
 
     return (
         <div
@@ -155,9 +148,10 @@ export default function RegisterPage() {
                     </div>
 
                     <div className="flex gap-4">
+                        {/* ✅ Modification ICI */}
                         <Button variant="outline"
                                 className="flex-1 h-11 rounded-xl border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-950 font-semibold shadow-sm"
-                                onClick={() => googleLogin()}>
+                                onClick={handleGoogleLogin}>
                             <GoogleIcon className="mr-2 h-4 w-4"/> Google
                         </Button>
                         <Button variant="outline"

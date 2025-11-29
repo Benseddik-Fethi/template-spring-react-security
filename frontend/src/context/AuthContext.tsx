@@ -12,11 +12,13 @@ export type User = {
     avatar?: string;
 };
 
+// 👇 C'est ICI qu'il faut ajouter la ligne manquante
 interface AuthContextType {
     user: User | null;
     isLoading: boolean;
     login: (user: User) => void;
-    logout: () => void; // Ajouté pour AuthCallbackPage
+    logout: () => void;
+    initAuth: () => Promise<void>; // ✅ LA LIGNE CRUCIALE À AJOUTER
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
