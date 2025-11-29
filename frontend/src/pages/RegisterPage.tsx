@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {ChevronRight, Eye, EyeOff, Lock, Mail, PawPrint} from "lucide-react";
+import {ChevronRight, Eye, EyeOff, Lock, Mail, Shield} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
@@ -54,16 +54,16 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-amber-50 via-rose-50 to-pink-50 flex items-center justify-center p-6 relative overflow-hidden dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100 flex items-center justify-center p-6 relative overflow-hidden dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
             <Card className="w-full max-w-md relative z-10 border-white/50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm shadow-xl dark:border-slate-800">
                 <CardHeader className="text-center pt-10">
-                    <div className="mx-auto w-16 h-16 bg-gradient-to-br from-amber-400 to-rose-400 rounded-2xl flex items-center justify-center mb-3 shadow-lg shadow-rose-200 dark:shadow-none">
-                        <PawPrint size={32} className="text-white"/>
+                    <div className="mx-auto w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center mb-3 shadow-lg shadow-indigo-200 dark:shadow-none">
+                        <Shield size={32} className="text-white"/>
                     </div>
-                    <CardTitle className="text-2xl font-bold text-amber-500 mb-1">
+                    <CardTitle className="text-2xl font-bold text-indigo-600 mb-1">
                         Créer un compte
                     </CardTitle>
-                    <CardDescription className="text-gray-500 dark:text-gray-400">Rejoignez la communauté PetCare</CardDescription>
+                    <CardDescription className="text-gray-500 dark:text-gray-400">Créez votre compte</CardDescription>
                 </CardHeader>
 
                 <CardContent className="p-8 space-y-6">
@@ -132,7 +132,7 @@ export default function RegisterPage() {
                         </div>
 
                         <Button
-                            className="w-full h-12 text-base font-bold rounded-2xl bg-gradient-to-r from-amber-400 to-rose-400 hover:opacity-90 shadow-md shadow-amber-100 dark:shadow-none text-white mt-2"
+                            className="w-full h-12 text-base font-bold rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90 shadow-md shadow-indigo-100 dark:shadow-none text-white mt-2"
                             onClick={handleRegister}>
                             Créer mon compte <ChevronRight className="ml-2 h-5 w-5"/>
                         </Button>
@@ -158,7 +158,7 @@ export default function RegisterPage() {
                     </div>
 
                     <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-4">
-                        Déjà un compte ? <Link to="/login" className="text-rose-500 font-bold hover:underline ml-1">Se
+                        Déjà un compte ? <Link to="/login" className="text-indigo-500 font-bold hover:underline ml-1">Se
                         connecter</Link>
                     </p>
                 </CardContent>
