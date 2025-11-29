@@ -1,33 +1,35 @@
+version: '3.8'
+
 services:
-  # 🐘 Base de données PostgreSQL
+  # Base de données PostgreSQL
   postgres:
-    image: postgres:17-alpine  # Remplace par 18-alpine quand elle sera dispo
+    image: postgres:18-alpine
     container_name: template_db
-    restart: unless-stopped
     environment:
+      POSTGRES_DB: template_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: template_db
     ports:
       - "5432:5432"
     volumes:
-      - ./data/postgres:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
 
-  # 📧 Serveur Mail de test (Mailpit)
+  # Serveur Mail de test (Mailpit)
+  # Permet de voir les emails envoyés par l'appli sans configurer Gmail
   mailpit:
     image: axllent/mailpit
     container_name: template_mail
-    restart: unless-stopped
-    environment:
-      MP_MAX_MESSAGES: 5000
-      MP_DATABASE: /data/mailpit.db
-      MP_SMTP_AUTH_ACCEPT_ANY: 1 # Accepte n'importe quel user/pass
     ports:
-      - "8025:8025" # Interface Web (UI)
-      - "1025:1025" # Port SMTP (pour le backend)
-    volumes:
-      - ./data/mailpit:/data
+      - "1025:1025" # Port SMTP
+      - "8025:8025" # Interface Web (http://localhost:8025)
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   postgres_data:
-  mailpit_data:

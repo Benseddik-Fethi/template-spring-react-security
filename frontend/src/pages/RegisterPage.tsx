@@ -5,10 +5,9 @@ import {Input} from "@/components/ui/input";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import {Separator} from "@/components/ui/separator";
 import {api} from "@/lib/api";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {FacebookIcon, GoogleIcon} from "@/components/ui/Icons";
 import {isAxiosError} from "axios";
-import {useAuth} from "@/context/AuthContext";
 import {Label} from "@/components/ui/label";
 
 export default function RegisterPage() {
@@ -20,7 +19,9 @@ export default function RegisterPage() {
         password: "",
         confirmPassword: "",
     });
-    const {login} = useAuth();
+
+    // ✅ Utilisation du navigate pour rediriger
+    const navigate = useNavigate();
 
     const handleRegister = async () => {
         if (formData.password !== formData.confirmPassword) {
@@ -28,15 +29,17 @@ export default function RegisterPage() {
             return;
         }
         try {
-            const {data} = await api.post('/auth/register', {
+            // Le backend ne renvoie plus de token
+            await api.post('/auth/register', {
                 email: formData.email,
                 password: formData.password,
                 firstName: formData.firstName,
                 lastName: formData.lastName
             });
-            // Attention : Selon ta logique back, le register connecte-t-il directement ?
-            // Si oui, login(data.user). Sinon, redirection vers login.
-            login(data.user);
+
+            // ✅ Redirection vers la page "Vérifiez vos emails"
+            navigate("/auth/verify-email-sent");
+
         } catch (error) {
             if (isAxiosError(error)) {
                 alert(error.response?.data?.message || "Erreur lors de l'inscription");
@@ -46,26 +49,21 @@ export default function RegisterPage() {
         }
     };
 
-    // ✅ NOUVEAU : Redirection vers le Backend
     const handleGoogleLogin = () => {
         window.location.href = "http://localhost:8080/oauth2/authorization/google";
     };
 
     return (
-        <div
-            className="min-h-screen bg-gradient-to-br from-amber-50 via-rose-50 to-pink-50 flex items-center justify-center p-6 relative overflow-hidden dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
-            <Card
-                className="w-full max-w-md relative z-10 border-white/50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm shadow-xl dark:border-slate-800">
+        <div className="min-h-screen bg-gradient-to-br from-amber-50 via-rose-50 to-pink-50 flex items-center justify-center p-6 relative overflow-hidden dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+            <Card className="w-full max-w-md relative z-10 border-white/50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm shadow-xl dark:border-slate-800">
                 <CardHeader className="text-center pt-10">
-                    <div
-                        className="mx-auto w-16 h-16 bg-gradient-to-br from-amber-400 to-rose-400 rounded-2xl flex items-center justify-center mb-3 shadow-lg shadow-rose-200 dark:shadow-none">
+                    <div className="mx-auto w-16 h-16 bg-gradient-to-br from-amber-400 to-rose-400 rounded-2xl flex items-center justify-center mb-3 shadow-lg shadow-rose-200 dark:shadow-none">
                         <PawPrint size={32} className="text-white"/>
                     </div>
                     <CardTitle className="text-2xl font-bold text-amber-500 mb-1">
                         Créer un compte
                     </CardTitle>
-                    <CardDescription className="text-gray-500 dark:text-gray-400">Rejoignez la communauté
-                        PetCare</CardDescription>
+                    <CardDescription className="text-gray-500 dark:text-gray-400">Rejoignez la communauté PetCare</CardDescription>
                 </CardHeader>
 
                 <CardContent className="p-8 space-y-6">
@@ -148,7 +146,6 @@ export default function RegisterPage() {
                     </div>
 
                     <div className="flex gap-4">
-                        {/* ✅ Modification ICI */}
                         <Button variant="outline"
                                 className="flex-1 h-11 rounded-xl border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-950 font-semibold shadow-sm"
                                 onClick={handleGoogleLogin}>

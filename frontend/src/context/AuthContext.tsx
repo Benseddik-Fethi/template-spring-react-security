@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect, type ReactNode, useCall
 import { useNavigate, useLocation } from "react-router-dom";
 import { api } from "@/lib/api";
 
-// Type User aligné avec le Backend
+// ✅ Type mis à jour avec emailVerified
 export type User = {
     id: string;
     email: string;
@@ -10,15 +10,15 @@ export type User = {
     lastName?: string | null;
     role: "USER" | "ADMIN";
     avatar?: string;
+    emailVerified: boolean;
 };
 
-// 👇 C'est ICI qu'il faut ajouter la ligne manquante
 interface AuthContextType {
     user: User | null;
     isLoading: boolean;
     login: (user: User) => void;
     logout: () => void;
-    initAuth: () => Promise<void>; // ✅ LA LIGNE CRUCIALE À AJOUTER
+    initAuth: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -32,7 +32,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Initialisation
     const initAuth = useCallback(async () => {
         try {
-            // Le cookie est envoyé automatiquement par le navigateur
             const { data } = await api.get<User>("/auth/me");
             setUser(data);
         } catch {
@@ -44,22 +43,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     useEffect(() => {
         initAuth();
-
         const handleLogoutEvent = () => logout();
         window.addEventListener('auth:logout', handleLogoutEvent);
         return () => window.removeEventListener('auth:logout', handleLogoutEvent);
     }, [initAuth]);
 
-    // ✅ LOGIN : On ne stocke plus de token manuellement
     const login = (newUser: User) => {
         setUser(newUser);
-        // Redirection si on vient de login/register
         if (["/login", "/register"].includes(location.pathname)) {
             navigate("/dashboard");
         }
     };
 
-    // ✅ LOGOUT : On appelle le back pour nettoyer le cookie
     const logout = async () => {
         try {
             await api.post("/auth/logout");
