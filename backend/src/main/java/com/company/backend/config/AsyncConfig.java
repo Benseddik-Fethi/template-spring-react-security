@@ -5,7 +5,14 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * Configuration pour activer les opérations asynchrones.
- * Utilisé notamment pour l'envoi d'emails en arrière-plan.
+ * <p>
+ * Permet l'utilisation de l'annotation @Async pour exécuter des méthodes
+ * en arrière-plan, notamment pour l'envoi d'emails non bloquant.
+ * </p>
+ *
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @Configuration
 @EnableAsync

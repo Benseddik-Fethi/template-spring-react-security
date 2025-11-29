@@ -5,8 +5,15 @@ import org.mapstruct.ReportingPolicy;
 
 /**
  * Configuration globale pour MapStruct.
- * - Intégration Spring (Injection de dépendances)
- * - Ignorer les champs non mappés (pour éviter les warnings inutiles)
+ * <p>
+ * Définit les paramètres communs à tous les mappers :
+ * intégration Spring pour l'injection de dépendances et
+ * politique d'ignorance des champs non mappés.
+ * </p>
+ *
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @org.mapstruct.MapperConfig(
         componentModel = MappingConstants.ComponentModel.SPRING,

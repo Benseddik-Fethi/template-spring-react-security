@@ -11,14 +11,25 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Repository pour les tokens de vérification d'email.
+ * Repository pour l'accès aux tokens de vérification d'email.
+ * <p>
+ * Gère les tokens temporaires utilisés pour la vérification d'adresse email.
+ * Utilise des JOIN FETCH pour optimiser le chargement des utilisateurs.
+ * </p>
+ *
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @Repository
 public interface VerificationTokenRepository extends JpaRepository<VerificationToken, UUID> {
 
     /**
      * Recherche un token valide (non expiré).
-     * Utilise JOIN FETCH pour charger l'utilisateur en une seule requête (évite N+1).
+     *
+     * @param token le token à rechercher
+     * @param now   l'instant actuel
+     * @return le token s'il est valide
      */
     @Query("""
         SELECT t FROM VerificationToken t 
@@ -30,18 +41,26 @@ public interface VerificationTokenRepository extends JpaRepository<VerificationT
 
     /**
      * Recherche le token d'un utilisateur.
+     *
+     * @param userId l'identifiant de l'utilisateur
+     * @return le token s'il existe
      */
     Optional<VerificationToken> findByUserId(UUID userId);
 
     /**
      * Supprime le token d'un utilisateur.
+     *
+     * @param userId l'identifiant de l'utilisateur
      */
     @Modifying
     @Query("DELETE FROM VerificationToken t WHERE t.user.id = :userId")
     void deleteByUserId(UUID userId);
 
     /**
-     * Supprime les tokens expirés (nettoyage).
+     * Supprime les tokens expirés (nettoyage périodique).
+     *
+     * @param now l'instant actuel
+     * @return le nombre de tokens supprimés
      */
     @Modifying
     @Query("DELETE FROM VerificationToken t WHERE t.expiresAt < :now")

@@ -33,13 +33,21 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /**
- * Configuration Spring Security 6.4.
+ * Configuration principale de Spring Security.
  * <p>
- * 🛡️ Sécurité :
- * - Stateless (JWT, pas de sessions HTTP)
- * - CSRF désactivé (API REST stateless)
- * - CORS configuré pour le frontend
- * - Argon2 pour le hashage des mots de passe
+ * Configure la sécurité de l'application avec :
+ * <ul>
+ *   <li>Authentification JWT stateless</li>
+ *   <li>OAuth2 (Google, Facebook)</li>
+ *   <li>Protection CORS</li>
+ *   <li>En-têtes de sécurité (CSP, HSTS, etc.)</li>
+ *   <li>Hashage des mots de passe avec Argon2</li>
+ * </ul>
+ * </p>
+ *
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @Configuration
 @EnableWebSecurity
@@ -56,13 +64,7 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final SecurityProperties securityProperties;
 
-    /**
-     * Endpoints publics (sans authentification).
-     *
-     * ✅ Inclut les endpoints avec et sans /v1/ pour compatibilité frontend.
-     */
     private static final String[] PUBLIC_ENDPOINTS = {
-            // Endpoints API v1
             "/api/v1/auth/**",
             "/api/v1/public/**",
             "/api/v1/users/verify-email",
@@ -70,7 +72,6 @@ public class SecurityConfig {
             "/api/v1/users/forgot-password",
             "/api/v1/users/reset-password",
             "/api/v1/users/reset-password/validate",
-            // Monitoring et documentation
             "/actuator/health",
             "/actuator/info",
             "/swagger-ui/**",
@@ -79,6 +80,14 @@ public class SecurityConfig {
             "/error"
     };
 
+    /**
+     * Configure la chaîne de filtres de sécurité.
+     *
+     * @param http                   la configuration HTTP Security
+     * @param authenticationProvider le provider d'authentification
+     * @return la chaîne de filtres configurée
+     * @throws Exception en cas d'erreur de configuration
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationProvider authenticationProvider) throws Exception {
         http
@@ -94,15 +103,15 @@ public class SecurityConfig {
                 .headers(headers -> headers
                         .contentSecurityPolicy(csp -> csp
                                 .policyDirectives(
-                                    "default-src 'self'; " +
-                                    "script-src 'self'; " +
-                                    "style-src 'self' 'unsafe-inline'; " +
-                                    "img-src 'self' data: https:; " +
-                                    "font-src 'self'; " +
-                                    "connect-src 'self'; " +
-                                    "frame-ancestors 'none'; " +
-                                    "base-uri 'self'; " +
-                                    "form-action 'self'"
+                                        "default-src 'self'; " +
+                                                "script-src 'self'; " +
+                                                "style-src 'self' 'unsafe-inline'; " +
+                                                "img-src 'self' data: https:; " +
+                                                "font-src 'self'; " +
+                                                "connect-src 'self'; " +
+                                                "frame-ancestors 'none'; " +
+                                                "base-uri 'self'; " +
+                                                "form-action 'self'"
                                 )
                         )
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::deny)
@@ -120,7 +129,6 @@ public class SecurityConfig {
                         .addHeaderWriter(new StaticHeadersWriter("Permissions-Policy", "geolocation=(), microphone=(), camera=(), payment=()"))
                 )
                 .authorizeHttpRequests(auth -> auth
-
                         .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
@@ -139,7 +147,9 @@ public class SecurityConfig {
     }
 
     /**
-     * Configuration CORS.
+     * Configure les règles CORS pour les requêtes cross-origin.
+     *
+     * @return la source de configuration CORS
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -151,7 +161,6 @@ public class SecurityConfig {
         configuration.setAllowCredentials(securityProperties.cors().allowCredentials());
         configuration.setMaxAge(securityProperties.cors().maxAge());
 
-        // Headers exposés au frontend
         configuration.addExposedHeader("Authorization");
         configuration.addExposedHeader("X-Total-Count");
 
@@ -162,33 +171,31 @@ public class SecurityConfig {
     }
 
     /**
-     * 🛡️ Encodeur de mots de passe Argon2 - Niveau bancaire.
+     * Configure l'encodeur de mots de passe Argon2.
+     * <p>
+     * Argon2id est recommandé par l'OWASP pour sa résistance aux attaques
+     * GPU/ASIC. Paramètres conformes aux recommandations OWASP 2024.
+     * </p>
      *
-     * Argon2id est plus sécurisé que BCrypt et résistant aux attaques GPU/ASIC.
-     *
-     * Paramètres (OWASP 2024 recommandations) :
-     * - Salt : 16 bytes (128 bits)
-     * - Hash : 32 bytes (256 bits)
-     * - Parallelism : 4 (utilise 4 cores CPU)
-     * - Memory : 64 MB (65536 KB) - standard bancaire
-     * - Iterations : 4 (compromis sécurité/performance)
-     *
-     * Temps de hash : ~250-400ms sur serveur moderne
-     * (acceptable pour authentification, trop long pour attaque brute force)
+     * @return l'encodeur de mots de passe configuré
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new Argon2PasswordEncoder(
-            16,
-            32,
-            4,
-            1 << 16,
-            4
+                16,
+                32,
+                4,
+                1 << 16,
+                4
         );
     }
 
     /**
-     * Provider d'authentification.
+     * Configure le provider d'authentification DAO.
+     *
+     * @param userDetailsService le service de chargement des utilisateurs
+     * @param passwordEncoder    l'encodeur de mots de passe
+     * @return le provider d'authentification configuré
      */
     @Bean
     public AuthenticationProvider authenticationProvider(
@@ -199,9 +206,11 @@ public class SecurityConfig {
         return authProvider;
     }
 
-
     /**
-     * Manager d'authentification.
+     * Configure le gestionnaire d'authentification.
+     *
+     * @param authenticationConfiguration la configuration d'authentification
+     * @return le gestionnaire d'authentification
      */
     @Bean
     public AuthenticationManager authenticationManager(

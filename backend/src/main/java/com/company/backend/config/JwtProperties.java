@@ -7,10 +7,20 @@ import org.springframework.validation.annotation.Validated;
 import java.time.Duration;
 
 /**
- * Propriétés de configuration JWT.
- * Chargées depuis application.yml sous le préfixe "jwt".
+ * Propriétés de configuration pour les tokens JWT.
+ * <p>
+ * Chargées depuis le fichier application.yml sous le préfixe "jwt".
+ * La clé secrète est obligatoire et doit faire au minimum 256 bits.
+ * </p>
  *
- * 🛡️ Validation : clé secrète obligatoire et min 256 bits.
+ * @param secret       la clé secrète pour signer les tokens (obligatoire)
+ * @param accessToken  configuration du token d'accès
+ * @param refreshToken configuration du token de rafraîchissement
+ * @param issuer       l'émetteur des tokens (claim "iss")
+ * @param audience     l'audience des tokens (claim "aud")
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @ConfigurationProperties(prefix = "jwt")
 @Validated
@@ -24,6 +34,12 @@ public record JwtProperties(
         String issuer,
         String audience
 ) {
+
+    /**
+     * Configuration du token d'accès.
+     *
+     * @param expiration durée de validité (15 minutes par défaut)
+     */
     public record AccessToken(Duration expiration) {
         public AccessToken {
             if (expiration == null) {
@@ -32,6 +48,11 @@ public record JwtProperties(
         }
     }
 
+    /**
+     * Configuration du token de rafraîchissement.
+     *
+     * @param expiration durée de validité (7 jours par défaut)
+     */
     public record RefreshToken(Duration expiration) {
         public RefreshToken {
             if (expiration == null) {

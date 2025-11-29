@@ -9,98 +9,84 @@ import com.company.backend.dto.response.UserResponse;
 import java.util.UUID;
 
 /**
- * Service de gestion des utilisateurs.
+ * Interface du service de gestion des utilisateurs.
+ * <p>
+ * Gère toutes les opérations liées aux comptes utilisateur :
+ * vérification d'email, réinitialisation et changement de mot de passe,
+ * gestion du profil.
+ * </p>
  *
- * Responsabilités :
- * - Vérification d'email
- * - Réinitialisation de mot de passe
- * - Changement de mot de passe
- * - Gestion du profil
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 public interface UserService {
-
-    // ═══════════════════════════════════════════════════════════════════════════
-    // VÉRIFICATION D'EMAIL
-    // ═══════════════════════════════════════════════════════════════════════════
 
     /**
      * Envoie un email de vérification à l'utilisateur.
      *
-     * @param userId ID de l'utilisateur
+     * @param userId l'identifiant de l'utilisateur
      */
     void sendVerificationEmail(UUID userId);
 
     /**
-     * Renvoie l'email de vérification.
+     * Renvoie l'email de vérification à un utilisateur.
      *
-     * @param request Email de l'utilisateur
+     * @param request l'email de l'utilisateur
      */
     void resendVerificationEmail(ResendVerificationRequest request);
 
     /**
-     * Vérifie l'adresse email avec le token.
+     * Vérifie l'adresse email avec le token reçu.
      *
-     * @param token Token de vérification
-     * @return true si la vérification a réussi
+     * @param token le token de vérification
+     * @return {@code true} si la vérification a réussi
      */
     boolean verifyEmail(String token);
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    // RÉINITIALISATION DE MOT DE PASSE
-    // ═══════════════════════════════════════════════════════════════════════════
-
     /**
-     * Demande une réinitialisation de mot de passe.
-     * Envoie un email avec le lien de réinitialisation.
+     * Initie une demande de réinitialisation de mot de passe.
      *
-     * @param request Email de l'utilisateur
+     * @param request l'email de l'utilisateur
      */
     void forgotPassword(ForgotPasswordRequest request);
 
     /**
-     * Vérifie si un token de reset est valide.
+     * Vérifie si un token de réinitialisation est valide.
      *
-     * @param token Token de réinitialisation
-     * @return true si le token est valide
+     * @param token le token à vérifier
+     * @return {@code true} si le token est valide
      */
     boolean isResetTokenValid(String token);
 
     /**
-     * Réinitialise le mot de passe avec le token.
+     * Réinitialise le mot de passe avec un token valide.
      *
-     * @param request Token et nouveau mot de passe
+     * @param request le token et le nouveau mot de passe
      */
     void resetPassword(ResetPasswordRequest request);
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    // CHANGEMENT DE MOT DE PASSE
-    // ═══════════════════════════════════════════════════════════════════════════
-
     /**
-     * Change le mot de passe de l'utilisateur connecté.
+     * Change le mot de passe d'un utilisateur connecté.
      *
-     * @param userId ID de l'utilisateur
-     * @param request Mot de passe actuel et nouveau
+     * @param userId  l'identifiant de l'utilisateur
+     * @param request le mot de passe actuel et le nouveau
      */
     void changePassword(UUID userId, ChangePasswordRequest request);
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    // PROFIL
-    // ═══════════════════════════════════════════════════════════════════════════
-
     /**
-     * Récupère les informations d'un utilisateur.
+     * Récupère les informations d'un utilisateur par son identifiant.
      *
-     * @param userId ID de l'utilisateur
-     * @return Informations utilisateur
+     * @param userId l'identifiant de l'utilisateur
+     * @return les informations de l'utilisateur
      */
     UserResponse getUserById(UUID userId);
 
     /**
-     * Récupère un utilisateur par son email.
+     * Récupère les informations d'un utilisateur par son email.
      *
-     * @param email Email de l'utilisateur
-     * @return Informations utilisateur
+     * @param email l'adresse email de l'utilisateur
+     * @return les informations de l'utilisateur
      */
     UserResponse getUserByEmail(String email);
 }

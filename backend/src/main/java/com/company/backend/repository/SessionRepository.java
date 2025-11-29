@@ -12,14 +12,25 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Repository pour l'entité Session (refresh tokens).
+ * Repository pour l'accès aux sessions utilisateur (refresh tokens).
+ * <p>
+ * Gère les sessions utilisateur contenant les refresh tokens hashés.
+ * Utilise des JOIN FETCH pour optimiser le chargement des utilisateurs.
+ * </p>
+ *
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @Repository
 public interface SessionRepository extends JpaRepository<Session, UUID> {
 
     /**
      * Recherche une session active par hash du refresh token.
-     * Utilise JOIN FETCH pour charger l'utilisateur en une seule requête (évite N+1).
+     *
+     * @param tokenHash le hash SHA-256 du refresh token
+     * @param now       l'instant actuel pour vérifier l'expiration
+     * @return la session si elle est valide
      */
     @Query("""
         SELECT s FROM Session s 
@@ -32,6 +43,10 @@ public interface SessionRepository extends JpaRepository<Session, UUID> {
 
     /**
      * Recherche toutes les sessions actives d'un utilisateur.
+     *
+     * @param userId l'identifiant de l'utilisateur
+     * @param now    l'instant actuel
+     * @return la liste des sessions actives
      */
     @Query("""
         SELECT s FROM Session s 
@@ -44,6 +59,10 @@ public interface SessionRepository extends JpaRepository<Session, UUID> {
 
     /**
      * Révoque toutes les sessions d'un utilisateur.
+     *
+     * @param userId l'identifiant de l'utilisateur
+     * @param now    l'instant de révocation
+     * @return le nombre de sessions révoquées
      */
     @Modifying
     @Query("UPDATE Session s SET s.revokedAt = :now WHERE s.user.id = :userId AND s.revokedAt IS NULL")
@@ -51,6 +70,10 @@ public interface SessionRepository extends JpaRepository<Session, UUID> {
 
     /**
      * Révoque une session spécifique.
+     *
+     * @param sessionId l'identifiant de la session
+     * @param now       l'instant de révocation
+     * @return le nombre de sessions révoquées
      */
     @Modifying
     @Query("UPDATE Session s SET s.revokedAt = :now WHERE s.id = :sessionId AND s.revokedAt IS NULL")
@@ -58,14 +81,22 @@ public interface SessionRepository extends JpaRepository<Session, UUID> {
 
     /**
      * Supprime les sessions expirées (nettoyage périodique).
+     *
+     * @param now l'instant actuel
+     * @return le nombre de sessions supprimées
      */
     @Modifying
     @Query("DELETE FROM Session s WHERE s.expiresAt < :now")
     int deleteExpiredSessions(Instant now);
 
     /**
-     * Supprime les sessions révoquées anciennes (nettoyage audit).
+     * Supprime les sessions révoquées anciennes.
+     * <p>
      * Les sessions révoquées sont conservées 30 jours pour audit/forensics.
+     * </p>
+     *
+     * @param before la date limite
+     * @return le nombre de sessions supprimées
      */
     @Modifying
     @Query("DELETE FROM Session s WHERE s.revokedAt IS NOT NULL AND s.revokedAt < :before")
@@ -73,6 +104,10 @@ public interface SessionRepository extends JpaRepository<Session, UUID> {
 
     /**
      * Compte les sessions actives d'un utilisateur.
+     *
+     * @param userId l'identifiant de l'utilisateur
+     * @param now    l'instant actuel
+     * @return le nombre de sessions actives
      */
     @Query("""
         SELECT COUNT(s) FROM Session s 

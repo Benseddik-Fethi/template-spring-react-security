@@ -23,19 +23,21 @@ import java.io.IOException;
 import java.time.Instant;
 
 /**
- * Handler de succès OAuth2 pour Google Login.
+ * Handler de succès pour l'authentification OAuth2.
+ * <p>
+ * Gère le flux post-authentification OAuth2 :
+ * <ol>
+ *   <li>Récupère les informations utilisateur du fournisseur</li>
+ *   <li>Crée ou met à jour l'utilisateur en base</li>
+ *   <li>Génère les tokens JWT</li>
+ *   <li>Stocke les tokens en cookies HTTP-only</li>
+ *   <li>Redirige vers le frontend</li>
+ * </ol>
+ * </p>
  *
- * 🔄 Workflow sécurisé avec cookies HTTP-only :
- * 1. Récupère les infos utilisateur de Google
- * 2. Crée ou met à jour l'utilisateur en BDD
- * 3. Génère les tokens JWT
- * 4. Stocke les tokens en cookies HTTP-only
- * 5. Redirige vers le frontend
- *
- * 🛡️ Sécurité :
- * - Tokens en cookies HTTP-only (inaccessibles au JavaScript)
- * - Secure flag (HTTPS uniquement en prod)
- * - SameSite=Strict (protection CSRF)
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @Component
 @RequiredArgsConstructor
@@ -53,6 +55,14 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Value("${app.security.cors.allowed-origins:http://localhost:5173}")
     private String frontendUrl;
 
+    /**
+     * Gère l'authentification OAuth2 réussie.
+     *
+     * @param request        la requête HTTP
+     * @param response       la réponse HTTP
+     * @param authentication l'authentification OAuth2
+     * @throws IOException en cas d'erreur de redirection
+     */
     @Override
     public void onAuthenticationSuccess(
             HttpServletRequest request,
@@ -66,7 +76,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         log.debug("OAuth2 success - Provider: {}", provider);
 
-        // Extraire les informations utilisateur
         String email = oAuth2User.getAttribute("email");
         String providerId = oAuth2User.getAttribute("sub");
         String firstName = oAuth2User.getAttribute("given_name");
@@ -79,21 +88,16 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             return;
         }
 
-        // Créer ou récupérer l'utilisateur
         User user = findOrCreateUser(email, providerId, firstName, lastName, avatar, provider);
 
-        // Générer les tokens
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
-        // Créer la session
         createSession(user, refreshToken, request);
 
-        // 🛡️ Stocker les tokens en cookies HTTP-only
         cookieUtils.addAccessTokenCookie(response, accessToken);
         cookieUtils.addRefreshTokenCookie(response, refreshToken);
 
-        // Log d'audit
         auditLogRepository.save(AuditLog.oauthLogin(
                 user,
                 AuthProvider.valueOf(provider.toUpperCase()),
@@ -103,10 +107,20 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         log.info("OAuth2 login réussi pour: {} - Tokens en cookies HTTP-only", email);
 
-        // Rediriger vers le frontend (sans tokens dans l'URL !)
         getRedirectStrategy().sendRedirect(request, response, frontendUrl + "/auth/callback");
     }
 
+    /**
+     * Recherche ou crée un utilisateur à partir des données OAuth2.
+     *
+     * @param email      l'adresse email
+     * @param providerId l'identifiant chez le fournisseur
+     * @param firstName  le prénom
+     * @param lastName   le nom de famille
+     * @param avatar     l'URL de l'avatar
+     * @param provider   le nom du fournisseur
+     * @return l'utilisateur trouvé ou créé
+     */
     private User findOrCreateUser(
             String email,
             String providerId,
@@ -141,6 +155,13 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                         }));
     }
 
+    /**
+     * Crée une session pour l'utilisateur authentifié.
+     *
+     * @param user         l'utilisateur
+     * @param refreshToken le refresh token
+     * @param request      la requête HTTP
+     */
     private void createSession(User user, String refreshToken, HttpServletRequest request) {
         Session session = Session.builder()
                 .user(user)

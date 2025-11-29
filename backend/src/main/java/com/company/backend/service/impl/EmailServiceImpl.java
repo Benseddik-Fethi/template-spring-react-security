@@ -16,12 +16,15 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 import java.util.Map;
 
 /**
- * Implémentation du service d'envoi d'emails avec Thymeleaf.
+ * Implémentation du service d'envoi d'emails avec templates Thymeleaf.
+ * <p>
+ * Envoie les emails de manière asynchrone pour ne pas bloquer les requêtes.
+ * Les templates sont situés dans /resources/templates/email/.
+ * </p>
  *
- * 📧 Templates dans : /resources/templates/email/
- *
- * En mode développement (mail.enabled=false) : logs uniquement.
- * En production : envoi via SMTP.
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @Service
 @Slf4j
@@ -39,6 +42,12 @@ public class EmailServiceImpl implements EmailService {
     @Value("${app.name:template}")
     private String appName;
 
+    /**
+     * Constructeur avec injection des dépendances.
+     *
+     * @param mailSender          le sender de mails Spring
+     * @param emailTemplateEngine le moteur de templates Thymeleaf pour les emails
+     */
     public EmailServiceImpl(
             JavaMailSender mailSender,
             @Qualifier("emailTemplateEngine") SpringTemplateEngine emailTemplateEngine
@@ -100,17 +109,15 @@ public class EmailServiceImpl implements EmailService {
     /**
      * Envoie un email avec un template Thymeleaf.
      *
-     * @param to Destinataire
-     * @param subject Sujet
-     * @param templateName Nom du template (sans extension)
-     * @param variables Variables à injecter dans le template
+     * @param to           l'adresse email destinataire
+     * @param subject      le sujet de l'email
+     * @param templateName le nom du template (sans extension)
+     * @param variables    les variables à injecter dans le template
      */
     private void sendTemplatedEmail(String to, String subject, String templateName, Map<String, Object> variables) {
-        // Créer le contexte Thymeleaf
         Context context = new Context();
         context.setVariables(variables);
 
-        // Générer le contenu HTML
         String htmlContent = emailTemplateEngine.process(templateName, context);
 
         try {
@@ -123,10 +130,10 @@ public class EmailServiceImpl implements EmailService {
             helper.setText(htmlContent, true);
 
             mailSender.send(message);
-            log.info("📧 Email envoyé à {} - Template: {}", to, templateName);
+            log.info("Email envoyé à {} - Template: {}", to, templateName);
 
         } catch (MessagingException e) {
-            log.error("❌ Erreur envoi email à {}: {}", to, e.getMessage());
+            log.error("Erreur envoi email à {}: {}", to, e.getMessage());
         }
     }
 }

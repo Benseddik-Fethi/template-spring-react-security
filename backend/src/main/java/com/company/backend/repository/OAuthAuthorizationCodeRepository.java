@@ -11,14 +11,25 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Repository pour les codes d'autorisation OAuth2.
+ * Repository pour l'accès aux codes d'autorisation OAuth2.
+ * <p>
+ * Gère les codes temporaires générés après authentification OAuth2
+ * et échangés contre les tokens JWT.
+ * </p>
+ *
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @Repository
 public interface OAuthAuthorizationCodeRepository extends JpaRepository<OAuthAuthorizationCode, UUID> {
 
     /**
      * Recherche un code valide (non expiré et non utilisé).
-     * Utilise JOIN FETCH pour charger l'utilisateur en une seule requête (évite N+1).
+     *
+     * @param code le code à rechercher
+     * @param now  l'instant actuel
+     * @return le code s'il est valide
      */
     @Query("""
         SELECT c FROM OAuthAuthorizationCode c 
@@ -31,13 +42,18 @@ public interface OAuthAuthorizationCodeRepository extends JpaRepository<OAuthAut
 
     /**
      * Supprime les codes expirés (nettoyage périodique).
+     *
+     * @param now l'instant actuel
+     * @return le nombre de codes supprimés
      */
     @Modifying
     @Query("DELETE FROM OAuthAuthorizationCode c WHERE c.expiresAt < :now")
     int deleteExpiredCodes(Instant now);
 
     /**
-     * Supprime les codes utilisés (nettoyage).
+     * Supprime les codes déjà utilisés.
+     *
+     * @return le nombre de codes supprimés
      */
     @Modifying
     @Query("DELETE FROM OAuthAuthorizationCode c WHERE c.used = true")

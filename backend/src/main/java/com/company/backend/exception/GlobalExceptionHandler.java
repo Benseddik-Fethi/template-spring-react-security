@@ -16,10 +16,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Gestionnaire global des exceptions.
- * Retourne des réponses JSON uniformes.
+ * Gestionnaire global des exceptions de l'application.
+ * <p>
+ * Intercepte toutes les exceptions et retourne des réponses JSON
+ * uniformes avec les codes HTTP appropriés.
+ * </p>
  *
- * 🛡️ Sécurité : Ne pas exposer les détails techniques en production.
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @RestControllerAdvice
 @Slf4j
@@ -27,6 +32,13 @@ public class GlobalExceptionHandler {
 
     /**
      * Structure standard d'une réponse d'erreur.
+     *
+     * @param status    le code HTTP
+     * @param error     le type d'erreur
+     * @param message   le message d'erreur
+     * @param path      le chemin de la requête
+     * @param timestamp l'horodatage de l'erreur
+     * @param details   les détails additionnels
      */
     public record ErrorResponse(
             int status,
@@ -46,7 +58,11 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Ressource non trouvée (404).
+     * Gère les exceptions ResourceNotFoundException (404).
+     *
+     * @param ex      l'exception
+     * @param request la requête web
+     * @return la réponse d'erreur
      */
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(
@@ -66,7 +82,11 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Requête invalide (400).
+     * Gère les exceptions BadRequestException (400).
+     *
+     * @param ex      l'exception
+     * @param request la requête web
+     * @return la réponse d'erreur
      */
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponse> handleBadRequestException(
@@ -86,7 +106,11 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Erreur d'authentification (401).
+     * Gère les exceptions AuthenticationException (401).
+     *
+     * @param ex      l'exception
+     * @param request la requête web
+     * @return la réponse d'erreur
      */
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ErrorResponse> handleAuthenticationException(
@@ -106,7 +130,11 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Compte verrouillé (423).
+     * Gère les exceptions AccountLockedException (423).
+     *
+     * @param ex      l'exception
+     * @param request la requête web
+     * @return la réponse d'erreur
      */
     @ExceptionHandler(AccountLockedException.class)
     public ResponseEntity<ErrorResponse> handleAccountLockedException(
@@ -130,7 +158,11 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Accès refusé (403).
+     * Gère les exceptions AccessDeniedException (403).
+     *
+     * @param ex      l'exception
+     * @param request la requête web
+     * @return la réponse d'erreur
      */
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponse> handleAccessDeniedException(
@@ -150,7 +182,11 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Erreurs de validation (400).
+     * Gère les erreurs de validation des arguments (400).
+     *
+     * @param ex      l'exception
+     * @param request la requête web
+     * @return la réponse d'erreur
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(
@@ -178,7 +214,11 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Erreurs de contrainte de validation (400).
+     * Gère les violations de contraintes (400).
+     *
+     * @param ex      l'exception
+     * @param request la requête web
+     * @return la réponse d'erreur
      */
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorResponse> handleConstraintViolationException(
@@ -206,8 +246,11 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Erreur serveur générique (500).
-     * ⚠️ Ne pas exposer les détails en production.
+     * Gère toutes les autres exceptions (500).
+     *
+     * @param ex      l'exception
+     * @param request la requête web
+     * @return la réponse d'erreur
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGlobalException(

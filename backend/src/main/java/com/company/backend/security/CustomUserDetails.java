@@ -13,7 +13,14 @@ import java.util.UUID;
 
 /**
  * Implémentation de UserDetails pour Spring Security.
- * Encapsule l'entité User pour l'authentification.
+ * <p>
+ * Encapsule l'entité User pour l'authentification et l'autorisation
+ * dans le contexte Spring Security.
+ * </p>
+ *
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @RequiredArgsConstructor
 @Getter
@@ -53,19 +60,22 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        // Peut être utilisé pour vérifier si l'email est vérifié
         return true;
     }
 
     /**
-     * Récupère l'ID de l'utilisateur.
+     * Récupère l'identifiant unique de l'utilisateur.
+     *
+     * @return l'UUID de l'utilisateur
      */
     public UUID getId() {
         return user.getId();
     }
 
     /**
-     * Récupère l'email de l'utilisateur.
+     * Récupère l'adresse email de l'utilisateur.
+     *
+     * @return l'email de l'utilisateur
      */
     public String getEmail() {
         return user.getEmail();

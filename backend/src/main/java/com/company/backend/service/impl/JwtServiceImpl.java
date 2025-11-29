@@ -21,13 +21,16 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Implémentation du service JWT avec JJWT 0.13.0.
+ * Implémentation du service JWT avec la bibliothèque JJWT.
+ * <p>
+ * Gère la génération, la validation et l'extraction des claims des tokens JWT.
+ * Utilise HMAC-SHA256 pour la signature et stocke les refresh tokens hashés
+ * en base de données pour plus de sécurité.
+ * </p>
  *
- * 🛡️ Sécurité :
- * - Clé HMAC-SHA256 (256 bits minimum)
- * - Claims standards (iss, aud, sub, exp, iat)
- * - Distinction access/refresh via claim "type"
- * - Hash SHA-256 pour stockage des refresh tokens
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @Service
 @Slf4j
@@ -40,10 +43,6 @@ public class JwtServiceImpl implements JwtService {
     private static final String TOKEN_TYPE_ACCESS = "access";
     private static final String TOKEN_TYPE_REFRESH = "refresh";
 
-    /**
-     * ThreadLocal pour réutiliser MessageDigest par thread (performance).
-     * MessageDigest n'est pas thread-safe, donc on utilise ThreadLocal.
-     */
     private static final ThreadLocal<MessageDigest> SHA256_DIGEST = ThreadLocal.withInitial(() -> {
         try {
             return MessageDigest.getInstance("SHA-256");
@@ -56,6 +55,11 @@ public class JwtServiceImpl implements JwtService {
     private final JwtProperties jwtProperties;
     private final JwtParser jwtParser;
 
+    /**
+     * Constructeur avec injection des propriétés JWT.
+     *
+     * @param jwtProperties les propriétés de configuration JWT
+     */
     public JwtServiceImpl(JwtProperties jwtProperties) {
         this.jwtProperties = jwtProperties;
         this.secretKey = Keys.hmacShaKeyFor(jwtProperties.secret().getBytes(StandardCharsets.UTF_8));
@@ -67,39 +71,33 @@ public class JwtServiceImpl implements JwtService {
     }
 
     /**
-     * 🛡️ SÉCURITÉ CRITIQUE : Validation du secret JWT au démarrage.
+     * Valide la configuration JWT au démarrage de l'application.
      *
-     * Vérifie que :
-     * - Le secret n'est pas la valeur par défaut (CRITIQUE)
-     * - Le secret fait au minimum 512 bits (64 caractères) pour HMAC-SHA256
-     *
-     * Si la validation échoue, l'application refuse de démarrer.
+     * @throws IllegalStateException si la configuration est invalide
      */
     @PostConstruct
     public void validateJwtConfiguration() {
         String secret = jwtProperties.secret();
 
-        // Vérifier que le secret par défaut n'est pas utilisé
         if (secret.startsWith("CHANGE_ME_IN_PRODUCTION")) {
             throw new IllegalStateException(
-                "🔴 SÉCURITÉ CRITIQUE: JWT_SECRET n'est pas configuré! " +
-                "Définissez la variable d'environnement JWT_SECRET avec un secret aléatoire de 512 bits minimum."
+                    "SÉCURITÉ CRITIQUE: JWT_SECRET n'est pas configuré! " +
+                            "Définissez la variable d'environnement JWT_SECRET avec un secret aléatoire de 512 bits minimum."
             );
         }
 
-        // Vérifier la longueur minimale (512 bits = 64 caractères pour sécurité bancaire)
         if (secret.length() < 64) {
             throw new IllegalStateException(
-                String.format(
-                    "🔴 SÉCURITÉ CRITIQUE: JWT_SECRET trop court (%d caractères). " +
-                    "Pour un niveau de sécurité bancaire, le secret doit faire au minimum 512 bits (64 caractères). " +
-                    "Générez un secret aléatoire avec: openssl rand -base64 64",
-                    secret.length()
-                )
+                    String.format(
+                            "SÉCURITÉ CRITIQUE: JWT_SECRET trop court (%d caractères). " +
+                                    "Le secret doit faire au minimum 512 bits (64 caractères). " +
+                                    "Générez un secret avec: openssl rand -base64 64",
+                            secret.length()
+                    )
             );
         }
 
-        log.info("✅ JWT secret validé: {} bits", secret.length() * 8);
+        log.info("JWT secret validé: {} bits", secret.length() * 8);
     }
 
     @Override
@@ -176,13 +174,17 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public String hashToken(String refreshToken) {
         MessageDigest digest = SHA256_DIGEST.get();
-        digest.reset(); // Réinitialiser pour une utilisation réutilisable
+        digest.reset();
         byte[] hash = digest.digest(refreshToken.getBytes(StandardCharsets.UTF_8));
         return HexFormat.of().formatHex(hash);
     }
 
     /**
-     * Extrait un claim du token.
+     * Extrait un claim spécifique du token.
+     *
+     * @param token     le token JWT
+     * @param claimName le nom du claim à extraire
+     * @return la valeur du claim ou empty si extraction impossible
      */
     private Optional<String> extractClaim(String token, String claimName) {
         try {

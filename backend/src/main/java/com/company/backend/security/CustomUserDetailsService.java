@@ -13,6 +13,14 @@ import java.util.UUID;
 
 /**
  * Service de chargement des utilisateurs pour Spring Security.
+ * <p>
+ * Implémente UserDetailsService pour fournir les détails utilisateur
+ * lors de l'authentification. Supporte le chargement par email ou par ID.
+ * </p>
+ *
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @Service
 @RequiredArgsConstructor
@@ -20,6 +28,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+    /**
+     * Charge un utilisateur par son email.
+     *
+     * @param email l'adresse email de l'utilisateur
+     * @return les détails de l'utilisateur pour Spring Security
+     * @throws UsernameNotFoundException si l'utilisateur n'existe pas
+     */
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -32,8 +47,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     /**
-     * Charge un utilisateur par son ID.
-     * Utilisé pour le filtre JWT.
+     * Charge un utilisateur par son identifiant.
+     * <p>
+     * Utilisé principalement par le filtre JWT pour charger l'utilisateur
+     * à partir de l'ID extrait du token.
+     * </p>
+     *
+     * @param userId l'identifiant unique de l'utilisateur
+     * @return les détails de l'utilisateur pour Spring Security
+     * @throws UsernameNotFoundException si l'utilisateur n'existe pas
      */
     @Transactional(readOnly = true)
     public UserDetails loadUserById(UUID userId) throws UsernameNotFoundException {

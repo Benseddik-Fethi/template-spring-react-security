@@ -25,7 +25,15 @@ import java.time.Instant;
 import java.util.UUID;
 
 /**
- * Implémentation du service utilisateur.
+ * Implémentation du service de gestion des utilisateurs.
+ * <p>
+ * Gère la vérification d'email, la réinitialisation et le changement
+ * de mot de passe, ainsi que la consultation du profil utilisateur.
+ * </p>
+ *
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @Service
 @RequiredArgsConstructor
@@ -44,10 +52,6 @@ public class UserServiceImpl implements UserService {
     @Value("${app.frontend-url:http://localhost:5173}")
     private String frontendUrl;
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    // VÉRIFICATION D'EMAIL
-    // ═══════════════════════════════════════════════════════════════════════════
-
     @Override
     public void sendVerificationEmail(UUID userId) {
         User user = findUserById(userId);
@@ -57,14 +61,11 @@ public class UserServiceImpl implements UserService {
             return;
         }
 
-        // Supprimer l'ancien token s'il existe
         verificationTokenRepository.deleteByUserId(userId);
 
-        // Créer un nouveau token
         VerificationToken token = VerificationToken.create(user);
         verificationTokenRepository.save(token);
 
-        // Envoyer l'email
         String verificationLink = buildVerificationLink(token.getToken());
         emailService.sendVerificationEmail(
                 user.getEmail(),
@@ -84,7 +85,6 @@ public class UserServiceImpl implements UserService {
         log.debug("Demande de renvoi de vérification pour: {}", request.email());
     }
 
-    // ✅ CORRECTION MAJEURE : Robustesse et gestion des Race Conditions
     @Override
     public boolean verifyEmail(String token) {
         VerificationToken verificationToken = verificationTokenRepository
@@ -99,21 +99,16 @@ public class UserServiceImpl implements UserService {
         User user = verificationToken.getUser();
         UUID userId = user.getId();
 
-        // Idempotence : Si l'utilisateur est déjà vérifié, c'est un succès.
         if (Boolean.TRUE.equals(user.getEmailVerified())) {
-            // Nettoyage du token (bulk delete - pas d'exception si déjà supprimé)
             verificationTokenRepository.deleteByUserId(userId);
             return true;
         }
 
-        // Marquer l'email comme vérifié
         user.setEmailVerified(true);
         userRepository.save(user);
 
-        // Suppression du token (bulk delete - gère les race conditions sans exception)
         verificationTokenRepository.deleteByUserId(userId);
 
-        // Envoyer un email de bienvenue
         try {
             emailService.sendWelcomeEmail(
                     user.getEmail(),
@@ -126,10 +121,6 @@ public class UserServiceImpl implements UserService {
         log.info("Email vérifié avec succès pour: {}", user.getEmail());
         return true;
     }
-
-    // ═══════════════════════════════════════════════════════════════════════════
-    // RÉINITIALISATION DE MOT DE PASSE
-    // ═══════════════════════════════════════════════════════════════════════════
 
     @Override
     public void forgotPassword(ForgotPasswordRequest request) {
@@ -186,10 +177,6 @@ public class UserServiceImpl implements UserService {
         log.info("Mot de passe réinitialisé pour: {}", user.getEmail());
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    // CHANGEMENT DE MOT DE PASSE
-    // ═══════════════════════════════════════════════════════════════════════════
-
     @Override
     public void changePassword(UUID userId, ChangePasswordRequest request) {
         User user = findUserById(userId);
@@ -215,10 +202,6 @@ public class UserServiceImpl implements UserService {
         log.info("Mot de passe changé pour: {}", user.getEmail());
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    // PROFIL
-    // ═══════════════════════════════════════════════════════════════════════════
-
     @Override
     @Transactional(readOnly = true)
     public UserResponse getUserById(UUID userId) {
@@ -234,19 +217,34 @@ public class UserServiceImpl implements UserService {
         return UserResponse.fromEntity(user);
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    // MÉTHODES PRIVÉES
-    // ═══════════════════════════════════════════════════════════════════════════
-
+    /**
+     * Recherche un utilisateur par son identifiant.
+     *
+     * @param userId l'identifiant de l'utilisateur
+     * @return l'utilisateur trouvé
+     * @throws ResourceNotFoundException si l'utilisateur n'existe pas
+     */
     private User findUserById(UUID userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
     }
 
+    /**
+     * Construit le lien de vérification d'email.
+     *
+     * @param token le token de vérification
+     * @return l'URL complète de vérification
+     */
     private String buildVerificationLink(String token) {
         return frontendUrl + "/auth/verify-email?token=" + token;
     }
 
+    /**
+     * Construit le lien de réinitialisation de mot de passe.
+     *
+     * @param token le token de réinitialisation
+     * @return l'URL complète de réinitialisation
+     */
     private String buildPasswordResetLink(String token) {
         return frontendUrl + "/auth/reset-password?token=" + token;
     }

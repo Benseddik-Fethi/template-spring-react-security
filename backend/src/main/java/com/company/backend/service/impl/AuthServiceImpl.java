@@ -28,8 +28,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.UUID;
 
+/**
+ * Implémentation du service d'authentification.
+ * <p>
+ * Gère l'inscription, la connexion, la déconnexion, le rafraîchissement
+ * des tokens et l'authentification OAuth2. Inclut la protection contre
+ * les attaques par force brute et les timing attacks.
+ * </p>
+ *
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -53,12 +64,10 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void register(RegisterRequest request, HttpServletRequest httpRequest) {
-        // Vérifier si l'email existe déjà
         if (userRepository.existsByEmail(request.email())) {
             throw new BadRequestException("Un compte existe déjà avec cet email");
         }
 
-        // Créer l'utilisateur (emailVerified = false par défaut)
         User user = User.builder()
                 .email(request.email())
                 .passwordHash(passwordEncoder.encode(request.password()))
@@ -73,12 +82,14 @@ public class AuthServiceImpl implements AuthService {
 
         log.info("Nouvel utilisateur inscrit: {}", user.getEmail());
 
-        // Envoyer l'email de vérification
         sendVerificationEmail(user);
-
-        // ❌ PAS DE TOKEN GÉNÉRÉ ICI
     }
 
+    /**
+     * Envoie l'email de vérification à l'utilisateur.
+     *
+     * @param user l'utilisateur à vérifier
+     */
     private void sendVerificationEmail(User user) {
         VerificationToken token = VerificationToken.create(user);
         verificationTokenRepository.save(token);
@@ -99,7 +110,6 @@ public class AuthServiceImpl implements AuthService {
 
         User user = userRepository.findByEmail(request.email()).orElse(null);
 
-        // Protection Timing Attack
         boolean passwordMatches = false;
         if (user != null) {
             passwordMatches = passwordEncoder.matches(request.password(), user.getPasswordHash());
@@ -118,7 +128,6 @@ public class AuthServiceImpl implements AuthService {
             throw new AuthenticationException("Email ou mot de passe incorrect");
         }
 
-        // ✅ SÉCURITÉ : Bloquer si l'email n'est pas vérifié
         if (Boolean.FALSE.equals(user.getEmailVerified())) {
             log.warn("Connexion refusée (Email non vérifié): {}", user.getEmail());
             throw new AuthenticationException("Veuillez vérifier votre adresse email avant de vous connecter.");
@@ -131,14 +140,15 @@ public class AuthServiceImpl implements AuthService {
         return createAuthResponse(user, httpRequest);
     }
 
-    // ... Les méthodes refreshToken, exchangeOAuthCode, logout, logoutAll, createAuthResponse, handleFailedLogin
-    // ... RESTENT IDENTIQUES À AVANT (Copie-les si besoin, mais elles ne changent pas)
-
     @Override
     public AuthResponse refreshToken(RefreshTokenRequest request, HttpServletRequest httpRequest) {
         String refreshToken = request.refreshToken();
-        if (!jwtService.isTokenValid(refreshToken)) throw new AuthenticationException("Refresh token invalide");
-        if (jwtService.isAccessToken(refreshToken)) throw new AuthenticationException("Token invalide");
+        if (!jwtService.isTokenValid(refreshToken)) {
+            throw new AuthenticationException("Refresh token invalide");
+        }
+        if (jwtService.isAccessToken(refreshToken)) {
+            throw new AuthenticationException("Token invalide");
+        }
 
         String tokenHash = jwtService.hashToken(refreshToken);
         Session session = sessionRepository.findValidByRefreshTokenHash(tokenHash, Instant.now())
@@ -167,7 +177,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void logout(String refreshToken, HttpServletRequest httpRequest) {
-        if (refreshToken == null || refreshToken.isBlank()) return;
+        if (refreshToken == null || refreshToken.isBlank()) {
+            return;
+        }
         String tokenHash = jwtService.hashToken(refreshToken);
         sessionRepository.findValidByRefreshTokenHash(tokenHash, Instant.now()).ifPresent(s -> {
             s.revoke();
@@ -182,6 +194,13 @@ public class AuthServiceImpl implements AuthService {
         sessionRepository.revokeAllUserSessions(userDetails.getId(), Instant.now());
     }
 
+    /**
+     * Crée la réponse d'authentification avec les tokens JWT.
+     *
+     * @param user        l'utilisateur authentifié
+     * @param httpRequest la requête HTTP
+     * @return la réponse d'authentification
+     */
     private AuthResponse createAuthResponse(User user, HttpServletRequest httpRequest) {
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
@@ -199,11 +218,20 @@ public class AuthServiceImpl implements AuthService {
         return new AuthResponse(accessToken, refreshToken, expiresIn, UserResponse.fromEntity(user));
     }
 
+    /**
+     * Gère une tentative de connexion échouée.
+     *
+     * @param user      l'utilisateur concerné
+     * @param ip        l'adresse IP du client
+     * @param userAgent le User-Agent du navigateur
+     */
     private void handleFailedLogin(User user, String ip, String userAgent) {
         SecurityProperties.BruteForce bruteForce = securityProperties.bruteForce();
         user.recordFailedLogin(bruteForce.maxAttempts(), (int) bruteForce.lockDuration().toMinutes());
         userRepository.save(user);
         auditLogRepository.save(AuditLog.loginFailed(user.getEmail(), ip, userAgent, "Invalid password"));
-        if (user.isAccountLocked()) auditLogRepository.save(AuditLog.accountLocked(user, ip));
+        if (user.isAccountLocked()) {
+            auditLogRepository.save(AuditLog.accountLocked(user, ip));
+        }
     }
 }

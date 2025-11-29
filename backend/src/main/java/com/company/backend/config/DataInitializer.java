@@ -13,8 +13,16 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- * Initialisation des données de test au démarrage.
- * Ne s'active que si le profil n'est PAS "prod" (sécurité).
+ * Initialisation des données de test au démarrage de l'application.
+ * <p>
+ * Crée des comptes utilisateur par défaut pour faciliter le développement
+ * et les tests. Cette configuration n'est active que si le profil "prod"
+ * n'est pas actif, pour des raisons de sécurité.
+ * </p>
+ *
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @Configuration
 @RequiredArgsConstructor
@@ -24,18 +32,26 @@ public class DataInitializer {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * Initialise les données de test au démarrage.
+     * <p>
+     * Crée un compte admin et un compte utilisateur standard si la base
+     * de données est vide. Ne s'exécute jamais en production.
+     * </p>
+     *
+     * @return le runner d'initialisation
+     */
     @Bean
-    @Profile("!prod") // Ne jamais exécuter en production
+    @Profile("!prod")
     public CommandLineRunner initData() {
         return args -> {
             if (userRepository.count() > 0) {
-                log.info("🚫 La base de données contient déjà des utilisateurs. Initialisation ignorée.");
+                log.info("La base de données contient déjà des utilisateurs. Initialisation ignorée.");
                 return;
             }
 
-            log.info("🚀 Initialisation du jeu de données de démarrage...");
+            log.info("Initialisation du jeu de données de démarrage...");
 
-            // 1. Créer un ADMIN
             createAccount(
                     "admin@template.com",
                     "Password123!",
@@ -44,7 +60,6 @@ public class DataInitializer {
                     Role.ADMIN
             );
 
-            // 2. Créer un USER standard
             createAccount(
                     "user@template.com",
                     "Password123!",
@@ -53,12 +68,21 @@ public class DataInitializer {
                     Role.USER
             );
 
-            log.info("✅ Jeu de données initialisé avec succès !");
-            log.info("👉 Admin: admin@template.com / Password123!");
-            log.info("👉 User:  user@template.com  / Password123!");
+            log.info("Jeu de données initialisé avec succès !");
+            log.info("Admin: admin@template.com / Password123!");
+            log.info("User:  user@template.com  / Password123!");
         };
     }
 
+    /**
+     * Crée un compte utilisateur avec les paramètres spécifiés.
+     *
+     * @param email     l'adresse email
+     * @param password  le mot de passe en clair
+     * @param firstName le prénom
+     * @param lastName  le nom de famille
+     * @param role      le rôle de l'utilisateur
+     */
     private void createAccount(String email, String password, String firstName, String lastName, Role role) {
         User user = User.builder()
                 .email(email)
@@ -67,7 +91,7 @@ public class DataInitializer {
                 .lastName(lastName)
                 .role(role)
                 .provider(AuthProvider.EMAIL)
-                .emailVerified(true) // Compte déjà activé
+                .emailVerified(true)
                 .failedLoginAttempts(0)
                 .build();
 

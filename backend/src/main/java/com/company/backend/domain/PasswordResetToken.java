@@ -9,11 +9,16 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 /**
- * Entité PasswordResetToken - Token de réinitialisation de mot de passe.
+ * Entité représentant un token de réinitialisation de mot de passe.
+ * <p>
+ * Utilisé pour permettre aux utilisateurs de réinitialiser leur mot de passe
+ * via un lien envoyé par email. Le token expire après 1 heure et est marqué
+ * comme utilisé après la réinitialisation pour garantir un usage unique.
+ * </p>
  *
- * 🛡️ Sécurité :
- * - Expiration 1 heure
- * - Usage unique (marqué comme utilisé)
+ * @author Fethi Benseddik
+ * @version 1.0
+ * @since 2024
  */
 @Entity
 @Table(name = "password_reset_tokens", indexes = {
@@ -52,26 +57,37 @@ public class PasswordResetToken {
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    // MÉTHODES UTILITAIRES
-    // ═══════════════════════════════════════════════════════════════════════════
-
+    /**
+     * Vérifie si le token a expiré.
+     *
+     * @return {@code true} si le token est expiré, {@code false} sinon
+     */
     public boolean isExpired() {
         return Instant.now().isAfter(expiresAt);
     }
 
+    /**
+     * Vérifie si le token est valide (non utilisé et non expiré).
+     *
+     * @return {@code true} si le token est valide, {@code false} sinon
+     */
     public boolean isValid() {
         return !used && !isExpired();
     }
 
+    /**
+     * Marque le token comme utilisé pour empêcher sa réutilisation.
+     */
     public void markAsUsed() {
         this.used = true;
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    // FACTORY METHODS
-    // ═══════════════════════════════════════════════════════════════════════════
-
+    /**
+     * Crée un nouveau token de réinitialisation avec la durée d'expiration par défaut.
+     *
+     * @param user l'utilisateur demandant la réinitialisation
+     * @return le token de réinitialisation créé
+     */
     public static PasswordResetToken create(User user) {
         return PasswordResetToken.builder()
                 .token(UUID.randomUUID().toString())
@@ -81,6 +97,13 @@ public class PasswordResetToken {
                 .build();
     }
 
+    /**
+     * Crée un nouveau token de réinitialisation avec une durée d'expiration personnalisée.
+     *
+     * @param user              l'utilisateur demandant la réinitialisation
+     * @param expirationMinutes durée de validité en minutes
+     * @return le token de réinitialisation créé
+     */
     public static PasswordResetToken create(User user, int expirationMinutes) {
         return PasswordResetToken.builder()
                 .token(UUID.randomUUID().toString())
