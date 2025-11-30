@@ -1,21 +1,14 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
-import { Lock, Eye, EyeOff, KeyRound, Loader2, CheckCircle, XCircle, ArrowLeft } from "lucide-react";
+import { KeyRound, Loader2, CheckCircle, XCircle, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { api } from "@/lib/api";
-import { isAxiosError } from "axios";
-
-// Password validation rules matching backend requirements
-const passwordRules = [
-    { id: 'length', label: '12 à 128 caractères', test: (p: string) => p.length >= 12 && p.length <= 128 },
-    { id: 'lowercase', label: 'Au moins une minuscule', test: (p: string) => /[a-z]/.test(p) },
-    { id: 'uppercase', label: 'Au moins une majuscule', test: (p: string) => /[A-Z]/.test(p) },
-    { id: 'digit', label: 'Au moins un chiffre', test: (p: string) => /\d/.test(p) },
-    { id: 'special', label: "Au moins un caractère spécial (@$!%*?&#^()_+-=[]{};':\"\\|,.<>/`~)", test: (p: string) => /[@$!%*?&#^()_+\-=[\]{};':"\\|,.<>/`~]/.test(p) },
-];
+import { authService } from "@/services";
+import { handleApiError } from "@/lib/error-handler";
+import { ROUTES } from "@/config";
+import { PasswordInput } from "@/components/forms/PasswordInput";
+import { passwordRules } from "@/lib/validators";
+import { ErrorMessage } from "@/components/common/ErrorMessage";
 
 export default function ResetPasswordPage() {
     const [searchParams] = useSearchParams();
@@ -25,8 +18,6 @@ export default function ResetPasswordPage() {
     const [status, setStatus] = useState<"loading" | "valid" | "invalid" | "success" | "error">("loading");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -37,9 +28,9 @@ export default function ResetPasswordPage() {
             return;
         }
 
-        api.get(`/users/reset-password/validate?token=${encodeURIComponent(token)}`)
+        authService.validateResetToken(token)
             .then((response) => {
-                if (response.data.valid) {
+                if (response.valid) {
                     setStatus("valid");
                 } else {
                     setStatus("invalid");
@@ -64,17 +55,13 @@ export default function ResetPasswordPage() {
         setErrorMessage(null);
 
         try {
-            await api.post('/users/reset-password', {
+            await authService.resetPassword({
                 token,
                 newPassword: password
             });
             setStatus("success");
         } catch (err) {
-            if (isAxiosError(err)) {
-                setErrorMessage(err.response?.data?.message || "Une erreur est survenue");
-            } else {
-                setErrorMessage("Une erreur est survenue");
-            }
+            setErrorMessage(handleApiError(err));
             setStatus("error");
         } finally {
             setIsSubmitting(false);
@@ -116,12 +103,12 @@ export default function ResetPasswordPage() {
                             Le lien a peut-être expiré ou a déjà été utilisé. Vous pouvez demander un nouveau lien de réinitialisation.
                         </p>
                         <div className="space-y-3">
-                            <Link to="/auth/forgot-password">
+                            <Link to={ROUTES.AUTH.FORGOT_PASSWORD}>
                                 <Button className="w-full h-12 text-base font-bold rounded-2xl bg-gradient-to-r from-[#FF6B6B] to-[#FF8E8E] hover:opacity-90 shadow-md shadow-rose-100 dark:shadow-none text-white">
                                     Demander un nouveau lien
                                 </Button>
                             </Link>
-                            <Link to="/login">
+                            <Link to={ROUTES.LOGIN}>
                                 <Button
                                     variant="outline"
                                     className="w-full h-12 rounded-xl border-gray-200 dark:border-slate-700 font-semibold"
@@ -155,7 +142,7 @@ export default function ResetPasswordPage() {
                     </CardHeader>
                     <CardContent className="p-8">
                         <Button
-                            onClick={() => navigate("/login")}
+                            onClick={() => navigate(ROUTES.LOGIN)}
                             className="w-full h-14 text-base font-bold rounded-2xl bg-gradient-to-r from-[#FF6B6B] to-[#FF8E8E] hover:opacity-90 shadow-md shadow-rose-100 dark:shadow-none text-white"
                         >
                             Se connecter
@@ -184,28 +171,12 @@ export default function ResetPasswordPage() {
 
                 <CardContent className="p-8 space-y-6">
                     <form onSubmit={handleSubmit} className="space-y-5">
-                        <div className="space-y-1.5">
-                            <Label className="text-gray-600 dark:text-gray-300 font-medium pl-1">
-                                Nouveau mot de passe
-                            </Label>
-                            <div className="relative">
-                                <Input
-                                    icon={Lock}
-                                    className="h-12 bg-slate-50 dark:bg-slate-950 border-transparent focus:bg-white dark:focus:bg-slate-900 focus:border-rose-200 rounded-xl pl-11 pr-10 text-gray-600 dark:text-white shadow-sm"
-                                    placeholder="••••••••••••"
-                                    type={showPassword ? "text" : "password"}
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
-                                >
-                                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                                </button>
-                            </div>
-                        </div>
+                        <PasswordInput
+                            label="Nouveau mot de passe"
+                            value={password}
+                            onChange={setPassword}
+                            placeholder="••••••••••••"
+                        />
 
                         {/* Password rules */}
                         <div className="bg-slate-50 dark:bg-slate-950 rounded-xl p-4 space-y-2">
@@ -229,37 +200,15 @@ export default function ResetPasswordPage() {
                             })}
                         </div>
 
-                        <div className="space-y-1.5">
-                            <Label className="text-gray-600 dark:text-gray-300 font-medium pl-1">
-                                Confirmer le mot de passe
-                            </Label>
-                            <div className="relative">
-                                <Input
-                                    icon={Lock}
-                                    className="h-12 bg-slate-50 dark:bg-slate-950 border-transparent focus:bg-white dark:focus:bg-slate-900 focus:border-rose-200 rounded-xl pl-11 pr-10 text-gray-600 dark:text-white shadow-sm"
-                                    placeholder="••••••••••••"
-                                    type={showConfirmPassword ? "text" : "password"}
-                                    value={confirmPassword}
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
-                                >
-                                    {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                                </button>
-                            </div>
-                            {confirmPassword && !doPasswordsMatch && (
-                                <p className="text-sm text-red-500 pl-1 mt-1">
-                                    Les mots de passe ne correspondent pas
-                                </p>
-                            )}
-                        </div>
+                        <PasswordInput
+                            label="Confirmer le mot de passe"
+                            value={confirmPassword}
+                            onChange={setConfirmPassword}
+                            placeholder="••••••••••••"
+                            error={confirmPassword && !doPasswordsMatch ? "Les mots de passe ne correspondent pas" : undefined}
+                        />
 
-                        {errorMessage && (
-                            <p className="text-sm text-red-500 text-center">{errorMessage}</p>
-                        )}
+                        {errorMessage && <ErrorMessage message={errorMessage} />}
 
                         <Button
                             type="submit"
@@ -278,7 +227,7 @@ export default function ResetPasswordPage() {
 
                         <div className="text-center pt-2">
                             <Link
-                                to="/login"
+                                to={ROUTES.LOGIN}
                                 className="text-sm text-gray-500 dark:text-gray-400 hover:text-rose-500 font-medium inline-flex items-center"
                             >
                                 <ArrowLeft className="mr-1 h-4 w-4" />

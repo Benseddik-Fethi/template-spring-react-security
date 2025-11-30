@@ -1,17 +1,11 @@
 import { createContext, useContext, useState, useEffect, type ReactNode, useCallback, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { api } from "@/lib/api";
+import { authService } from "@/services";
+import { ROUTES } from "@/config";
+import type { User } from "@/types";
 
-// ✅ Type mis à jour avec emailVerified
-export type User = {
-    id: string;
-    email: string;
-    firstName?: string | null;
-    lastName?: string | null;
-    role: "USER" | "ADMIN";
-    avatar?: string;
-    emailVerified: boolean;
-};
+// Re-export User type for backward compatibility
+export type { User } from "@/types";
 
 interface AuthContextType {
     user: User | null;
@@ -32,8 +26,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Initialisation - memoized pour éviter les recréations inutiles
     const initAuth = useCallback(async () => {
         try {
-            const { data } = await api.get<User>("/auth/me");
-            setUser(data);
+            const user = await authService.me();
+            setUser(user);
         } catch {
             setUser(null);
         } finally {
@@ -52,20 +46,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Memoized pour éviter les re-renders inutiles des composants enfants
     const login = useCallback((newUser: User) => {
         setUser(newUser);
-        if (["/login", "/register"].includes(location.pathname)) {
-            navigate("/dashboard");
+        if (location.pathname === ROUTES.LOGIN || location.pathname === ROUTES.REGISTER) {
+            navigate(ROUTES.DASHBOARD);
         }
     }, [location.pathname, navigate]);
 
     // Memoized pour éviter les re-renders inutiles des composants enfants
     const logout = useCallback(async () => {
         try {
-            await api.post("/auth/logout");
+            await authService.logout();
         } catch (e) {
             console.error(e);
         }
         setUser(null);
-        navigate("/login");
+        navigate(ROUTES.LOGIN);
     }, [navigate]);
 
     // Memoize le contexte pour éviter les re-renders inutiles

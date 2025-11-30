@@ -3,8 +3,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { api } from "@/lib/api";
 import { Link } from "react-router-dom";
+import { authService } from "@/services";
+import { ROUTES } from "@/config";
 
 export default function ResendVerificationPage() {
     const [email, setEmail] = useState("");
@@ -14,7 +15,7 @@ export default function ResendVerificationPage() {
         e.preventDefault();
         setStatus("loading");
         try {
-            await api.post("/users/resend-verification", { email });
+            await authService.resendVerification({ email });
             setStatus("success");
         } catch (error) {
             console.error(error);
@@ -35,7 +36,7 @@ export default function ResendVerificationPage() {
                             <div className="p-4 bg-green-50 text-green-700 rounded-lg">
                                 Email envoyé ! Vérifiez votre boîte de réception.
                             </div>
-                            <Button asChild className="w-full"><Link to="/login">Retour connexion</Link></Button>
+                            <Button asChild className="w-full"><Link to={ROUTES.LOGIN}>Retour connexion</Link></Button>
                         </div>
                     ) : (
                         <form onSubmit={handleSubmit} className="space-y-4">
