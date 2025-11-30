@@ -12,7 +12,7 @@ import jakarta.validation.constraints.NotBlank;
  * @param refreshToken le token de rafraîchissement
  * @author Fethi Benseddik
  * @version 1.0
- * @since 2024
+ * @since 2025
  */
 public record RefreshTokenRequest(
         @NotBlank(message = "Le refresh token est obligatoire")

@@ -16,7 +16,7 @@ import jakarta.validation.constraints.Size;
  * @param newPassword le nouveau mot de passe souhaité
  * @author Fethi Benseddik
  * @version 1.0
- * @since 2024
+ * @since 2025
  */
 public record ResetPasswordRequest(
         @NotBlank(message = "Le token est obligatoire")

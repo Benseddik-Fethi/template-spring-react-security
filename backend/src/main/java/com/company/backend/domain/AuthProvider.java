@@ -10,7 +10,7 @@ package com.company.backend.domain;
  *
  * @author Fethi Benseddik
  * @version 1.0
- * @since 2024
+ * @since 2025
  */
 public enum AuthProvider {
 

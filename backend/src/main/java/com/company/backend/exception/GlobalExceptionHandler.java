@@ -24,38 +24,11 @@ import java.util.Map;
  *
  * @author Fethi Benseddik
  * @version 1.0
- * @since 2024
+ * @since 2025
  */
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
-
-    /**
-     * Structure standard d'une réponse d'erreur.
-     *
-     * @param status    le code HTTP
-     * @param error     le type d'erreur
-     * @param message   le message d'erreur
-     * @param path      le chemin de la requête
-     * @param timestamp l'horodatage de l'erreur
-     * @param details   les détails additionnels
-     */
-    public record ErrorResponse(
-            int status,
-            String error,
-            String message,
-            String path,
-            Instant timestamp,
-            Map<String, Object> details
-    ) {
-        public ErrorResponse(int status, String error, String message, String path) {
-            this(status, error, message, path, Instant.now(), null);
-        }
-
-        public ErrorResponse(int status, String error, String message, String path, Map<String, Object> details) {
-            this(status, error, message, path, Instant.now(), details);
-        }
-    }
 
     /**
      * Gère les exceptions ResourceNotFoundException (404).
@@ -267,5 +240,32 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
+
+    /**
+     * Structure standard d'une réponse d'erreur.
+     *
+     * @param status    le code HTTP
+     * @param error     le type d'erreur
+     * @param message   le message d'erreur
+     * @param path      le chemin de la requête
+     * @param timestamp l'horodatage de l'erreur
+     * @param details   les détails additionnels
+     */
+    public record ErrorResponse(
+            int status,
+            String error,
+            String message,
+            String path,
+            Instant timestamp,
+            Map<String, Object> details
+    ) {
+        public ErrorResponse(int status, String error, String message, String path) {
+            this(status, error, message, path, Instant.now(), null);
+        }
+
+        public ErrorResponse(int status, String error, String message, String path, Map<String, Object> details) {
+            this(status, error, message, path, Instant.now(), details);
+        }
     }
 }

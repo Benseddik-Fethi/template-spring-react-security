@@ -13,7 +13,7 @@ import org.mapstruct.Mapper;
  *
  * @author Fethi Benseddik
  * @version 1.0
- * @since 2024
+ * @since 2025
  */
 @Mapper(config = MapperConfig.class)
 public interface UserMapper {

@@ -20,7 +20,7 @@ import java.time.Duration;
  * @param audience     l'audience des tokens (claim "aud")
  * @author Fethi Benseddik
  * @version 1.0
- * @since 2024
+ * @since 2025
  */
 @ConfigurationProperties(prefix = "jwt")
 @Validated
@@ -34,6 +34,21 @@ public record JwtProperties(
         String issuer,
         String audience
 ) {
+
+    public JwtProperties {
+        if (accessToken == null) {
+            accessToken = new AccessToken(Duration.ofMinutes(15));
+        }
+        if (refreshToken == null) {
+            refreshToken = new RefreshToken(Duration.ofDays(7));
+        }
+        if (issuer == null || issuer.isBlank()) {
+            issuer = "template-api";
+        }
+        if (audience == null || audience.isBlank()) {
+            audience = "template-app";
+        }
+    }
 
     /**
      * Configuration du token d'accès.
@@ -58,21 +73,6 @@ public record JwtProperties(
             if (expiration == null) {
                 expiration = Duration.ofDays(7);
             }
-        }
-    }
-
-    public JwtProperties {
-        if (accessToken == null) {
-            accessToken = new AccessToken(Duration.ofMinutes(15));
-        }
-        if (refreshToken == null) {
-            refreshToken = new RefreshToken(Duration.ofDays(7));
-        }
-        if (issuer == null || issuer.isBlank()) {
-            issuer = "template-api";
-        }
-        if (audience == null || audience.isBlank()) {
-            audience = "template-app";
         }
     }
 }

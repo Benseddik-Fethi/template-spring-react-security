@@ -13,7 +13,7 @@ import jakarta.validation.constraints.NotBlank;
  * @param email l'adresse email du compte
  * @author Fethi Benseddik
  * @version 1.0
- * @since 2024
+ * @since 2025
  */
 public record ForgotPasswordRequest(
         @NotBlank(message = "L'email est obligatoire")

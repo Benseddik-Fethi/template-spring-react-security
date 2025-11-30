@@ -13,7 +13,7 @@ import org.mapstruct.ReportingPolicy;
  *
  * @author Fethi Benseddik
  * @version 1.0
- * @since 2024
+ * @since 2025
  */
 @org.mapstruct.MapperConfig(
         componentModel = MappingConstants.ComponentModel.SPRING,

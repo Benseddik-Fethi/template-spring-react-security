@@ -20,7 +20,7 @@ import java.util.UUID;
  *
  * @author Fethi Benseddik
  * @version 1.0
- * @since 2024
+ * @since 2025
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
@@ -74,11 +74,11 @@ public interface UserRepository extends JpaRepository<User, UUID> {
      */
     @Modifying
     @Query("""
-        UPDATE User u 
-        SET u.failedLoginAttempts = u.failedLoginAttempts + 1, 
-            u.lastFailedLogin = :now 
-        WHERE u.id = :userId
-    """)
+                UPDATE User u 
+                SET u.failedLoginAttempts = u.failedLoginAttempts + 1, 
+                    u.lastFailedLogin = :now 
+                WHERE u.id = :userId
+            """)
     void incrementFailedLoginAttempts(UUID userId, Instant now);
 
     /**

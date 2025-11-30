@@ -17,7 +17,7 @@ import java.util.UUID;
  *
  * @author Fethi Benseddik
  * @version 1.0
- * @since 2024
+ * @since 2025
  */
 @Entity
 @Table(name = "oauth_authorization_codes", indexes = {
@@ -60,22 +60,6 @@ public class OAuthAuthorizationCode {
     private Instant createdAt;
 
     /**
-     * Vérifie si le code est valide (non expiré et non utilisé).
-     *
-     * @return {@code true} si le code est valide, {@code false} sinon
-     */
-    public boolean isValid() {
-        return !used && Instant.now().isBefore(expiresAt);
-    }
-
-    /**
-     * Marque le code comme utilisé pour empêcher sa réutilisation.
-     */
-    public void markAsUsed() {
-        this.used = true;
-    }
-
-    /**
      * Crée un nouveau code d'autorisation avec expiration dans 30 secondes.
      *
      * @param user         l'utilisateur authentifié
@@ -92,5 +76,21 @@ public class OAuthAuthorizationCode {
                 .expiresAt(Instant.now().plusSeconds(30))
                 .used(false)
                 .build();
+    }
+
+    /**
+     * Vérifie si le code est valide (non expiré et non utilisé).
+     *
+     * @return {@code true} si le code est valide, {@code false} sinon
+     */
+    public boolean isValid() {
+        return !used && Instant.now().isBefore(expiresAt);
+    }
+
+    /**
+     * Marque le code comme utilisé pour empêcher sa réutilisation.
+     */
+    public void markAsUsed() {
+        this.used = true;
     }
 }

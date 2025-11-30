@@ -25,7 +25,7 @@ import java.util.UUID;
  * @param updatedAt     la date de dernière modification
  * @author Fethi Benseddik
  * @version 1.0
- * @since 2024
+ * @since 2025
  */
 public record UserResponse(
         UUID id,

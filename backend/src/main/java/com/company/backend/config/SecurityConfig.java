@@ -47,22 +47,13 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
  *
  * @author Fethi Benseddik
  * @version 1.0
- * @since 2024
+ * @since 2025
  */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
-
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final RateLimitFilter rateLimitFilter;
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    private final OAuth2SuccessHandler oAuth2SuccessHandler;
-    private final OAuth2FailureHandler oAuth2FailureHandler;
-    private final UserDetailsService userDetailsService;
-    private final SecurityProperties securityProperties;
 
     private static final String[] PUBLIC_ENDPOINTS = {
             "/api/v1/auth/**",
@@ -79,6 +70,14 @@ public class SecurityConfig {
             "/v3/api-docs/**",
             "/error"
     };
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final RateLimitFilter rateLimitFilter;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
+    private final OAuth2FailureHandler oAuth2FailureHandler;
+    private final UserDetailsService userDetailsService;
+    private final SecurityProperties securityProperties;
 
     /**
      * Configure la chaîne de filtres de sécurité.

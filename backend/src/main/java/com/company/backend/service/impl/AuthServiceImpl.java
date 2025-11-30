@@ -39,7 +39,7 @@ import java.time.Instant;
  *
  * @author Fethi Benseddik
  * @version 1.0
- * @since 2024
+ * @since 2025
  */
 @Service
 @RequiredArgsConstructor
@@ -110,7 +110,7 @@ public class AuthServiceImpl implements AuthService {
 
         User user = userRepository.findByEmail(request.email()).orElse(null);
 
-        boolean passwordMatches = false;
+        boolean passwordMatches;
         if (user != null) {
             passwordMatches = passwordEncoder.matches(request.password(), user.getPasswordHash());
         } else {

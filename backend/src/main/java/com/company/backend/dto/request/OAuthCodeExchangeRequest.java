@@ -12,7 +12,7 @@ import jakarta.validation.constraints.NotBlank;
  * @param code le code d'autorisation OAuth2 à échanger
  * @author Fethi Benseddik
  * @version 1.0
- * @since 2024
+ * @since 2025
  */
 public record OAuthCodeExchangeRequest(
         @NotBlank(message = "Le code d'autorisation est obligatoire")

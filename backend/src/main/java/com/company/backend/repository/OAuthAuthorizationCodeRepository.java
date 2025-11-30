@@ -19,7 +19,7 @@ import java.util.UUID;
  *
  * @author Fethi Benseddik
  * @version 1.0
- * @since 2024
+ * @since 2025
  */
 @Repository
 public interface OAuthAuthorizationCodeRepository extends JpaRepository<OAuthAuthorizationCode, UUID> {
@@ -32,12 +32,12 @@ public interface OAuthAuthorizationCodeRepository extends JpaRepository<OAuthAut
      * @return le code s'il est valide
      */
     @Query("""
-        SELECT c FROM OAuthAuthorizationCode c 
-        JOIN FETCH c.user
-        WHERE c.code = :code 
-        AND c.used = false 
-        AND c.expiresAt > :now
-    """)
+                SELECT c FROM OAuthAuthorizationCode c 
+                JOIN FETCH c.user
+                WHERE c.code = :code 
+                AND c.used = false 
+                AND c.expiresAt > :now
+            """)
     Optional<OAuthAuthorizationCode> findValidByCode(String code, Instant now);
 
     /**

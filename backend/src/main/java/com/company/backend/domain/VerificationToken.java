@@ -18,7 +18,7 @@ import java.util.UUID;
  *
  * @author Fethi Benseddik
  * @version 1.0
- * @since 2024
+ * @since 2025
  */
 @Entity
 @Table(name = "verification_tokens", indexes = {
@@ -54,24 +54,6 @@ public class VerificationToken {
     private Instant createdAt;
 
     /**
-     * Vérifie si le token a expiré.
-     *
-     * @return {@code true} si le token est expiré, {@code false} sinon
-     */
-    public boolean isExpired() {
-        return Instant.now().isAfter(expiresAt);
-    }
-
-    /**
-     * Vérifie si le token est valide (non expiré).
-     *
-     * @return {@code true} si le token est valide, {@code false} sinon
-     */
-    public boolean isValid() {
-        return !isExpired();
-    }
-
-    /**
      * Crée un nouveau token de vérification avec la durée d'expiration par défaut.
      *
      * @param user l'utilisateur associé au token
@@ -98,5 +80,23 @@ public class VerificationToken {
                 .user(user)
                 .expiresAt(Instant.now().plus(expirationHours, ChronoUnit.HOURS))
                 .build();
+    }
+
+    /**
+     * Vérifie si le token a expiré.
+     *
+     * @return {@code true} si le token est expiré, {@code false} sinon
+     */
+    public boolean isExpired() {
+        return Instant.now().isAfter(expiresAt);
+    }
+
+    /**
+     * Vérifie si le token est valide (non expiré).
+     *
+     * @return {@code true} si le token est valide, {@code false} sinon
+     */
+    public boolean isValid() {
+        return !isExpired();
     }
 }

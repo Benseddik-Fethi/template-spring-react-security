@@ -18,7 +18,7 @@ import java.util.UUID;
  *
  * @author Fethi Benseddik
  * @version 1.0
- * @since 2024
+ * @since 2025
  */
 @Entity
 @Table(name = "password_reset_tokens", indexes = {
@@ -58,31 +58,6 @@ public class PasswordResetToken {
     private Instant createdAt;
 
     /**
-     * Vérifie si le token a expiré.
-     *
-     * @return {@code true} si le token est expiré, {@code false} sinon
-     */
-    public boolean isExpired() {
-        return Instant.now().isAfter(expiresAt);
-    }
-
-    /**
-     * Vérifie si le token est valide (non utilisé et non expiré).
-     *
-     * @return {@code true} si le token est valide, {@code false} sinon
-     */
-    public boolean isValid() {
-        return !used && !isExpired();
-    }
-
-    /**
-     * Marque le token comme utilisé pour empêcher sa réutilisation.
-     */
-    public void markAsUsed() {
-        this.used = true;
-    }
-
-    /**
      * Crée un nouveau token de réinitialisation avec la durée d'expiration par défaut.
      *
      * @param user l'utilisateur demandant la réinitialisation
@@ -111,5 +86,30 @@ public class PasswordResetToken {
                 .expiresAt(Instant.now().plus(expirationMinutes, ChronoUnit.MINUTES))
                 .used(false)
                 .build();
+    }
+
+    /**
+     * Vérifie si le token a expiré.
+     *
+     * @return {@code true} si le token est expiré, {@code false} sinon
+     */
+    public boolean isExpired() {
+        return Instant.now().isAfter(expiresAt);
+    }
+
+    /**
+     * Vérifie si le token est valide (non utilisé et non expiré).
+     *
+     * @return {@code true} si le token est valide, {@code false} sinon
+     */
+    public boolean isValid() {
+        return !used && !isExpired();
+    }
+
+    /**
+     * Marque le token comme utilisé pour empêcher sa réutilisation.
+     */
+    public void markAsUsed() {
+        this.used = true;
     }
 }

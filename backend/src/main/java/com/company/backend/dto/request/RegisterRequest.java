@@ -20,7 +20,7 @@ import jakarta.validation.constraints.Size;
  * @param lastName  le nom de famille de l'utilisateur (optionnel)
  * @author Fethi Benseddik
  * @version 1.0
- * @since 2024
+ * @since 2025
  */
 public record RegisterRequest(
         @NotBlank(message = "L'email est obligatoire")

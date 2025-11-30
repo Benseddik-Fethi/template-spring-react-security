@@ -17,7 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
  *
  * @author Fethi Benseddik
  * @version 1.0
- * @since 2024
+ * @since 2025
  */
 public interface AuthService {
 

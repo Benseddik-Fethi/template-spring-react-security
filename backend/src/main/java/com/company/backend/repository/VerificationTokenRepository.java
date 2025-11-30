@@ -19,7 +19,7 @@ import java.util.UUID;
  *
  * @author Fethi Benseddik
  * @version 1.0
- * @since 2024
+ * @since 2025
  */
 @Repository
 public interface VerificationTokenRepository extends JpaRepository<VerificationToken, UUID> {
@@ -32,11 +32,11 @@ public interface VerificationTokenRepository extends JpaRepository<VerificationT
      * @return le token s'il est valide
      */
     @Query("""
-        SELECT t FROM VerificationToken t 
-        JOIN FETCH t.user
-        WHERE t.token = :token 
-        AND t.expiresAt > :now
-    """)
+                SELECT t FROM VerificationToken t 
+                JOIN FETCH t.user
+                WHERE t.token = :token 
+                AND t.expiresAt > :now
+            """)
     Optional<VerificationToken> findValidByToken(String token, Instant now);
 
     /**

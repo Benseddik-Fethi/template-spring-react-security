@@ -19,7 +19,7 @@ import java.util.UUID;
  *
  * @author Fethi Benseddik
  * @version 1.0
- * @since 2024
+ * @since 2025
  */
 @Repository
 public interface PasswordResetTokenRepository extends JpaRepository<PasswordResetToken, UUID> {
@@ -32,12 +32,12 @@ public interface PasswordResetTokenRepository extends JpaRepository<PasswordRese
      * @return le token s'il est valide
      */
     @Query("""
-        SELECT t FROM PasswordResetToken t 
-        JOIN FETCH t.user
-        WHERE t.token = :token 
-        AND t.used = false 
-        AND t.expiresAt > :now
-    """)
+                SELECT t FROM PasswordResetToken t 
+                JOIN FETCH t.user
+                WHERE t.token = :token 
+                AND t.used = false 
+                AND t.expiresAt > :now
+            """)
     Optional<PasswordResetToken> findValidByToken(String token, Instant now);
 
     /**

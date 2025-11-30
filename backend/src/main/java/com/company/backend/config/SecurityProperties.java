@@ -17,7 +17,7 @@ import java.util.List;
  * @param bruteForce configuration de la protection brute force
  * @author Fethi Benseddik
  * @version 1.0
- * @since 2024
+ * @since 2025
  */
 @ConfigurationProperties(prefix = "app.security")
 public record SecurityProperties(
@@ -25,6 +25,18 @@ public record SecurityProperties(
         RateLimit rateLimit,
         BruteForce bruteForce
 ) {
+
+    public SecurityProperties {
+        if (cors == null) {
+            cors = new Cors(null, null, null, null, null);
+        }
+        if (rateLimit == null) {
+            rateLimit = new RateLimit(null, null, null);
+        }
+        if (bruteForce == null) {
+            bruteForce = new BruteForce(null, null);
+        }
+    }
 
     /**
      * Configuration CORS (Cross-Origin Resource Sharing).
@@ -103,18 +115,6 @@ public record SecurityProperties(
             if (lockDuration == null) {
                 lockDuration = Duration.ofMinutes(15);
             }
-        }
-    }
-
-    public SecurityProperties {
-        if (cors == null) {
-            cors = new Cors(null, null, null, null, null);
-        }
-        if (rateLimit == null) {
-            rateLimit = new RateLimit(null, null, null);
-        }
-        if (bruteForce == null) {
-            bruteForce = new BruteForce(null, null);
         }
     }
 }

@@ -14,7 +14,7 @@ package com.company.backend.dto.response;
  * @param user         les informations de l'utilisateur authentifié
  * @author Fethi Benseddik
  * @version 1.0
- * @since 2024
+ * @since 2025
  */
 public record AuthResponse(
         String accessToken,

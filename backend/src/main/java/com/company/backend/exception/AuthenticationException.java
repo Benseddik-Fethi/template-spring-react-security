@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Fethi Benseddik
  * @version 1.0
- * @since 2024
+ * @since 2025
  */
 @ResponseStatus(HttpStatus.UNAUTHORIZED)
 public class AuthenticationException extends RuntimeException {

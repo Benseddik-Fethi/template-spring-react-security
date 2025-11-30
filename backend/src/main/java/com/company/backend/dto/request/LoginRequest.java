@@ -14,7 +14,7 @@ import jakarta.validation.constraints.NotBlank;
  * @param password le mot de passe de l'utilisateur
  * @author Fethi Benseddik
  * @version 1.0
- * @since 2024
+ * @since 2025
  */
 public record LoginRequest(
         @NotBlank(message = "L'email est obligatoire")
