@@ -41,6 +41,7 @@ export default function ForgotPasswordPage() {
             iconGradient="from-rose-400 to-pink-500"
             titleColor="text-rose-500"
             backgroundGradient="from-rose-50 via-pink-50 to-amber-50"
+            iconShadowColor="shadow-rose-200"
         >
             {isSubmitted ? (
                 <div className="text-center space-y-6">

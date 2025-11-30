@@ -56,6 +56,7 @@ export const me = async (): Promise<User> => {
 
 /**
  * Verifies user email with token
+ * Note: Token is passed as URL param to match backend API design
  * @param token - The verification token
  */
 export const verifyEmail = async ({ token }: VerifyEmailRequest): Promise<void> => {
@@ -80,6 +81,7 @@ export const forgotPassword = async (data: ForgotPasswordRequest): Promise<void>
 
 /**
  * Validates a password reset token
+ * Note: Token is passed as URL param to match backend API design
  * @param token - The reset token to validate
  * @returns Whether the token is valid
  */

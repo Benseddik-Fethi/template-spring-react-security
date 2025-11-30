@@ -25,7 +25,7 @@ export interface UseAsyncReturn<T, Args extends unknown[]> extends AsyncState<T>
 
 /**
  * Generic hook for managing async operations
- * @param asyncFunction - The async function to execute
+ * @param asyncFunction - The async function to execute. Should be wrapped in useCallback for stable reference.
  * @returns State and methods for managing the async operation
  */
 export function useAsync<T, Args extends unknown[] = []>(

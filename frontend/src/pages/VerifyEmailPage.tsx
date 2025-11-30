@@ -11,6 +11,7 @@ export default function VerifyEmailPage() {
     const navigate = useNavigate();
     const token = searchParams.get("token");
     const [status, setStatus] = useState<"loading" | "success" | "error">(token ? "loading" : "error");
+    // Ref to prevent double API call in React 18 Strict Mode development
     const hasCalledApi = useRef(false);
 
     useEffect(() => {

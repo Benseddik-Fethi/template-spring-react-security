@@ -23,6 +23,8 @@ interface AuthCardProps {
   className?: string;
   /** Background gradient for page */
   backgroundGradient?: string;
+  /** Shadow color class for icon container */
+  iconShadowColor?: string;
 }
 
 /**
@@ -37,6 +39,7 @@ export function AuthCard({
   titleColor = 'text-indigo-600',
   className,
   backgroundGradient = 'from-slate-50 via-gray-50 to-slate-100',
+  iconShadowColor = 'shadow-indigo-200',
 }: AuthCardProps) {
   return (
     <div
@@ -57,7 +60,7 @@ export function AuthCard({
             className={cn(
               'mx-auto w-20 h-20 rounded-3xl mb-4 flex items-center justify-center shadow-lg dark:shadow-none',
               `bg-gradient-to-br ${iconGradient}`,
-              iconGradient.includes('indigo') ? 'shadow-indigo-200' : 'shadow-rose-200'
+              iconShadowColor
             )}
           >
             <Icon size={40} className="text-white" />
