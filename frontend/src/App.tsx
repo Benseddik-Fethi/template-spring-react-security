@@ -1,4 +1,5 @@
 import {Navigate, Route, Routes} from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import SettingsPage from "@/pages/SettingsPage";
 import {useAuth} from "@/context/AuthContext";
@@ -16,8 +17,9 @@ import ResetPasswordPage from "@/pages/ResetPasswordPage.tsx";
 import { ROUTES } from "@/config";
 
 function RootRedirect() {
+    const { t } = useTranslation('pages');
     const {user, isLoading} = useAuth();
-    if (isLoading) return <div className="min-h-screen flex items-center justify-center">Chargement...</div>;
+    if (isLoading) return <div className="min-h-screen flex items-center justify-center">{t('loading')}</div>;
     return <Navigate to={user ? ROUTES.DASHBOARD : ROUTES.LOGIN} replace/>;
 }
 

@@ -1,0 +1,83 @@
+{
+  "dashboard": {
+    "title": "Dashboard",
+    "welcomeMessage": "Bienvenue sur votre template de démarrage",
+    "documentation": "Documentation",
+    "newAction": "Nouvelle Action",
+    "securityStatus": "Statut Sécurité",
+    "secured": "Sécurisé",
+    "userRole": "Rôle Utilisateur",
+    "apiPerformance": "Performance API",
+    "optimal": "Optimale",
+    "readyToCode": "Prêt à coder ?",
+    "templateDescription": "Ce template inclut tout ce dont vous avez besoin pour démarrer votre SaaS : Authentification complète (JWT, Cookies, OAuth2), gestion des utilisateurs, emails transactionnels et UI moderne.",
+    "backendFeature": "Backend Spring Boot 3.4 Clean Architecture",
+    "frontendFeature": "Frontend React 19 + Tailwind + Shadcn",
+    "securityFeature": "Sécurité avancée (Rate Limit, Argon2, HttpOnly)",
+    "yourContentHere": "Votre contenu ici",
+    "startAdding": "Commencez par ajouter vos entités dans le backend et créez vos pages ici."
+  },
+  "settings": {
+    "title": "Paramètres",
+    "description": "Gérez votre compte et vos préférences",
+    "menu": {
+      "profile": "Mon profil",
+      "notifications": "Notifications",
+      "security": "Sécurité",
+      "appearance": "Apparence",
+      "help": "Aide"
+    },
+    "logout": "Déconnexion",
+    "profile": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Email",
+      "phone": "Téléphone",
+      "phonePlaceholder": "Ajouter un numéro",
+      "address": "Adresse",
+      "addressPlaceholder": "Votre adresse",
+      "save": "Enregistrer",
+      "owner": "Propriétaire"
+    },
+    "appearance": {
+      "title": "Apparence",
+      "darkMode": "Mode Sombre",
+      "darkModeEnabled": "Activé (Thème sombre)",
+      "darkModeDisabled": "Désactivé (Thème clair)",
+      "controlledBySystem": "Contrôlé par le système",
+      "autoTheme": "Thème automatique",
+      "syncWithSystem": "Synchroniser avec le système",
+      "themeFollowsSystem": "Le thème suit le système"
+    },
+    "sectionInDevelopment": "Section en cours de développement"
+  },
+  "emailSent": {
+    "title": "Vérifiez vos emails",
+    "message": "Nous avons envoyé un lien de confirmation à votre adresse email. Veuillez cliquer dessus pour activer votre compte.",
+    "backToLogin": "Retour à la connexion",
+    "noEmailReceived": "Je n'ai rien reçu"
+  },
+  "resendVerification": {
+    "title": "Renvoyer le lien",
+    "description": "Recevez un nouveau lien d'activation",
+    "email": "Email",
+    "submit": "Envoyer",
+    "submitting": "Envoi...",
+    "successMessage": "Email envoyé ! Vérifiez votre boîte de réception.",
+    "backToLogin": "Retour connexion",
+    "errorMessage": "Une erreur est survenue."
+  },
+  "layout": {
+    "brandName": "Template",
+    "dashboard": "Dashboard",
+    "profile": "Mon Profil",
+    "settings": "Paramètres",
+    "logout": "Se déconnecter"
+  },
+  "loading": "Chargement...",
+  "notFound": {
+    "title": "Page non trouvée",
+    "message": "La page que vous recherchez n'existe pas.",
+    "backToHome": "Retour à l'accueil"
+  }
+}

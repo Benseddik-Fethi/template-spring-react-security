@@ -5,6 +5,7 @@
 import type { ReactNode, ElementType } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 
 interface AuthCardProps {
   /** Icon component to display */
@@ -49,6 +50,11 @@ export function AuthCard({
         'dark:from-slate-950 dark:via-slate-900 dark:to-slate-950'
       )}
     >
+      {/* Language switcher - top right position */}
+      <div className="absolute top-4 right-4 z-20">
+        <LanguageSwitcher />
+      </div>
+      
       <Card
         className={cn(
           'w-full max-w-md relative z-10 border-white/50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm shadow-xl dark:border-slate-800',

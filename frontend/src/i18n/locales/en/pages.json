@@ -1,0 +1,83 @@
+{
+  "dashboard": {
+    "title": "Dashboard",
+    "welcomeMessage": "Welcome to your starter template",
+    "documentation": "Documentation",
+    "newAction": "New Action",
+    "securityStatus": "Security Status",
+    "secured": "Secured",
+    "userRole": "User Role",
+    "apiPerformance": "API Performance",
+    "optimal": "Optimal",
+    "readyToCode": "Ready to code?",
+    "templateDescription": "This template includes everything you need to start your SaaS: Complete authentication (JWT, Cookies, OAuth2), user management, transactional emails and modern UI.",
+    "backendFeature": "Backend Spring Boot 3.4 Clean Architecture",
+    "frontendFeature": "Frontend React 19 + Tailwind + Shadcn",
+    "securityFeature": "Advanced Security (Rate Limit, Argon2, HttpOnly)",
+    "yourContentHere": "Your content here",
+    "startAdding": "Start by adding your entities in the backend and create your pages here."
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Manage your account and preferences",
+    "menu": {
+      "profile": "My Profile",
+      "notifications": "Notifications",
+      "security": "Security",
+      "appearance": "Appearance",
+      "help": "Help"
+    },
+    "logout": "Logout",
+    "profile": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phone": "Phone",
+      "phonePlaceholder": "Add a number",
+      "address": "Address",
+      "addressPlaceholder": "Your address",
+      "save": "Save",
+      "owner": "Owner"
+    },
+    "appearance": {
+      "title": "Appearance",
+      "darkMode": "Dark Mode",
+      "darkModeEnabled": "Enabled (Dark theme)",
+      "darkModeDisabled": "Disabled (Light theme)",
+      "controlledBySystem": "Controlled by system",
+      "autoTheme": "Automatic Theme",
+      "syncWithSystem": "Sync with system",
+      "themeFollowsSystem": "Theme follows system"
+    },
+    "sectionInDevelopment": "Section under development"
+  },
+  "emailSent": {
+    "title": "Check your emails",
+    "message": "We have sent a confirmation link to your email address. Please click on it to activate your account.",
+    "backToLogin": "Back to login",
+    "noEmailReceived": "I haven't received anything"
+  },
+  "resendVerification": {
+    "title": "Resend link",
+    "description": "Receive a new activation link",
+    "email": "Email",
+    "submit": "Send",
+    "submitting": "Sending...",
+    "successMessage": "Email sent! Check your inbox.",
+    "backToLogin": "Back to login",
+    "errorMessage": "An error occurred."
+  },
+  "layout": {
+    "brandName": "Template",
+    "dashboard": "Dashboard",
+    "profile": "My Profile",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "loading": "Loading...",
+  "notFound": {
+    "title": "Page not found",
+    "message": "The page you are looking for does not exist.",
+    "backToHome": "Back to home"
+  }
+}

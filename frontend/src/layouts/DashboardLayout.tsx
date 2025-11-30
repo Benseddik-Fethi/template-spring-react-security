@@ -1,19 +1,22 @@
 
 import {Outlet, useLocation, useNavigate} from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {Home, LogOut, Settings, ShieldCheck, User} from "lucide-react"; // Icônes génériques
 import {cn} from "@/lib/utils";
 import {useAuth} from "@/context/AuthContext";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 export default function DashboardLayout() {
+    const { t } = useTranslation('pages');
     const {user, logout} = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
 
     // Menu générique pour le template
     const navItems = [
-        {id: "/dashboard", label: "Dashboard", icon: Home},
-        {id: "/profile", label: "Mon Profil", icon: User},
-        {id: "/settings", label: "Paramètres", icon: Settings},
+        {id: "/dashboard", label: t('layout.dashboard'), icon: Home},
+        {id: "/profile", label: t('layout.profile'), icon: User},
+        {id: "/settings", label: t('layout.settings'), icon: Settings},
     ];
 
     return (
@@ -27,7 +30,7 @@ export default function DashboardLayout() {
                         <ShieldCheck size={24} className="text-white"/>
                     </div>
                     <span className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
-                        Template
+                        {t('layout.brandName')}
                     </span>
                 </div>
 
@@ -54,8 +57,13 @@ export default function DashboardLayout() {
                     })}
                 </nav>
 
+                {/* Language Switcher */}
+                <div className="py-4 border-t border-gray-100 dark:border-slate-800">
+                    <LanguageSwitcher />
+                </div>
+
                 {/* User Footer */}
-                <div className="pt-6 border-t border-gray-100 dark:border-slate-800">
+                <div className="pt-4 border-t border-gray-100 dark:border-slate-800">
                     <div className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors cursor-pointer group">
                         <div className="w-10 h-10 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-slate-700 dark:to-slate-600 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 font-bold border border-gray-200 dark:border-slate-700">
                             {user?.firstName?.charAt(0) || "U"}
@@ -71,7 +79,7 @@ export default function DashboardLayout() {
                         <button
                             onClick={logout}
                             className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
-                            title="Se déconnecter"
+                            title={t('layout.logout')}
                         >
                             <LogOut size={18}/>
                         </button>
