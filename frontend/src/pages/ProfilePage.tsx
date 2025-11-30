@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/context/AuthContext";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -21,112 +21,129 @@ export default function ProfilePage() {
     };
 
     return (
-        <div className="container max-w-2xl py-8">
-            <h1 className="text-2xl font-bold mb-6">{t('pages:profile.title')}</h1>
+        <div className="space-y-8 animate-in fade-in duration-500">
+            {/* Header */}
+            <div>
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                    {t('pages:profile.title')}
+                </h1>
+                <p className="text-gray-500 dark:text-gray-400 mt-2">
+                    {t('pages:profile.subtitle')}
+                </p>
+            </div>
 
             {/* Personal Information Section */}
-            <Card className="mb-6">
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                        <User className="h-5 w-5" />
+            <Card className="p-6 border border-gray-100 dark:border-slate-800 shadow-sm bg-white dark:bg-slate-900 rounded-2xl">
+                <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/20 flex items-center justify-center text-indigo-600">
+                        <User size={20} />
+                    </div>
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                         {t('pages:profile.personalInfo')}
-                    </CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <div className="flex items-start gap-6">
-                        {/* Avatar */}
-                        <div className="flex-shrink-0">
-                            <Avatar className="h-20 w-20">
-                                <AvatarImage />
-                                <AvatarFallback className="text-xl bg-gradient-to-br from-indigo-400 to-purple-400 text-white">
-                                    {user?.firstName?.[0] || ''}{user?.lastName?.[0] || ''}
-                                </AvatarFallback>
-                            </Avatar>
-                        </div>
+                    </h2>
+                </div>
 
-                        {/* Info */}
-                        <div className="space-y-3 flex-1">
-                            <div>
-                                <Label className="text-muted-foreground">{t('pages:profile.firstName')}</Label>
-                                <p className="font-medium">{user?.firstName || '-'}</p>
-                            </div>
-                            <div>
-                                <Label className="text-muted-foreground">{t('pages:profile.lastName')}</Label>
-                                <p className="font-medium">{user?.lastName || '-'}</p>
-                            </div>
-                            <div>
-                                <Label className="text-muted-foreground">{t('pages:profile.email')}</Label>
-                                <p className="font-medium">{user?.email || '-'}</p>
-                            </div>
-                            <div>
-                                <Label className="text-muted-foreground">{t('pages:profile.memberSince')}</Label>
-                                <p className="font-medium">{formatDate(null)}</p>
-                            </div>
-                        </div>
+                <div className="flex items-start gap-6">
+                    {/* Avatar */}
+                    <div className="flex-shrink-0">
+                        <Avatar className="h-20 w-20">
+                            <AvatarImage />
+                            <AvatarFallback className="text-xl bg-gradient-to-br from-indigo-400 to-purple-400 text-white">
+                                {user?.firstName?.[0] || ''}{user?.lastName?.[0] || ''}
+                            </AvatarFallback>
+                        </Avatar>
                     </div>
 
-                    <Button className="mt-6">
-                        <Pencil className="h-4 w-4 mr-2" />
-                        {t('pages:profile.editProfile')}
-                    </Button>
-                </CardContent>
+                    {/* Info */}
+                    <div className="space-y-3 flex-1">
+                        <div>
+                            <Label className="text-gray-500 dark:text-gray-400">{t('pages:profile.firstName')}</Label>
+                            <p className="font-medium text-gray-900 dark:text-white">{user?.firstName || '-'}</p>
+                        </div>
+                        <div>
+                            <Label className="text-gray-500 dark:text-gray-400">{t('pages:profile.lastName')}</Label>
+                            <p className="font-medium text-gray-900 dark:text-white">{user?.lastName || '-'}</p>
+                        </div>
+                        <div>
+                            <Label className="text-gray-500 dark:text-gray-400">{t('pages:profile.email')}</Label>
+                            <p className="font-medium text-gray-900 dark:text-white">{user?.email || '-'}</p>
+                        </div>
+                        <div>
+                            <Label className="text-gray-500 dark:text-gray-400">{t('pages:profile.memberSince')}</Label>
+                            <p className="font-medium text-gray-900 dark:text-white">{formatDate(null)}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <Button className="mt-6 bg-indigo-600 hover:bg-indigo-700 text-white">
+                    <Pencil className="h-4 w-4 mr-2" />
+                    {t('pages:profile.editProfile')}
+                </Button>
             </Card>
 
             {/* Security Section */}
-            <Card className="mb-6">
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                        <Shield className="h-5 w-5" />
+            <Card className="p-6 border border-gray-100 dark:border-slate-800 shadow-sm bg-white dark:bg-slate-900 rounded-2xl">
+                <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 rounded-xl bg-green-100 dark:bg-green-900/20 flex items-center justify-center text-green-600">
+                        <Shield size={20} />
+                    </div>
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                         {t('pages:profile.security.title')}
-                    </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
+                    </h2>
+                </div>
+
+                <div className="space-y-4">
                     {/* Change Password */}
-                    <div className="flex items-center justify-between p-4 rounded-lg border">
+                    <div className="flex items-center justify-between p-4 rounded-xl border border-gray-100 dark:border-slate-800 bg-gray-50 dark:bg-slate-800/50">
                         <div className="flex items-center gap-3">
-                            <Key className="h-5 w-5 text-muted-foreground" />
+                            <div className="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/20 flex items-center justify-center text-amber-600">
+                                <Key size={20} />
+                            </div>
                             <div>
-                                <p className="font-medium">{t('pages:profile.security.changePassword')}</p>
-                                <p className="text-sm text-muted-foreground">{t('pages:profile.security.changePasswordDescription')}</p>
+                                <p className="font-medium text-gray-900 dark:text-white">{t('pages:profile.security.changePassword')}</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">{t('pages:profile.security.changePasswordDescription')}</p>
                             </div>
                         </div>
                         <Button variant="outline">{t('common:actions.edit')}</Button>
                     </div>
 
                     {/* Active Sessions */}
-                    <div className="flex items-center justify-between p-4 rounded-lg border">
+                    <div className="flex items-center justify-between p-4 rounded-xl border border-gray-100 dark:border-slate-800 bg-gray-50 dark:bg-slate-800/50">
                         <div className="flex items-center gap-3">
-                            <Monitor className="h-5 w-5 text-muted-foreground" />
+                            <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center text-blue-600">
+                                <Monitor size={20} />
+                            </div>
                             <div>
-                                <p className="font-medium">{t('pages:profile.security.sessions')}</p>
-                                <p className="text-sm text-muted-foreground">{t('pages:profile.security.sessionsDescription')}</p>
+                                <p className="font-medium text-gray-900 dark:text-white">{t('pages:profile.security.sessions')}</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">{t('pages:profile.security.sessionsDescription')}</p>
                             </div>
                         </div>
                         <Button variant="outline">{t('common:actions.view')}</Button>
                     </div>
-                </CardContent>
+                </div>
             </Card>
 
             {/* Danger Zone */}
-            <Card className="border-destructive/50">
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-destructive">
-                        <AlertTriangle className="h-5 w-5" />
-                        {t('pages:profile.dangerZone.title')}
-                    </CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <div className="flex items-center justify-between p-4 rounded-lg border border-destructive/30 bg-destructive/5">
-                        <div>
-                            <p className="font-medium">{t('pages:profile.dangerZone.deleteAccount')}</p>
-                            <p className="text-sm text-muted-foreground">{t('pages:profile.dangerZone.deleteWarning')}</p>
-                        </div>
-                        <Button variant="destructive">
-                            <Trash2 className="h-4 w-4 mr-2" />
-                            {t('common:actions.delete')}
-                        </Button>
+            <Card className="p-6 border border-red-200 dark:border-red-900/50 shadow-sm bg-white dark:bg-slate-900 rounded-2xl">
+                <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 rounded-xl bg-red-100 dark:bg-red-900/20 flex items-center justify-center text-red-600">
+                        <AlertTriangle size={20} />
                     </div>
-                </CardContent>
+                    <h2 className="text-xl font-bold text-red-600 dark:text-red-400">
+                        {t('pages:profile.dangerZone.title')}
+                    </h2>
+                </div>
+
+                <div className="flex items-center justify-between p-4 rounded-xl border border-red-200 dark:border-red-900/30 bg-red-50 dark:bg-red-900/10">
+                    <div>
+                        <p className="font-medium text-gray-900 dark:text-white">{t('pages:profile.dangerZone.deleteAccount')}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{t('pages:profile.dangerZone.deleteWarning')}</p>
+                    </div>
+                    <Button variant="destructive">
+                        <Trash2 className="h-4 w-4 mr-2" />
+                        {t('common:actions.delete')}
+                    </Button>
+                </div>
             </Card>
         </div>
     );
