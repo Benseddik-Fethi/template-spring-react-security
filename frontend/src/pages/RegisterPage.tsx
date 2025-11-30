@@ -50,7 +50,8 @@ export default function RegisterPage() {
     };
 
     const handleGoogleLogin = () => {
-        window.location.href = "http://localhost:8080/oauth2/authorization/google";
+        const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080';
+        window.location.href = `${backendUrl}/oauth2/authorization/google`;
     };
 
     return (
