@@ -39,48 +39,35 @@
   },
   "settings": {
     "title": "Paramètres",
-    "description": "Gérez vos préférences et la configuration de votre compte",
-    "logout": "Déconnexion",
-    "language": {
-      "title": "Langue",
-      "description": "Choisissez votre langue préférée pour l'interface",
-      "selectLabel": "Langue de l'interface",
-      "selectDescription": "Sélectionnez la langue d'affichage de l'application"
-    },
-    "appearance": {
-      "title": "Apparence",
+    "description": "Gérez vos préférences et les paramètres de votre compte",
+    "theme": {
+      "title": "Thème",
       "description": "Personnalisez l'apparence de l'application",
-      "darkMode": "Mode Sombre",
-      "darkModeEnabled": "Activé (Thème sombre)",
-      "darkModeDisabled": "Désactivé (Thème clair)",
-      "controlledBySystem": "Contrôlé par le système",
-      "autoTheme": "Thème automatique",
-      "syncWithSystem": "Synchroniser avec le système",
-      "themeFollowsSystem": "Le thème suit le système"
+      "light": "Clair",
+      "dark": "Sombre",
+      "system": "Système"
     },
     "security": {
       "title": "Sécurité",
-      "description": "Gérez la sécurité de votre compte",
       "changePassword": "Changer le mot de passe",
-      "changePasswordDescription": "Mettez à jour votre mot de passe régulièrement",
-      "change": "Modifier",
+      "changePasswordDescription": "Modifiez votre mot de passe actuel",
       "sessions": "Sessions actives",
-      "sessionsDescription": "Gérez vos sessions de connexion",
-      "view": "Voir",
-      "twoFactor": "Authentification à deux facteurs"
+      "sessionsDescription": "Gérez vos sessions de connexion"
     },
-    "account": {
-      "title": "Compte",
-      "description": "Gérez les paramètres de votre compte",
+    "notifications": {
+      "title": "Notifications",
+      "emailNotifications": "Notifications par email",
+      "emailNotificationsDescription": "Recevoir des emails pour les mises à jour importantes"
+    },
+    "dangerZone": {
+      "title": "Zone danger",
       "exportData": "Exporter mes données",
       "exportDataDescription": "Téléchargez une copie de vos données",
-      "export": "Exporter",
-      "dangerZone": "Zone de danger",
       "deleteAccount": "Supprimer mon compte",
+      "deleteAccountDescription": "Supprimer définitivement votre compte et toutes vos données",
       "deleteWarning": "Cette action est irréversible. Toutes vos données seront supprimées.",
-      "delete": "Supprimer"
-    },
-    "sectionInDevelopment": "Section en cours de développement"
+      "confirmDelete": "Confirmer la suppression"
+    }
   },
   "emailSent": {
     "title": "Vérifiez vos emails",
