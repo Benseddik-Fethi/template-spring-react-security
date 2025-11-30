@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import { KeyRound, Loader2, CheckCircle, XCircle, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,7 @@ import { passwordRules } from "@/lib/validators";
 import { ErrorMessage } from "@/components/common/ErrorMessage";
 
 export default function ResetPasswordPage() {
+    const { t } = useTranslation('auth');
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const token = searchParams.get("token");
@@ -75,7 +77,7 @@ export default function ResetPasswordPage() {
                 <Card className="w-full max-w-md relative z-10 border-white/50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm shadow-xl dark:border-slate-800">
                     <CardContent className="p-8 text-center">
                         <Loader2 className="w-12 h-12 text-rose-500 animate-spin mx-auto mb-4" />
-                        <p className="text-gray-600 dark:text-gray-300 font-medium">Vérification du lien...</p>
+                        <p className="text-gray-600 dark:text-gray-300 font-medium">{t('resetPassword.verifyingLink')}</p>
                     </CardContent>
                 </Card>
             </div>
@@ -92,20 +94,20 @@ export default function ResetPasswordPage() {
                             <XCircle size={40} className="text-red-500" />
                         </div>
                         <CardTitle className="text-2xl font-bold text-red-500 mb-1">
-                            Lien invalide ou expiré
+                            {t('resetPassword.invalidLink')}
                         </CardTitle>
                         <CardDescription className="text-gray-500 dark:text-gray-400 font-medium">
-                            Ce lien de réinitialisation n'est plus valide
+                            {t('resetPassword.invalidLinkDescription')}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="p-8 space-y-4">
                         <p className="text-center text-gray-600 dark:text-gray-300 text-sm">
-                            Le lien a peut-être expiré ou a déjà été utilisé. Vous pouvez demander un nouveau lien de réinitialisation.
+                            {t('resetPassword.linkExpiredMessage')}
                         </p>
                         <div className="space-y-3">
                             <Link to={ROUTES.AUTH.FORGOT_PASSWORD}>
                                 <Button className="w-full h-12 text-base font-bold rounded-2xl bg-gradient-to-r from-[#FF6B6B] to-[#FF8E8E] hover:opacity-90 shadow-md shadow-rose-100 dark:shadow-none text-white">
-                                    Demander un nouveau lien
+                                    {t('resetPassword.requestNewLink')}
                                 </Button>
                             </Link>
                             <Link to={ROUTES.LOGIN}>
@@ -114,7 +116,7 @@ export default function ResetPasswordPage() {
                                     className="w-full h-12 rounded-xl border-gray-200 dark:border-slate-700 font-semibold"
                                 >
                                     <ArrowLeft className="mr-2 h-4 w-4" />
-                                    Retour à la connexion
+                                    {t('resetPassword.backToLogin')}
                                 </Button>
                             </Link>
                         </div>
@@ -134,10 +136,10 @@ export default function ResetPasswordPage() {
                             <CheckCircle size={40} className="text-green-500" />
                         </div>
                         <CardTitle className="text-2xl font-bold text-green-500 mb-1">
-                            Mot de passe réinitialisé !
+                            {t('resetPassword.successTitle')}
                         </CardTitle>
                         <CardDescription className="text-gray-500 dark:text-gray-400 font-medium">
-                            Vous pouvez maintenant vous connecter avec votre nouveau mot de passe
+                            {t('resetPassword.successMessage')}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="p-8">
@@ -145,7 +147,7 @@ export default function ResetPasswordPage() {
                             onClick={() => navigate(ROUTES.LOGIN)}
                             className="w-full h-14 text-base font-bold rounded-2xl bg-gradient-to-r from-[#FF6B6B] to-[#FF8E8E] hover:opacity-90 shadow-md shadow-rose-100 dark:shadow-none text-white"
                         >
-                            Se connecter
+                            {t('resetPassword.signIn')}
                         </Button>
                     </CardContent>
                 </Card>
@@ -162,26 +164,26 @@ export default function ResetPasswordPage() {
                         <KeyRound size={40} className="text-white" />
                     </div>
                     <CardTitle className="text-3xl font-bold text-rose-500 mb-1">
-                        Nouveau mot de passe
+                        {t('resetPassword.title')}
                     </CardTitle>
                     <CardDescription className="text-gray-500 dark:text-gray-400 font-medium">
-                        Créez un mot de passe sécurisé pour votre compte
+                        {t('resetPassword.subtitle')}
                     </CardDescription>
                 </CardHeader>
 
                 <CardContent className="p-8 space-y-6">
                     <form onSubmit={handleSubmit} className="space-y-5">
                         <PasswordInput
-                            label="Nouveau mot de passe"
+                            label={t('resetPassword.newPassword')}
                             value={password}
                             onChange={setPassword}
-                            placeholder="••••••••••••"
+                            placeholder={t('resetPassword.passwordPlaceholder')}
                         />
 
                         {/* Password rules */}
                         <div className="bg-slate-50 dark:bg-slate-950 rounded-xl p-4 space-y-2">
                             <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
-                                Critères du mot de passe :
+                                {t('resetPassword.passwordCriteria')}
                             </p>
                             {passwordRules.map((rule) => {
                                 const isValid = rule.test(password);
@@ -201,11 +203,11 @@ export default function ResetPasswordPage() {
                         </div>
 
                         <PasswordInput
-                            label="Confirmer le mot de passe"
+                            label={t('resetPassword.confirmPassword')}
                             value={confirmPassword}
                             onChange={setConfirmPassword}
-                            placeholder="••••••••••••"
-                            error={confirmPassword && !doPasswordsMatch ? "Les mots de passe ne correspondent pas" : undefined}
+                            placeholder={t('resetPassword.passwordPlaceholder')}
+                            error={confirmPassword && !doPasswordsMatch ? t('resetPassword.passwordMismatch') : undefined}
                         />
 
                         {errorMessage && <ErrorMessage message={errorMessage} />}
@@ -218,10 +220,10 @@ export default function ResetPasswordPage() {
                             {isSubmitting ? (
                                 <>
                                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                                    Réinitialisation...
+                                    {t('resetPassword.submitting')}
                                 </>
                             ) : (
-                                "Réinitialiser le mot de passe"
+                                t('resetPassword.submit')
                             )}
                         </Button>
 
@@ -231,7 +233,7 @@ export default function ResetPasswordPage() {
                                 className="text-sm text-gray-500 dark:text-gray-400 hover:text-rose-500 font-medium inline-flex items-center"
                             >
                                 <ArrowLeft className="mr-1 h-4 w-4" />
-                                Retour à la connexion
+                                {t('resetPassword.backToLogin')}
                             </Link>
                         </div>
                     </form>

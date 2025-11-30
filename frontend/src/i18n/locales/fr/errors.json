@@ -1,0 +1,14 @@
+{
+  "generic": "Une erreur s'est produite",
+  "network": "Erreur de connexion au serveur",
+  "unauthorized": "Accès non autorisé",
+  "forbidden": "Accès refusé",
+  "notFound": "Ressource non trouvée",
+  "serverError": "Erreur serveur",
+  "invalidCredentials": "Email ou mot de passe invalide",
+  "accountLocked": "Compte verrouillé. Veuillez réessayer plus tard.",
+  "emailNotVerified": "Veuillez vérifier votre email avant de vous connecter",
+  "emailAlreadyExists": "Un compte avec cet email existe déjà",
+  "tokenExpired": "Le lien a expiré",
+  "tokenInvalid": "Lien invalide"
+}

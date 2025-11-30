@@ -100,6 +100,10 @@ public class User {
     @Builder.Default
     private List<AuditLog> auditLogs = new ArrayList<>();
 
+    @Column(name = "preferred_language", length = 5, nullable = false)
+    @Builder.Default
+    private String preferredLanguage = "fr";
+
     /**
      * Vérifie si le compte utilisateur est actuellement verrouillé.
      *

@@ -2,6 +2,7 @@ package com.company.backend.controller;
 
 import com.company.backend.dto.request.ChangePasswordRequest;
 import com.company.backend.dto.request.ForgotPasswordRequest;
+import com.company.backend.dto.request.LanguageUpdateRequest;
 import com.company.backend.dto.request.ResendVerificationRequest;
 import com.company.backend.dto.request.ResetPasswordRequest;
 import com.company.backend.dto.response.UserResponse;
@@ -166,6 +167,40 @@ public class UserController {
 
         return ResponseEntity.ok(Map.of(
                 "message", "Email de vérification envoyé"
+        ));
+    }
+
+    /**
+     * Récupère la langue préférée de l'utilisateur connecté.
+     *
+     * @param userDetails les détails de l'utilisateur courant
+     * @return la langue préférée
+     */
+    @GetMapping("/language")
+    public ResponseEntity<Map<String, String>> getLanguage(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        String language = userService.getLanguage(userDetails.getId());
+        return ResponseEntity.ok(Map.of("language", language));
+    }
+
+    /**
+     * Met à jour la langue préférée de l'utilisateur connecté.
+     *
+     * @param userDetails les détails de l'utilisateur courant
+     * @param request     la nouvelle langue préférée
+     * @return un message de confirmation
+     */
+    @PutMapping("/language")
+    public ResponseEntity<Map<String, String>> updateLanguage(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @Valid @RequestBody LanguageUpdateRequest request
+    ) {
+        userService.updateLanguage(userDetails.getId(), request.language());
+
+        return ResponseEntity.ok(Map.of(
+                "message", "Préférence de langue mise à jour avec succès",
+                "language", request.language()
         ));
     }
 }

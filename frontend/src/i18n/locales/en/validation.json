@@ -1,0 +1,25 @@
+{
+  "email": {
+    "required": "Email is required",
+    "invalid": "Invalid email format"
+  },
+  "password": {
+    "required": "Password is required",
+    "minLength": "At least 8 characters",
+    "hasUppercase": "At least one uppercase letter",
+    "hasLowercase": "At least one lowercase letter",
+    "hasNumber": "At least one number",
+    "hasSpecial": "At least one special character"
+  },
+  "confirmPassword": {
+    "required": "Confirmation is required",
+    "mismatch": "Passwords do not match"
+  },
+  "name": {
+    "required": "This field is required",
+    "minLength": "At least 2 characters"
+  },
+  "language": {
+    "invalid": "Language must be 'fr' or 'en'"
+  }
+}

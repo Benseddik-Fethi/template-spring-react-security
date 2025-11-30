@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ChevronRight, Mail, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +15,7 @@ import { PasswordInput } from "@/components/forms/PasswordInput";
 import { ErrorMessage } from "@/components/common/ErrorMessage";
 
 export default function RegisterPage() {
+    const { t } = useTranslation('auth');
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -27,7 +29,7 @@ export default function RegisterPage() {
 
     const handleRegister = async () => {
         if (formData.password !== formData.confirmPassword) {
-            setError("Les mots de passe ne correspondent pas");
+            setError(t('register.passwordMismatch'));
             return;
         }
         setIsLoading(true);
@@ -50,24 +52,24 @@ export default function RegisterPage() {
     return (
         <AuthCard
             icon={Shield}
-            title="Créer un compte"
-            description="Créez votre compte"
+            title={t('register.title')}
+            description={t('register.subtitle')}
         >
             <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-1.5">
-                        <Label className="text-gray-600 dark:text-gray-300 pl-1">Prénom</Label>
+                        <Label className="text-gray-600 dark:text-gray-300 pl-1">{t('register.firstName')}</Label>
                         <Input
-                            placeholder="Jean"
+                            placeholder={t('register.firstNamePlaceholder')}
                             className="h-11 bg-slate-50 dark:bg-slate-950 border-transparent focus:bg-white dark:focus:bg-slate-900 rounded-xl"
                             value={formData.firstName}
                             onChange={(e) => setFormData({...formData, firstName: e.target.value})}
                         />
                     </div>
                     <div className="space-y-1.5">
-                        <Label className="text-gray-600 dark:text-gray-300 pl-1">Nom</Label>
+                        <Label className="text-gray-600 dark:text-gray-300 pl-1">{t('register.lastName')}</Label>
                         <Input
-                            placeholder="Dupont"
+                            placeholder={t('register.lastNamePlaceholder')}
                             className="h-11 bg-slate-50 dark:bg-slate-950 border-transparent focus:bg-white dark:focus:bg-slate-900 rounded-xl"
                             value={formData.lastName}
                             onChange={(e) => setFormData({...formData, lastName: e.target.value})}
@@ -76,10 +78,10 @@ export default function RegisterPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                    <Label className="text-gray-600 dark:text-gray-300 pl-1">Email</Label>
+                    <Label className="text-gray-600 dark:text-gray-300 pl-1">{t('register.email')}</Label>
                     <Input
                         icon={Mail}
-                        placeholder="votre@email.com"
+                        placeholder={t('register.emailPlaceholder')}
                         type="email"
                         className="h-11 pl-10 bg-slate-50 dark:bg-slate-950 border-transparent focus:bg-white dark:focus:bg-slate-900 rounded-xl"
                         value={formData.email}
@@ -88,18 +90,18 @@ export default function RegisterPage() {
                 </div>
 
                 <PasswordInput
-                    label="Mot de passe"
+                    label={t('register.password')}
                     value={formData.password}
                     onChange={(value) => setFormData({...formData, password: value})}
-                    placeholder="Min. 8 caractères"
+                    placeholder={t('register.passwordPlaceholder')}
                     className="h-11"
                 />
 
                 <PasswordInput
-                    label="Confirmation"
+                    label={t('register.confirmPassword')}
                     value={formData.confirmPassword}
                     onChange={(value) => setFormData({...formData, confirmPassword: value})}
-                    placeholder="Répétez le mot de passe"
+                    placeholder={t('register.confirmPasswordPlaceholder')}
                     className="h-11"
                 />
 
@@ -109,7 +111,7 @@ export default function RegisterPage() {
                     className="w-full h-12 text-base font-bold rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90 shadow-md shadow-indigo-100 dark:shadow-none text-white mt-2"
                     onClick={handleRegister}
                     disabled={isLoading}>
-                    {isLoading ? "Création..." : "Créer mon compte"} <ChevronRight className="ml-2 h-5 w-5"/>
+                    {isLoading ? t('register.submitting') : t('register.submit')} <ChevronRight className="ml-2 h-5 w-5"/>
                 </Button>
             </div>
 
@@ -117,14 +119,13 @@ export default function RegisterPage() {
                 <div className="absolute inset-0 flex items-center"><Separator
                     className="bg-gray-100 dark:bg-slate-800"/></div>
                 <div className="relative flex justify-center text-xs uppercase"><span
-                    className="bg-white dark:bg-slate-900 px-4 text-gray-400 font-medium">ou</span></div>
+                    className="bg-white dark:bg-slate-900 px-4 text-gray-400 font-medium">{t('register.or')}</span></div>
             </div>
 
             <SocialLoginButtons disabled={isLoading} />
 
             <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-4">
-                Déjà un compte ? <Link to={ROUTES.LOGIN} className="text-indigo-500 font-bold hover:underline ml-1">Se
-                connecter</Link>
+                {t('register.hasAccount')} <Link to={ROUTES.LOGIN} className="text-indigo-500 font-bold hover:underline ml-1">{t('register.signIn')}</Link>
             </p>
         </AuthCard>
     );
