@@ -1,17 +1,19 @@
-import {useState} from "react";
-import {ChevronRight, Eye, EyeOff, Lock, Mail, Shield} from "lucide-react";
-import {Button} from "@/components/ui/button";
-import {Input} from "@/components/ui/input";
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
-import {Separator} from "@/components/ui/separator";
-import {api} from "@/lib/api";
-import {Link, useNavigate} from "react-router-dom";
-import {FacebookIcon, GoogleIcon} from "@/components/ui/Icons";
-import {isAxiosError} from "axios";
-import {Label} from "@/components/ui/label";
+import { useState } from "react";
+import { ChevronRight, Mail, Shield } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { Link, useNavigate } from "react-router-dom";
+import { Label } from "@/components/ui/label";
+import { authService } from "@/services";
+import { handleApiError } from "@/lib/error-handler";
+import { ROUTES } from "@/config";
+import { AuthCard } from "@/components/auth/AuthCard";
+import { SocialLoginButtons } from "@/components/auth/SocialLoginButtons";
+import { PasswordInput } from "@/components/forms/PasswordInput";
+import { ErrorMessage } from "@/components/common/ErrorMessage";
 
 export default function RegisterPage() {
-    const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -19,151 +21,111 @@ export default function RegisterPage() {
         password: "",
         confirmPassword: "",
     });
-
-    // ✅ Utilisation du navigate pour rediriger
+    const [error, setError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleRegister = async () => {
         if (formData.password !== formData.confirmPassword) {
-            alert("Les mots de passe ne correspondent pas");
+            setError("Les mots de passe ne correspondent pas");
             return;
         }
+        setIsLoading(true);
+        setError(null);
         try {
-            // Le backend ne renvoie plus de token
-            await api.post('/auth/register', {
+            await authService.register({
                 email: formData.email,
                 password: formData.password,
                 firstName: formData.firstName,
                 lastName: formData.lastName
             });
-
-            // ✅ Redirection vers la page "Vérifiez vos emails"
-            navigate("/auth/verify-email-sent");
-
-        } catch (error) {
-            if (isAxiosError(error)) {
-                alert(error.response?.data?.message || "Erreur lors de l'inscription");
-            } else {
-                console.error(error);
-            }
+            navigate(ROUTES.AUTH.VERIFY_EMAIL_SENT);
+        } catch (err) {
+            setError(handleApiError(err));
+        } finally {
+            setIsLoading(false);
         }
     };
 
-    const handleGoogleLogin = () => {
-        const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080';
-        window.location.href = `${backendUrl}/oauth2/authorization/google`;
-    };
-
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100 flex items-center justify-center p-6 relative overflow-hidden dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
-            <Card className="w-full max-w-md relative z-10 border-white/50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm shadow-xl dark:border-slate-800">
-                <CardHeader className="text-center pt-10">
-                    <div className="mx-auto w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center mb-3 shadow-lg shadow-indigo-200 dark:shadow-none">
-                        <Shield size={32} className="text-white"/>
+        <AuthCard
+            icon={Shield}
+            title="Créer un compte"
+            description="Créez votre compte"
+        >
+            <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1.5">
+                        <Label className="text-gray-600 dark:text-gray-300 pl-1">Prénom</Label>
+                        <Input
+                            placeholder="Jean"
+                            className="h-11 bg-slate-50 dark:bg-slate-950 border-transparent focus:bg-white dark:focus:bg-slate-900 rounded-xl"
+                            value={formData.firstName}
+                            onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                        />
                     </div>
-                    <CardTitle className="text-2xl font-bold text-indigo-600 mb-1">
-                        Créer un compte
-                    </CardTitle>
-                    <CardDescription className="text-gray-500 dark:text-gray-400">Créez votre compte</CardDescription>
-                </CardHeader>
-
-                <CardContent className="p-8 space-y-6">
-                    <div className="space-y-4">
-                        <div className="grid grid-cols-2 gap-3">
-                            <div className="space-y-1.5">
-                                <Label className="text-gray-600 dark:text-gray-300 pl-1">Prénom</Label>
-                                <Input
-                                    placeholder="Jean"
-                                    className="h-11 bg-slate-50 dark:bg-slate-950 border-transparent focus:bg-white dark:focus:bg-slate-900 rounded-xl"
-                                    value={formData.firstName}
-                                    onChange={(e) => setFormData({...formData, firstName: e.target.value})}
-                                />
-                            </div>
-                            <div className="space-y-1.5">
-                                <Label className="text-gray-600 dark:text-gray-300 pl-1">Nom</Label>
-                                <Input
-                                    placeholder="Dupont"
-                                    className="h-11 bg-slate-50 dark:bg-slate-950 border-transparent focus:bg-white dark:focus:bg-slate-900 rounded-xl"
-                                    value={formData.lastName}
-                                    onChange={(e) => setFormData({...formData, lastName: e.target.value})}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="space-y-1.5">
-                            <Label className="text-gray-600 dark:text-gray-300 pl-1">Email</Label>
-                            <Input
-                                icon={Mail}
-                                placeholder="votre@email.com"
-                                type="email"
-                                className="h-11 pl-10 bg-slate-50 dark:bg-slate-950 border-transparent focus:bg-white dark:focus:bg-slate-900 rounded-xl"
-                                value={formData.email}
-                                onChange={(e) => setFormData({...formData, email: e.target.value})}
-                            />
-                        </div>
-
-                        <div className="space-y-1.5">
-                            <Label className="text-gray-600 dark:text-gray-300 pl-1">Mot de passe</Label>
-                            <div className="relative">
-                                <Input
-                                    icon={Lock}
-                                    placeholder="Min. 8 caractères"
-                                    type={showPassword ? "text" : "password"}
-                                    className="h-11 pl-10 pr-10 bg-slate-50 dark:bg-slate-950 border-transparent focus:bg-white dark:focus:bg-slate-900 rounded-xl"
-                                    value={formData.password}
-                                    onChange={(e) => setFormData({...formData, password: e.target.value})}
-                                />
-                                <button type="button" onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
-                                    {showPassword ? <EyeOff size={18}/> : <Eye size={18}/>}
-                                </button>
-                            </div>
-                        </div>
-
-                        <div className="space-y-1.5">
-                            <Label className="text-gray-600 dark:text-gray-300 pl-1">Confirmation</Label>
-                            <Input
-                                icon={Lock}
-                                placeholder="Répétez le mot de passe"
-                                type="password"
-                                className="h-11 pl-10 bg-slate-50 dark:bg-slate-950 border-transparent focus:bg-white dark:focus:bg-slate-900 rounded-xl"
-                                value={formData.confirmPassword}
-                                onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-                            />
-                        </div>
-
-                        <Button
-                            className="w-full h-12 text-base font-bold rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90 shadow-md shadow-indigo-100 dark:shadow-none text-white mt-2"
-                            onClick={handleRegister}>
-                            Créer mon compte <ChevronRight className="ml-2 h-5 w-5"/>
-                        </Button>
+                    <div className="space-y-1.5">
+                        <Label className="text-gray-600 dark:text-gray-300 pl-1">Nom</Label>
+                        <Input
+                            placeholder="Dupont"
+                            className="h-11 bg-slate-50 dark:bg-slate-950 border-transparent focus:bg-white dark:focus:bg-slate-900 rounded-xl"
+                            value={formData.lastName}
+                            onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                        />
                     </div>
+                </div>
 
-                    <div className="relative py-2">
-                        <div className="absolute inset-0 flex items-center"><Separator
-                            className="bg-gray-100 dark:bg-slate-800"/></div>
-                        <div className="relative flex justify-center text-xs uppercase"><span
-                            className="bg-white dark:bg-slate-900 px-4 text-gray-400 font-medium">ou</span></div>
-                    </div>
+                <div className="space-y-1.5">
+                    <Label className="text-gray-600 dark:text-gray-300 pl-1">Email</Label>
+                    <Input
+                        icon={Mail}
+                        placeholder="votre@email.com"
+                        type="email"
+                        className="h-11 pl-10 bg-slate-50 dark:bg-slate-950 border-transparent focus:bg-white dark:focus:bg-slate-900 rounded-xl"
+                        value={formData.email}
+                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    />
+                </div>
 
-                    <div className="flex gap-4">
-                        <Button variant="outline"
-                                className="flex-1 h-11 rounded-xl border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-950 font-semibold shadow-sm"
-                                onClick={handleGoogleLogin}>
-                            <GoogleIcon className="mr-2 h-4 w-4"/> Google
-                        </Button>
-                        <Button variant="outline"
-                                className="flex-1 h-11 rounded-xl border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-950 font-semibold shadow-sm">
-                            <FacebookIcon className="mr-2 h-4 w-4"/> Facebook
-                        </Button>
-                    </div>
+                <PasswordInput
+                    label="Mot de passe"
+                    value={formData.password}
+                    onChange={(value) => setFormData({...formData, password: value})}
+                    placeholder="Min. 8 caractères"
+                    className="h-11"
+                />
 
-                    <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-4">
-                        Déjà un compte ? <Link to="/login" className="text-indigo-500 font-bold hover:underline ml-1">Se
-                        connecter</Link>
-                    </p>
-                </CardContent>
-            </Card>
-        </div>
+                <PasswordInput
+                    label="Confirmation"
+                    value={formData.confirmPassword}
+                    onChange={(value) => setFormData({...formData, confirmPassword: value})}
+                    placeholder="Répétez le mot de passe"
+                    className="h-11"
+                />
+
+                {error && <ErrorMessage message={error} />}
+
+                <Button
+                    className="w-full h-12 text-base font-bold rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90 shadow-md shadow-indigo-100 dark:shadow-none text-white mt-2"
+                    onClick={handleRegister}
+                    disabled={isLoading}>
+                    {isLoading ? "Création..." : "Créer mon compte"} <ChevronRight className="ml-2 h-5 w-5"/>
+                </Button>
+            </div>
+
+            <div className="relative py-2">
+                <div className="absolute inset-0 flex items-center"><Separator
+                    className="bg-gray-100 dark:bg-slate-800"/></div>
+                <div className="relative flex justify-center text-xs uppercase"><span
+                    className="bg-white dark:bg-slate-900 px-4 text-gray-400 font-medium">ou</span></div>
+            </div>
+
+            <SocialLoginButtons disabled={isLoading} />
+
+            <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-4">
+                Déjà un compte ? <Link to={ROUTES.LOGIN} className="text-indigo-500 font-bold hover:underline ml-1">Se
+                connecter</Link>
+            </p>
+        </AuthCard>
     );
 }

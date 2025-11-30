@@ -13,42 +13,44 @@ import VerifyEmailPage from "@/pages/VerifyEmailPage.tsx";
 import ResendVerificationPage from "@/pages/ResendVerificationPage.tsx";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage.tsx";
 import ResetPasswordPage from "@/pages/ResetPasswordPage.tsx";
+import { ROUTES } from "@/config";
+
 function RootRedirect() {
     const {user, isLoading} = useAuth();
     if (isLoading) return <div className="min-h-screen flex items-center justify-center">Chargement...</div>;
-    return <Navigate to={user ? "/dashboard" : "/login"} replace/>;
+    return <Navigate to={user ? ROUTES.DASHBOARD : ROUTES.LOGIN} replace/>;
 }
 
 function App() {
     return (
         <Routes>
             {/* Route racine */}
-            <Route path="/" element={<RootRedirect/>}/>
+            <Route path={ROUTES.HOME} element={<RootRedirect/>}/>
 
             {/* Pages publiques */}
-            <Route path="/register" element={<RegisterPage/>}/>
-            <Route path="/login" element={<LoginPage/>}/>
+            <Route path={ROUTES.REGISTER} element={<RegisterPage/>}/>
+            <Route path={ROUTES.LOGIN} element={<LoginPage/>}/>
 
             {/* Flux d'authentification et emails */}
-            <Route path="/auth/callback" element={<AuthCallbackPage/>}/>
-            <Route path="/auth/verify-email-sent" element={<EmailSentPage/>}/>
-            <Route path="/auth/verify-email" element={<VerifyEmailPage/>}/>
-            <Route path="/auth/resend-verification" element={<ResendVerificationPage/>}/>
-            <Route path="/auth/forgot-password" element={<ForgotPasswordPage/>}/>
-            <Route path="/auth/reset-password" element={<ResetPasswordPage/>}/>
+            <Route path={ROUTES.AUTH.CALLBACK} element={<AuthCallbackPage/>}/>
+            <Route path={ROUTES.AUTH.VERIFY_EMAIL_SENT} element={<EmailSentPage/>}/>
+            <Route path={ROUTES.AUTH.VERIFY_EMAIL} element={<VerifyEmailPage/>}/>
+            <Route path={ROUTES.AUTH.RESEND_VERIFICATION} element={<ResendVerificationPage/>}/>
+            <Route path={ROUTES.AUTH.FORGOT_PASSWORD} element={<ForgotPasswordPage/>}/>
+            <Route path={ROUTES.AUTH.RESET_PASSWORD} element={<ResetPasswordPage/>}/>
 
             {/* Espace sécurisé (Dashboard) */}
             <Route element={<ProtectedRoute/>}>
                 <Route element={<DashboardLayout/>}>
-                    <Route path="/dashboard" element={<DashboardPage/>}/>
+                    <Route path={ROUTES.DASHBOARD} element={<DashboardPage/>}/>
                     {/* On map Settings sur /profile pour l'instant aussi */}
-                    <Route path="/profile" element={<SettingsPage/>}/>
-                    <Route path="/settings" element={<SettingsPage/>}/>
+                    <Route path={ROUTES.PROFILE} element={<SettingsPage/>}/>
+                    <Route path={ROUTES.SETTINGS} element={<SettingsPage/>}/>
                 </Route>
             </Route>
 
             {/* Fallback 404 (optionnel) */}
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />
         </Routes>
     );
 }
