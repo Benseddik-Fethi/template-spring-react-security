@@ -65,7 +65,7 @@ export default function ProfilePage() {
                     <Avatar className="h-16 w-16 flex-shrink-0">
                         <AvatarImage />
                         <AvatarFallback className="text-lg bg-gradient-to-br from-indigo-400 to-purple-400 text-white">
-                            {user?.firstName?.[0]}{user?.lastName?.[0]}
+                            {user?.firstName?.[0] || ''}{user?.lastName?.[0] || ''}
                         </AvatarFallback>
                     </Avatar>
 
