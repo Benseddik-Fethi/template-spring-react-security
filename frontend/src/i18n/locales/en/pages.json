@@ -39,48 +39,34 @@
   },
   "settings": {
     "title": "Settings",
-    "description": "Manage your preferences and account configuration",
-    "logout": "Logout",
-    "language": {
-      "title": "Language",
-      "description": "Choose your preferred language for the interface",
-      "selectLabel": "Interface Language",
-      "selectDescription": "Select the display language for the application"
-    },
-    "appearance": {
-      "title": "Appearance",
+    "theme": {
+      "title": "Theme",
       "description": "Customize the app appearance",
-      "darkMode": "Dark Mode",
-      "darkModeEnabled": "Enabled (Dark theme)",
-      "darkModeDisabled": "Disabled (Light theme)",
-      "controlledBySystem": "Controlled by system",
-      "autoTheme": "Automatic Theme",
-      "syncWithSystem": "Sync with system",
-      "themeFollowsSystem": "Theme follows system"
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
     },
     "security": {
       "title": "Security",
-      "description": "Manage your account security",
       "changePassword": "Change password",
-      "changePasswordDescription": "Update your password regularly",
-      "change": "Change",
+      "changePasswordDescription": "Update your current password",
       "sessions": "Active sessions",
-      "sessionsDescription": "Manage your login sessions",
-      "view": "View",
-      "twoFactor": "Two-factor authentication"
+      "sessionsDescription": "Manage your login sessions"
     },
-    "account": {
-      "title": "Account",
-      "description": "Manage your account settings",
+    "notifications": {
+      "title": "Notifications",
+      "emailNotifications": "Email notifications",
+      "emailNotificationsDescription": "Receive emails for important updates"
+    },
+    "dangerZone": {
+      "title": "Danger zone",
       "exportData": "Export my data",
       "exportDataDescription": "Download a copy of your data",
-      "export": "Export",
-      "dangerZone": "Danger Zone",
       "deleteAccount": "Delete my account",
+      "deleteAccountDescription": "Permanently delete your account and all your data",
       "deleteWarning": "This action cannot be undone. All your data will be deleted.",
-      "delete": "Delete"
-    },
-    "sectionInDevelopment": "Section under development"
+      "confirmDelete": "Confirm deletion"
+    }
   },
   "emailSent": {
     "title": "Check your emails",
