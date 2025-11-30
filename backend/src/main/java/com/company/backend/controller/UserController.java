@@ -10,6 +10,8 @@ import com.company.backend.security.CustomUserDetails;
 import com.company.backend.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +35,7 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final MessageSource messageSource;
 
     /**
      * Vérifie l'adresse email avec le token reçu par email.
@@ -198,8 +201,14 @@ public class UserController {
     ) {
         userService.updateLanguage(userDetails.getId(), request.language());
 
+        String message = messageSource.getMessage(
+                "user.language.updated",
+                null,
+                LocaleContextHolder.getLocale()
+        );
+
         return ResponseEntity.ok(Map.of(
-                "message", "Préférence de langue mise à jour avec succès",
+                "message", message,
                 "language", request.language()
         ));
     }

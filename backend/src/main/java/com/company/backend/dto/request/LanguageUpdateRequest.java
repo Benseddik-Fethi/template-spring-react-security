@@ -12,8 +12,8 @@ import jakarta.validation.constraints.Pattern;
  * @since 2025
  */
 public record LanguageUpdateRequest(
-        @NotBlank(message = "La langue est requise")
-        @Pattern(regexp = "^(fr|en)$", message = "La langue doit être 'fr' ou 'en'")
+        @NotBlank(message = "{validation.language.required}")
+        @Pattern(regexp = "^(fr|en)$", message = "{validation.language.invalid}")
         String language
 ) {
 }

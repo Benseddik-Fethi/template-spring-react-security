@@ -222,7 +222,7 @@ public class UserServiceImpl implements UserService {
         User user = findUserById(userId);
         user.setPreferredLanguage(language);
         userRepository.save(user);
-        log.info("Langue mise à jour pour l'utilisateur {}: {}", userId, language);
+        log.info("Language preference updated for user {}: {}", userId, language);
     }
 
     @Override

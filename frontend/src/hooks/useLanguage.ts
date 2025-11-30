@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/context/AuthContext';
 import { userService } from '@/services';
@@ -14,6 +14,9 @@ export function useLanguage() {
 
   // Get current language from i18n
   const currentLanguage = i18n.language?.substring(0, 2) || 'fr';
+
+  // Track previous language for rollback on error
+  const previousLanguageRef = useRef(currentLanguage);
 
   // Check if user is authenticated
   const isAuthenticated = !!user;
@@ -35,6 +38,10 @@ export function useLanguage() {
     async (language: string) => {
       if (language === currentLanguage) return;
 
+      // Store the original language before attempting change
+      const originalLanguage = currentLanguage;
+      previousLanguageRef.current = originalLanguage;
+
       setIsLoading(true);
       try {
         // Change language in i18next immediately
@@ -46,8 +53,8 @@ export function useLanguage() {
         }
       } catch (error) {
         console.error('Failed to change language:', error);
-        // Revert to previous language on error
-        await i18n.changeLanguage(currentLanguage);
+        // Revert to the original language on error
+        await i18n.changeLanguage(originalLanguage);
       } finally {
         setIsLoading(false);
       }
