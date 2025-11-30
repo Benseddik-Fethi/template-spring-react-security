@@ -217,6 +217,21 @@ public class UserServiceImpl implements UserService {
         return UserResponse.fromEntity(user);
     }
 
+    @Override
+    public void updateLanguage(UUID userId, String language) {
+        User user = findUserById(userId);
+        user.setPreferredLanguage(language);
+        userRepository.save(user);
+        log.info("Language preference updated for user {}: {}", userId, language);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public String getLanguage(UUID userId) {
+        User user = findUserById(userId);
+        return user.getPreferredLanguage();
+    }
+
     /**
      * Recherche un utilisateur par son identifiant.
      *

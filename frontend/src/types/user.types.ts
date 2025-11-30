@@ -13,6 +13,7 @@ export interface User {
   role: "USER" | "ADMIN";
   avatar?: string;
   emailVerified: boolean;
+  preferredLanguage?: string;
 }
 
 /**

@@ -14,15 +14,16 @@ import java.util.UUID;
  * Compatible avec le frontend React utilisant le format camelCase.
  * </p>
  *
- * @param id            l'identifiant unique de l'utilisateur
- * @param email         l'adresse email de l'utilisateur
- * @param firstName     le prénom de l'utilisateur
- * @param lastName      le nom de famille de l'utilisateur
- * @param avatar        l'URL de l'avatar de l'utilisateur
- * @param role          le rôle de l'utilisateur dans l'application
- * @param emailVerified indique si l'email a été vérifié
- * @param createdAt     la date de création du compte
- * @param updatedAt     la date de dernière modification
+ * @param id                l'identifiant unique de l'utilisateur
+ * @param email             l'adresse email de l'utilisateur
+ * @param firstName         le prénom de l'utilisateur
+ * @param lastName          le nom de famille de l'utilisateur
+ * @param avatar            l'URL de l'avatar de l'utilisateur
+ * @param role              le rôle de l'utilisateur dans l'application
+ * @param emailVerified     indique si l'email a été vérifié
+ * @param preferredLanguage la langue préférée de l'utilisateur (fr ou en)
+ * @param createdAt         la date de création du compte
+ * @param updatedAt         la date de dernière modification
  * @author Fethi Benseddik
  * @version 1.0
  * @since 2025
@@ -35,6 +36,7 @@ public record UserResponse(
         String avatar,
         Role role,
         Boolean emailVerified,
+        String preferredLanguage,
         Instant createdAt,
         Instant updatedAt
 ) {
@@ -54,6 +56,7 @@ public record UserResponse(
                 user.getAvatar(),
                 user.getRole(),
                 user.getEmailVerified(),
+                user.getPreferredLanguage(),
                 user.getCreatedAt(),
                 user.getUpdatedAt()
         );

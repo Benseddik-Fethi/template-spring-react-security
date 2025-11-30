@@ -1,0 +1,31 @@
+{
+  "appName": "My App",
+  "language": {
+    "french": "Français",
+    "english": "English",
+    "selectLanguage": "Language"
+  },
+  "navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "profile": "Profile"
+  },
+  "actions": {
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "confirm": "Confirm",
+    "back": "Back",
+    "loading": "Loading..."
+  },
+  "status": {
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Information"
+  }
+}

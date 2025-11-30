@@ -28,6 +28,8 @@ databaseChangeLog:
       file: db/changelog/v1/007-add-email-verified-to-users.yaml
   - include:
       file: db/changelog/v1/008-create-oauth-authorization-codes-table.yaml
+  - include:
+      file: db/changelog/v1/009-add-preferred-language-to-users.yaml
 
   # ─────────────────────────────────────────────────────────────────────────────
   # TEST DATA (dev/test context only)

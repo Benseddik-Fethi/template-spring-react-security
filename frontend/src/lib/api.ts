@@ -1,4 +1,5 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from 'axios';
+import i18n from '@/i18n';
 
 export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1';
 
@@ -21,6 +22,8 @@ api.interceptors.request.use(
         if (accessToken) {
             config.headers['Authorization'] = `Bearer ${accessToken}`;
         }
+        // Add Accept-Language header based on current i18n language
+        config.headers['Accept-Language'] = i18n.language || 'fr';
         return config;
     },
     (error) => Promise.reject(error)

@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,6 +8,7 @@ import { authService } from "@/services";
 import { ROUTES } from "@/config";
 
 export default function VerifyEmailPage() {
+    const { t } = useTranslation('auth');
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const token = searchParams.get("token");
@@ -32,17 +34,17 @@ export default function VerifyEmailPage() {
                     {status === "loading" && (
                         <>
                             <Loader2 className="w-12 h-12 text-rose-500 animate-spin mx-auto" />
-                            <h2 className="text-xl font-semibold">Vérification en cours...</h2>
+                            <h2 className="text-xl font-semibold">{t('verifyEmail.verifying')}</h2>
                         </>
                     )}
 
                     {status === "success" && (
                         <>
                             <CheckCircle className="w-12 h-12 text-green-500 mx-auto" />
-                            <h2 className="text-xl font-bold text-green-600">Email vérifié !</h2>
-                            <p className="text-gray-500">Votre compte est maintenant actif.</p>
+                            <h2 className="text-xl font-bold text-green-600">{t('verifyEmail.successTitle')}</h2>
+                            <p className="text-gray-500">{t('verifyEmail.successMessage')}</p>
                             <Button onClick={() => navigate(ROUTES.LOGIN)} className="w-full">
-                                Se connecter
+                                {t('verifyEmail.signIn')}
                             </Button>
                         </>
                     )}
@@ -50,10 +52,10 @@ export default function VerifyEmailPage() {
                     {status === "error" && (
                         <>
                             <XCircle className="w-12 h-12 text-red-500 mx-auto" />
-                            <h2 className="text-xl font-bold text-red-600">Lien invalide</h2>
-                            <p className="text-gray-500">Ce lien a expiré ou a déjà été utilisé.</p>
+                            <h2 className="text-xl font-bold text-red-600">{t('verifyEmail.errorTitle')}</h2>
+                            <p className="text-gray-500">{t('verifyEmail.errorMessage')}</p>
                             <Button variant="outline" onClick={() => navigate(ROUTES.LOGIN)} className="w-full">
-                                Retour à l'accueil
+                                {t('verifyEmail.backToHome')}
                             </Button>
                         </>
                     )}

@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 009-add-preferred-language-to-users
+      author: benseddik fethi
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: preferred_language
+                  type: varchar(5)
+                  defaultValue: 'fr'
+                  constraints:
+                    nullable: false

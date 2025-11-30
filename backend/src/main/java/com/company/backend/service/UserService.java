@@ -89,4 +89,20 @@ public interface UserService {
      * @return les informations de l'utilisateur
      */
     UserResponse getUserByEmail(String email);
+
+    /**
+     * Met à jour la langue préférée de l'utilisateur.
+     *
+     * @param userId   l'identifiant de l'utilisateur
+     * @param language la nouvelle langue préférée (fr ou en)
+     */
+    void updateLanguage(UUID userId, String language);
+
+    /**
+     * Récupère la langue préférée de l'utilisateur.
+     *
+     * @param userId l'identifiant de l'utilisateur
+     * @return la langue préférée de l'utilisateur
+     */
+    String getLanguage(UUID userId);
 }
