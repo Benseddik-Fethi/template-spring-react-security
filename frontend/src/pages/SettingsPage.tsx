@@ -1,4 +1,5 @@
 import {useCallback, useMemo, useState} from "react";
+import { useTranslation } from "react-i18next";
 import {useAuth} from "@/context/AuthContext";
 import {useTheme} from "@/components/ThemeProvider";
 import {Card} from "@/components/ui/card";
@@ -9,19 +10,20 @@ import {Bell, Camera, HelpCircle, LogOut, Mail, MapPin, Moon, Palette, Phone, Sh
 import {cn} from "@/lib/utils";
 import {Input} from "@/components/ui/input";
 
-// Définir les items du menu en dehors du composant pour éviter les recréations
-const menuItems = [
-    {id: "profile", label: "Mon profil", icon: User},
-    {id: "notifications", label: "Notifications", icon: Bell},
-    {id: "security", label: "Sécurité", icon: Shield},
-    {id: "appearance", label: "Apparence", icon: Palette},
-    {id: "help", label: "Aide", icon: HelpCircle},
-] as const;
-
 export default function SettingsPage() {
+    const { t } = useTranslation('pages');
     const {user, logout} = useAuth();
     const {theme, setTheme} = useTheme();
     const [activeSection, setActiveSection] = useState("profile");
+
+    // Définir les items du menu avec traduction
+    const menuItems = useMemo(() => [
+        {id: "profile", label: t('settings.menu.profile'), icon: User},
+        {id: "notifications", label: t('settings.menu.notifications'), icon: Bell},
+        {id: "security", label: t('settings.menu.security'), icon: Shield},
+        {id: "appearance", label: t('settings.menu.appearance'), icon: Palette},
+        {id: "help", label: t('settings.menu.help'), icon: HelpCircle},
+    ] as const, [t]);
 
     // Memoize le calcul du mode sombre pour éviter les recalculs inutiles
     const isDarkMode = useMemo(() => {
@@ -51,8 +53,8 @@ export default function SettingsPage() {
     return (
         <div className="space-y-6 pb-10">
             <div>
-                <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Paramètres</h1>
-                <p className="text-gray-500 dark:text-gray-400 mt-1">Gérez votre compte et vos préférences</p>
+                <h1 className="text-3xl font-bold text-gray-800 dark:text-white">{t('settings.title')}</h1>
+                <p className="text-gray-500 dark:text-gray-400 mt-1">{t('settings.description')}</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -87,7 +89,7 @@ export default function SettingsPage() {
                             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all text-sm font-medium"
                         >
                             <LogOut size={18}/>
-                            Déconnexion
+                            {t('settings.logout')}
                         </button>
                     </div>
                 </Card>
@@ -116,33 +118,33 @@ export default function SettingsPage() {
                                     <p className="text-gray-500 dark:text-gray-400">{user?.email}</p>
                                     <span
                                         className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 mt-2">
-                    Propriétaire
-                  </span>
+                    {t('settings.profile.owner')}
+                   </span>
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <Label>Prénom</Label>
+                                    <Label>{t('settings.profile.firstName')}</Label>
                                     <Input value={user?.firstName ?? ""} className="bg-gray-50 dark:bg-slate-950"/>
                                 </div>
                                 <div className="space-y-2">
-                                    <Label>Nom</Label>
+                                    <Label>{t('settings.profile.lastName')}</Label>
                                     <Input value={user?.lastName ?? ""} className="bg-gray-50 dark:bg-slate-950"/>
                                 </div>
                                 <div className="space-y-2">
-                                    <Label>Email</Label>
+                                    <Label>{t('settings.profile.email')}</Label>
                                     <Input icon={Mail} defaultValue={user?.email} disabled
                                            className="bg-gray-100 dark:bg-slate-900 opacity-70"/>
                                 </div>
                                 <div className="space-y-2">
-                                    <Label>Téléphone</Label>
-                                    <Input icon={Phone} placeholder="Ajouter un numéro"
+                                    <Label>{t('settings.profile.phone')}</Label>
+                                    <Input icon={Phone} placeholder={t('settings.profile.phonePlaceholder')}
                                            className="bg-gray-50 dark:bg-slate-950"/>
                                 </div>
                                 <div className="col-span-full space-y-2">
-                                    <Label>Adresse</Label>
-                                    <Input icon={MapPin} placeholder="Votre adresse"
+                                    <Label>{t('settings.profile.address')}</Label>
+                                    <Input icon={MapPin} placeholder={t('settings.profile.addressPlaceholder')}
                                            className="bg-gray-50 dark:bg-slate-950"/>
                                 </div>
                             </div>
@@ -150,7 +152,7 @@ export default function SettingsPage() {
                             <div className="mt-8 flex justify-end">
                                 <Button
                                     className="bg-gray-900 text-white hover:bg-gray-800 dark:bg-white dark:text-black">
-                                    Enregistrer
+                                    {t('settings.profile.save')}
                                 </Button>
                             </div>
                         </Card>
@@ -161,7 +163,7 @@ export default function SettingsPage() {
                         <Card
                             className="p-8 animate-in fade-in slide-in-from-right-4 dark:bg-slate-900 border-white/10">
                             <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-6 flex items-center gap-2">
-                                <Palette className="text-indigo-500"/> Apparence
+                                <Palette className="text-indigo-500"/> {t('settings.appearance.title')}
                             </h2>
 
                             <div className="space-y-6">
@@ -179,11 +181,11 @@ export default function SettingsPage() {
                                             {isDarkMode ? <Moon size={24}/> : <Sun size={24}/>}
                                         </div>
                                         <div>
-                                            <p className="font-bold text-gray-800 dark:text-white">Mode Sombre</p>
+                                            <p className="font-bold text-gray-800 dark:text-white">{t('settings.appearance.darkMode')}</p>
                                             <p className="text-sm text-gray-500 dark:text-gray-400">
                                                 {isSystemTheme
-                                                    ? "Contrôlé par le système"
-                                                    : isDarkMode ? "Activé (Thème sombre)" : "Désactivé (Thème clair)"}
+                                                    ? t('settings.appearance.controlledBySystem')
+                                                    : isDarkMode ? t('settings.appearance.darkModeEnabled') : t('settings.appearance.darkModeDisabled')}
                                             </p>
                                         </div>
                                     </div>
@@ -206,11 +208,11 @@ export default function SettingsPage() {
                                             <Palette size={24}/>
                                         </div>
                                         <div>
-                                            <p className="font-bold text-gray-800 dark:text-white">Thème automatique</p>
+                                            <p className="font-bold text-gray-800 dark:text-white">{t('settings.appearance.autoTheme')}</p>
                                             <p className="text-sm text-gray-500 dark:text-gray-400">
                                                 {isSystemTheme
-                                                    ? "Le thème suit le système"
-                                                    : "Synchroniser avec le système"}
+                                                    ? t('settings.appearance.themeFollowsSystem')
+                                                    : t('settings.appearance.syncWithSystem')}
                                             </p>
                                         </div>
                                     </div>
@@ -228,7 +230,7 @@ export default function SettingsPage() {
                     {["notifications", "security", "help"].includes(activeSection) && (
                         <Card
                             className="p-12 text-center text-gray-400 border-dashed border-2 dark:bg-slate-900 dark:border-slate-800">
-                            <p>Section en cours de développement</p>
+                            <p>{t('settings.sectionInDevelopment')}</p>
                         </Card>
                     )}
                 </div>

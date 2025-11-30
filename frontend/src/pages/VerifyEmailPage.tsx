@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { authService } from "@/services";
 import { ROUTES } from "@/config";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 export default function VerifyEmailPage() {
     const { t } = useTranslation('auth');
@@ -28,7 +29,12 @@ export default function VerifyEmailPage() {
     }, [token]);
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-slate-950 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-gray-50 dark:bg-slate-950 flex items-center justify-center p-4 relative">
+            {/* Language switcher - top right position */}
+            <div className="absolute top-4 right-4 z-20">
+                <LanguageSwitcher />
+            </div>
+            
             <Card className="w-full max-w-md text-center p-6">
                 <CardContent className="space-y-6 pt-6">
                     {status === "loading" && (

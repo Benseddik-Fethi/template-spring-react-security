@@ -10,6 +10,7 @@ import { ROUTES } from "@/config";
 import { PasswordInput } from "@/components/forms/PasswordInput";
 import { passwordRules } from "@/lib/validators";
 import { ErrorMessage } from "@/components/common/ErrorMessage";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 export default function ResetPasswordPage() {
     const { t } = useTranslation('auth');
@@ -74,6 +75,10 @@ export default function ResetPasswordPage() {
     if (status === "loading") {
         return (
             <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-amber-50 flex items-center justify-center p-6 relative overflow-hidden dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+                {/* Language switcher - top right position */}
+                <div className="absolute top-4 right-4 z-20">
+                    <LanguageSwitcher />
+                </div>
                 <Card className="w-full max-w-md relative z-10 border-white/50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm shadow-xl dark:border-slate-800">
                     <CardContent className="p-8 text-center">
                         <Loader2 className="w-12 h-12 text-rose-500 animate-spin mx-auto mb-4" />
@@ -88,6 +93,10 @@ export default function ResetPasswordPage() {
     if (status === "invalid") {
         return (
             <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-amber-50 flex items-center justify-center p-6 relative overflow-hidden dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+                {/* Language switcher - top right position */}
+                <div className="absolute top-4 right-4 z-20">
+                    <LanguageSwitcher />
+                </div>
                 <Card className="w-full max-w-md relative z-10 border-white/50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm shadow-xl dark:border-slate-800">
                     <CardHeader className="text-center pt-10">
                         <div className="mx-auto w-20 h-20 bg-red-100 dark:bg-red-900/30 rounded-3xl mb-4 flex items-center justify-center">
@@ -130,6 +139,10 @@ export default function ResetPasswordPage() {
     if (status === "success") {
         return (
             <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-amber-50 flex items-center justify-center p-6 relative overflow-hidden dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+                {/* Language switcher - top right position */}
+                <div className="absolute top-4 right-4 z-20">
+                    <LanguageSwitcher />
+                </div>
                 <Card className="w-full max-w-md relative z-10 border-white/50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm shadow-xl dark:border-slate-800">
                     <CardHeader className="text-center pt-10">
                         <div className="mx-auto w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-3xl mb-4 flex items-center justify-center">
@@ -158,6 +171,10 @@ export default function ResetPasswordPage() {
     // Valid token - show form (also handles error state with form)
     return (
         <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-amber-50 flex items-center justify-center p-6 relative overflow-hidden dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+            {/* Language switcher - top right position */}
+            <div className="absolute top-4 right-4 z-20">
+                <LanguageSwitcher />
+            </div>
             <Card className="w-full max-w-md relative z-10 border-white/50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm shadow-xl dark:border-slate-800">
                 <CardHeader className="text-center pt-10">
                     <div className="mx-auto w-20 h-20 bg-gradient-to-br from-rose-400 to-pink-500 rounded-3xl mb-4 flex items-center justify-center shadow-lg shadow-rose-200 dark:shadow-none">
