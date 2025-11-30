@@ -19,6 +19,7 @@
   },
   "profile": {
     "title": "Mon Profil",
+    "subtitle": "Gérez vos informations personnelles",
     "description": "Consultez et gérez vos informations personnelles",
     "avatar": "Photo de profil",
     "changeAvatar": "Changer la photo de profil",
@@ -51,6 +52,7 @@
   },
   "settings": {
     "title": "Paramètres",
+    "subtitle": "Personnalisez votre expérience",
     "description": "Gérez vos préférences et les paramètres de votre compte",
     "language": {
       "title": "Langue",

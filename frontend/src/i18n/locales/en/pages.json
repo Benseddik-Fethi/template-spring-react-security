@@ -19,6 +19,7 @@
   },
   "profile": {
     "title": "My Profile",
+    "subtitle": "Manage your personal information",
     "description": "View and manage your personal information",
     "avatar": "Profile picture",
     "changeAvatar": "Change profile picture",
@@ -51,6 +52,7 @@
   },
   "settings": {
     "title": "Settings",
+    "subtitle": "Customize your experience",
     "description": "Manage your preferences and account settings",
     "language": {
       "title": "Language",
