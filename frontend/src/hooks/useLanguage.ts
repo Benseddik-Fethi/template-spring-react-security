@@ -12,7 +12,7 @@ export function useLanguage() {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
 
-  // Get current language from i18n
+  // Get current language from i18n - normalize to 2-letter code
   const currentLanguage = i18n.language?.substring(0, 2) || 'fr';
 
   // Track previous language for rollback on error
@@ -21,30 +21,41 @@ export function useLanguage() {
   // Check if user is authenticated
   const isAuthenticated = !!user;
 
+  // Keep track if we've already synced for this user to prevent loops
+  const hasSyncedRef = useRef(false);
+
+  // Reset sync flag when user changes
+  useEffect(() => {
+    hasSyncedRef.current = false;
+  }, [user?.id]);
+
   // Sync language from user preferences when authenticated
   useEffect(() => {
-    if (isAuthenticated && user?.preferredLanguage) {
+    if (isAuthenticated && user?.preferredLanguage && !hasSyncedRef.current) {
       const userLang = user.preferredLanguage;
-      if (userLang !== currentLanguage) {
+      const currentLang = i18n.language?.substring(0, 2) || 'fr';
+      if (userLang !== currentLang) {
+        hasSyncedRef.current = true;
         i18n.changeLanguage(userLang);
       }
     }
-  }, [isAuthenticated, user?.preferredLanguage, currentLanguage, i18n]);
+  }, [isAuthenticated, user?.preferredLanguage, user?.id, i18n]);
 
   /**
    * Change language and sync with backend if authenticated
    */
   const changeLanguage = useCallback(
     async (language: string) => {
-      if (language === currentLanguage) return;
+      const currentLang = i18n.language?.substring(0, 2) || 'fr';
+      if (language === currentLang) return;
 
       // Store the original language before attempting change
-      const originalLanguage = currentLanguage;
+      const originalLanguage = currentLang;
       previousLanguageRef.current = originalLanguage;
 
       setIsLoading(true);
       try {
-        // Change language in i18next immediately
+        // Change language in i18next immediately for responsive UI
         await i18n.changeLanguage(language);
 
         // Sync with backend if authenticated
@@ -59,7 +70,7 @@ export function useLanguage() {
         setIsLoading(false);
       }
     },
-    [currentLanguage, i18n, isAuthenticated]
+    [i18n, isAuthenticated]
   );
 
   /**
@@ -70,13 +81,14 @@ export function useLanguage() {
 
     try {
       const { language } = await userService.getLanguage();
-      if (language && language !== currentLanguage) {
+      const currentLang = i18n.language?.substring(0, 2) || 'fr';
+      if (language && language !== currentLang) {
         await i18n.changeLanguage(language);
       }
     } catch (error) {
       console.error('Failed to fetch language preference:', error);
     }
-  }, [isAuthenticated, currentLanguage, i18n]);
+  }, [isAuthenticated, i18n]);
 
   return {
     currentLanguage,

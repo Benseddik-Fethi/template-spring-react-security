@@ -17,30 +17,39 @@
     "yourContentHere": "Your content here",
     "startAdding": "Start by adding your entities in the backend and create your pages here."
   },
+  "profile": {
+    "title": "My Profile",
+    "description": "View and manage your personal information",
+    "avatar": "Profile picture",
+    "changeAvatar": "Change profile picture",
+    "personalInfo": "Personal Information",
+    "personalInfoDescription": "Your basic information as displayed on your profile",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "memberSince": "Member since",
+    "lastLogin": "Last login",
+    "editProfile": "Edit profile",
+    "accountStats": "Account Statistics",
+    "accountStatsDescription": "Overview of your account activity",
+    "emailStatus": "Email Status",
+    "emailVerified": "Verified",
+    "emailNotVerified": "Not verified",
+    "notAvailable": "Not available"
+  },
   "settings": {
     "title": "Settings",
-    "description": "Manage your account and preferences",
-    "menu": {
-      "profile": "My Profile",
-      "notifications": "Notifications",
-      "security": "Security",
-      "appearance": "Appearance",
-      "help": "Help"
-    },
+    "description": "Manage your preferences and account configuration",
     "logout": "Logout",
-    "profile": {
-      "firstName": "First Name",
-      "lastName": "Last Name",
-      "email": "Email",
-      "phone": "Phone",
-      "phonePlaceholder": "Add a number",
-      "address": "Address",
-      "addressPlaceholder": "Your address",
-      "save": "Save",
-      "owner": "Owner"
+    "language": {
+      "title": "Language",
+      "description": "Choose your preferred language for the interface",
+      "selectLabel": "Interface Language",
+      "selectDescription": "Select the display language for the application"
     },
     "appearance": {
       "title": "Appearance",
+      "description": "Customize the app appearance",
       "darkMode": "Dark Mode",
       "darkModeEnabled": "Enabled (Dark theme)",
       "darkModeDisabled": "Disabled (Light theme)",
@@ -48,6 +57,28 @@
       "autoTheme": "Automatic Theme",
       "syncWithSystem": "Sync with system",
       "themeFollowsSystem": "Theme follows system"
+    },
+    "security": {
+      "title": "Security",
+      "description": "Manage your account security",
+      "changePassword": "Change password",
+      "changePasswordDescription": "Update your password regularly",
+      "change": "Change",
+      "sessions": "Active sessions",
+      "sessionsDescription": "Manage your login sessions",
+      "view": "View",
+      "twoFactor": "Two-factor authentication"
+    },
+    "account": {
+      "title": "Account",
+      "description": "Manage your account settings",
+      "exportData": "Export my data",
+      "exportDataDescription": "Download a copy of your data",
+      "export": "Export",
+      "dangerZone": "Danger Zone",
+      "deleteAccount": "Delete my account",
+      "deleteWarning": "This action cannot be undone. All your data will be deleted.",
+      "delete": "Delete"
     },
     "sectionInDevelopment": "Section under development"
   },
