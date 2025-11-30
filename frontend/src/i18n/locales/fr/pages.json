@@ -17,30 +17,39 @@
     "yourContentHere": "Votre contenu ici",
     "startAdding": "Commencez par ajouter vos entités dans le backend et créez vos pages ici."
   },
+  "profile": {
+    "title": "Mon Profil",
+    "description": "Consultez et gérez vos informations personnelles",
+    "avatar": "Photo de profil",
+    "changeAvatar": "Changer la photo de profil",
+    "personalInfo": "Informations personnelles",
+    "personalInfoDescription": "Vos informations de base telles qu'affichées sur votre profil",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "email": "Email",
+    "memberSince": "Membre depuis",
+    "lastLogin": "Dernière connexion",
+    "editProfile": "Modifier le profil",
+    "accountStats": "Statistiques du compte",
+    "accountStatsDescription": "Aperçu de l'activité de votre compte",
+    "emailStatus": "Statut de l'email",
+    "emailVerified": "Vérifié",
+    "emailNotVerified": "Non vérifié",
+    "notAvailable": "Non disponible"
+  },
   "settings": {
     "title": "Paramètres",
-    "description": "Gérez votre compte et vos préférences",
-    "menu": {
-      "profile": "Mon profil",
-      "notifications": "Notifications",
-      "security": "Sécurité",
-      "appearance": "Apparence",
-      "help": "Aide"
-    },
+    "description": "Gérez vos préférences et la configuration de votre compte",
     "logout": "Déconnexion",
-    "profile": {
-      "firstName": "Prénom",
-      "lastName": "Nom",
-      "email": "Email",
-      "phone": "Téléphone",
-      "phonePlaceholder": "Ajouter un numéro",
-      "address": "Adresse",
-      "addressPlaceholder": "Votre adresse",
-      "save": "Enregistrer",
-      "owner": "Propriétaire"
+    "language": {
+      "title": "Langue",
+      "description": "Choisissez votre langue préférée pour l'interface",
+      "selectLabel": "Langue de l'interface",
+      "selectDescription": "Sélectionnez la langue d'affichage de l'application"
     },
     "appearance": {
       "title": "Apparence",
+      "description": "Personnalisez l'apparence de l'application",
       "darkMode": "Mode Sombre",
       "darkModeEnabled": "Activé (Thème sombre)",
       "darkModeDisabled": "Désactivé (Thème clair)",
@@ -48,6 +57,28 @@
       "autoTheme": "Thème automatique",
       "syncWithSystem": "Synchroniser avec le système",
       "themeFollowsSystem": "Le thème suit le système"
+    },
+    "security": {
+      "title": "Sécurité",
+      "description": "Gérez la sécurité de votre compte",
+      "changePassword": "Changer le mot de passe",
+      "changePasswordDescription": "Mettez à jour votre mot de passe régulièrement",
+      "change": "Modifier",
+      "sessions": "Sessions actives",
+      "sessionsDescription": "Gérez vos sessions de connexion",
+      "view": "Voir",
+      "twoFactor": "Authentification à deux facteurs"
+    },
+    "account": {
+      "title": "Compte",
+      "description": "Gérez les paramètres de votre compte",
+      "exportData": "Exporter mes données",
+      "exportDataDescription": "Téléchargez une copie de vos données",
+      "export": "Exporter",
+      "dangerZone": "Zone de danger",
+      "deleteAccount": "Supprimer mon compte",
+      "deleteWarning": "Cette action est irréversible. Toutes vos données seront supprimées.",
+      "delete": "Supprimer"
     },
     "sectionInDevelopment": "Section en cours de développement"
   },

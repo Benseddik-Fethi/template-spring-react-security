@@ -2,6 +2,7 @@ import {Navigate, Route, Routes} from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import SettingsPage from "@/pages/SettingsPage";
+import ProfilePage from "@/pages/ProfilePage";
 import {useAuth} from "@/context/AuthContext";
 import RegisterPage from "@/pages/RegisterPage.tsx";
 import LoginPage from "@/pages/LoginPage.tsx";
@@ -45,8 +46,7 @@ function App() {
             <Route element={<ProtectedRoute/>}>
                 <Route element={<DashboardLayout/>}>
                     <Route path={ROUTES.DASHBOARD} element={<DashboardPage/>}/>
-                    {/* On map Settings sur /profile pour l'instant aussi */}
-                    <Route path={ROUTES.PROFILE} element={<SettingsPage/>}/>
+                    <Route path={ROUTES.PROFILE} element={<ProfilePage/>}/>
                     <Route path={ROUTES.SETTINGS} element={<SettingsPage/>}/>
                 </Route>
             </Route>
