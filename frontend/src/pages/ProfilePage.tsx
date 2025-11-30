@@ -37,9 +37,9 @@ export default function ProfilePage() {
                         {/* Avatar */}
                         <div className="flex-shrink-0">
                             <Avatar className="h-20 w-20">
-                                <AvatarImage src={undefined} />
+                                <AvatarImage />
                                 <AvatarFallback className="text-xl bg-gradient-to-br from-indigo-400 to-purple-400 text-white">
-                                    {user?.firstName?.[0]}{user?.lastName?.[0]}
+                                    {user?.firstName?.[0] || ''}{user?.lastName?.[0] || ''}
                                 </AvatarFallback>
                             </Avatar>
                         </div>
