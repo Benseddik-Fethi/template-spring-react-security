@@ -39,6 +39,7 @@
   },
   "settings": {
     "title": "Paramètres",
+    "description": "Gérez vos préférences et les paramètres de votre compte",
     "theme": {
       "title": "Thème",
       "description": "Personnalisez l'apparence de l'application",

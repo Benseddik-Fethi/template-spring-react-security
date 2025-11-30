@@ -39,6 +39,7 @@
   },
   "settings": {
     "title": "Settings",
+    "description": "Manage your preferences and account settings",
     "theme": {
       "title": "Theme",
       "description": "Customize the app appearance",
