@@ -2,13 +2,13 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "@/context/AuthContext";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AlertTriangle, Key, Monitor, Pencil, Shield, Trash2, User } from "lucide-react";
+import { LoadingSpinner } from "@/components/common/LoadingSpinner";
 
 export default function ProfilePage() {
     const { t } = useTranslation(['pages', 'common']);
-    const { user } = useAuth();
+    const { user, isLoading } = useAuth();
 
     // Format date helper
     const formatDate = (date: string | undefined | null) => {
@@ -19,6 +19,14 @@ export default function ProfilePage() {
             day: 'numeric'
         });
     };
+
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <LoadingSpinner size="lg" />
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-8 animate-in fade-in duration-500">
@@ -34,51 +42,53 @@ export default function ProfilePage() {
 
             {/* Personal Information Section */}
             <Card className="p-6 border border-gray-100 dark:border-slate-800 shadow-sm bg-white dark:bg-slate-900 rounded-2xl">
-                <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/20 flex items-center justify-center text-indigo-600">
-                        <User size={20} />
+                {/* Header */}
+                <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/20 flex items-center justify-center text-indigo-600">
+                            <User size={20} />
+                        </div>
+                        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                            {t('pages:profile.personalInfo')}
+                        </h2>
                     </div>
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                        {t('pages:profile.personalInfo')}
-                    </h2>
+                    {/* Compact button on the right */}
+                    <Button variant="outline" size="sm">
+                        <Pencil className="h-4 w-4 mr-2" />
+                        {t('pages:profile.editProfile')}
+                    </Button>
                 </div>
 
+                {/* Content with Avatar + 2 columns grid */}
                 <div className="flex items-start gap-6">
                     {/* Avatar */}
-                    <div className="flex-shrink-0">
-                        <Avatar className="h-20 w-20">
-                            <AvatarImage />
-                            <AvatarFallback className="text-xl bg-gradient-to-br from-indigo-400 to-purple-400 text-white">
-                                {user?.firstName?.[0] || ''}{user?.lastName?.[0] || ''}
-                            </AvatarFallback>
-                        </Avatar>
-                    </div>
+                    <Avatar className="h-16 w-16 flex-shrink-0">
+                        <AvatarImage />
+                        <AvatarFallback className="text-lg bg-gradient-to-br from-indigo-400 to-purple-400 text-white">
+                            {user?.firstName?.[0] || ''}{user?.lastName?.[0] || ''}
+                        </AvatarFallback>
+                    </Avatar>
 
-                    {/* Info */}
-                    <div className="space-y-3 flex-1">
+                    {/* 2 columns information grid */}
+                    <div className="flex-1 grid grid-cols-2 gap-x-8 gap-y-4">
                         <div>
-                            <Label className="text-gray-500 dark:text-gray-400">{t('pages:profile.firstName')}</Label>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">{t('pages:profile.firstName')}</p>
                             <p className="font-medium text-gray-900 dark:text-white">{user?.firstName || '-'}</p>
                         </div>
                         <div>
-                            <Label className="text-gray-500 dark:text-gray-400">{t('pages:profile.lastName')}</Label>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">{t('pages:profile.lastName')}</p>
                             <p className="font-medium text-gray-900 dark:text-white">{user?.lastName || '-'}</p>
                         </div>
                         <div>
-                            <Label className="text-gray-500 dark:text-gray-400">{t('pages:profile.email')}</Label>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">{t('pages:profile.email')}</p>
                             <p className="font-medium text-gray-900 dark:text-white">{user?.email || '-'}</p>
                         </div>
                         <div>
-                            <Label className="text-gray-500 dark:text-gray-400">{t('pages:profile.memberSince')}</Label>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">{t('pages:profile.memberSince')}</p>
                             <p className="font-medium text-gray-900 dark:text-white">{formatDate(null)}</p>
                         </div>
                     </div>
                 </div>
-
-                <Button className="mt-6 bg-indigo-600 hover:bg-indigo-700 text-white">
-                    <Pencil className="h-4 w-4 mr-2" />
-                    {t('pages:profile.editProfile')}
-                </Button>
             </Card>
 
             {/* Security Section */}
