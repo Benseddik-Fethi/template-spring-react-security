@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import {Home, LogOut, Settings, ShieldCheck, User} from "lucide-react"; // Icônes génériques
 import {cn} from "@/lib/utils";
 import {useAuth} from "@/context/AuthContext";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 export default function DashboardLayout() {
     const { t } = useTranslation('pages');
@@ -56,11 +55,6 @@ export default function DashboardLayout() {
                         );
                     })}
                 </nav>
-
-                {/* Language Switcher */}
-                <div className="py-4 border-t border-gray-100 dark:border-slate-800">
-                    <LanguageSwitcher />
-                </div>
 
                 {/* User Footer */}
                 <div className="pt-4 border-t border-gray-100 dark:border-slate-800">

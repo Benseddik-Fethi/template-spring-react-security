@@ -1,187 +1,137 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "@/components/ThemeProvider";
+import { useLanguage } from "@/hooks/useLanguage";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { AlertTriangle, Bell, Download, Key, Moon, Palette, Shield, Sun, Trash2, Monitor } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Bell, CheckCircle, Globe, Moon, Palette, Sun, Monitor } from "lucide-react";
 
 export default function SettingsPage() {
     const { t } = useTranslation('pages');
     const { theme, setTheme } = useTheme();
+    const { currentLanguage, changeLanguage } = useLanguage();
     const [emailNotifications, setEmailNotifications] = useState(true);
 
     return (
-        <div className="space-y-6 pb-10">
-            {/* Header */}
-            <div>
-                <h1 className="text-3xl font-bold text-gray-800 dark:text-white">{t('settings.title')}</h1>
-                <p className="text-gray-500 dark:text-gray-400 mt-1">{t('settings.description')}</p>
-            </div>
+        <div className="container max-w-2xl py-8">
+            <h1 className="text-2xl font-bold mb-6">{t('settings.title')}</h1>
 
-            {/* Theme Section */}
-            <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-white/20">
+            {/* Language Section */}
+            <Card className="mb-6">
                 <CardHeader>
-                    <div className="flex items-center gap-2">
-                        <Palette className="text-indigo-500" size={20} />
-                        <CardTitle>🎨 {t('settings.theme.title')}</CardTitle>
-                    </div>
-                    <CardDescription>{t('settings.theme.description')}</CardDescription>
+                    <CardTitle className="flex items-center gap-2">
+                        <Globe className="h-5 w-5" />
+                        {t('settings.language.title')}
+                    </CardTitle>
+                    <CardDescription>{t('settings.language.description')}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <RadioGroup
-                        value={theme}
-                        onValueChange={(value) => setTheme(value as "light" | "dark" | "system")}
-                        className="grid grid-cols-1 md:grid-cols-3 gap-4"
-                    >
-                        {/* Light Theme Option */}
-                        <div className="flex items-center space-x-3 p-4 bg-gray-50 dark:bg-slate-950 rounded-xl border border-gray-100 dark:border-slate-800">
-                            <RadioGroupItem value="light" id="light" />
-                            <Label htmlFor="light" className="flex items-center gap-3 cursor-pointer flex-1">
-                                <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-lg flex items-center justify-center">
-                                    <Sun className="text-amber-600 dark:text-amber-400" size={20} />
-                                </div>
-                                <span className="font-medium text-gray-800 dark:text-white">{t('settings.theme.light')}</span>
-                            </Label>
-                        </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        {/* Card Français */}
+                        <button
+                            onClick={() => changeLanguage('fr')}
+                            className={`p-4 rounded-lg border-2 text-center transition-all ${
+                                currentLanguage === 'fr'
+                                    ? 'border-primary bg-primary/10'
+                                    : 'border-border hover:border-primary/50'
+                            }`}
+                        >
+                            <span className="text-3xl mb-2 block">🇫🇷</span>
+                            <span className="font-medium">Français</span>
+                            {currentLanguage === 'fr' && <CheckCircle className="h-4 w-4 text-primary mx-auto mt-2" />}
+                        </button>
 
-                        {/* Dark Theme Option */}
-                        <div className="flex items-center space-x-3 p-4 bg-gray-50 dark:bg-slate-950 rounded-xl border border-gray-100 dark:border-slate-800">
-                            <RadioGroupItem value="dark" id="dark" />
-                            <Label htmlFor="dark" className="flex items-center gap-3 cursor-pointer flex-1">
-                                <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center">
-                                    <Moon className="text-indigo-600 dark:text-indigo-400" size={20} />
-                                </div>
-                                <span className="font-medium text-gray-800 dark:text-white">{t('settings.theme.dark')}</span>
-                            </Label>
-                        </div>
-
-                        {/* System Theme Option */}
-                        <div className="flex items-center space-x-3 p-4 bg-gray-50 dark:bg-slate-950 rounded-xl border border-gray-100 dark:border-slate-800">
-                            <RadioGroupItem value="system" id="system" />
-                            <Label htmlFor="system" className="flex items-center gap-3 cursor-pointer flex-1">
-                                <div className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
-                                    <Monitor className="text-gray-600 dark:text-gray-400" size={20} />
-                                </div>
-                                <span className="font-medium text-gray-800 dark:text-white">{t('settings.theme.system')}</span>
-                            </Label>
-                        </div>
-                    </RadioGroup>
+                        {/* Card English */}
+                        <button
+                            onClick={() => changeLanguage('en')}
+                            className={`p-4 rounded-lg border-2 text-center transition-all ${
+                                currentLanguage === 'en'
+                                    ? 'border-primary bg-primary/10'
+                                    : 'border-border hover:border-primary/50'
+                            }`}
+                        >
+                            <span className="text-3xl mb-2 block">🇬🇧</span>
+                            <span className="font-medium">English</span>
+                            {currentLanguage === 'en' && <CheckCircle className="h-4 w-4 text-primary mx-auto mt-2" />}
+                        </button>
+                    </div>
                 </CardContent>
             </Card>
 
-            {/* Security Section */}
-            <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-white/20">
+            {/* Theme Section */}
+            <Card className="mb-6">
                 <CardHeader>
-                    <div className="flex items-center gap-2">
-                        <Shield className="text-indigo-500" size={20} />
-                        <CardTitle>🔐 {t('settings.security.title')}</CardTitle>
-                    </div>
+                    <CardTitle className="flex items-center gap-2">
+                        <Palette className="h-5 w-5" />
+                        {t('settings.theme.title')}
+                    </CardTitle>
+                    <CardDescription>{t('settings.theme.description')}</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                    {/* Change Password */}
-                    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-950 rounded-xl border border-gray-100 dark:border-slate-800">
-                        <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center">
-                                <Key className="text-blue-600 dark:text-blue-400" size={24} />
-                            </div>
-                            <div>
-                                <p className="font-bold text-gray-800 dark:text-white">{t('settings.security.changePassword')}</p>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">{t('settings.security.changePasswordDescription')}</p>
-                            </div>
-                        </div>
-                        <Button variant="outline" size="sm">
-                            {t('settings.security.changePassword')}
-                        </Button>
-                    </div>
+                <CardContent>
+                    <div className="grid grid-cols-3 gap-4">
+                        {/* Card Light */}
+                        <button
+                            onClick={() => setTheme("light")}
+                            className={`p-4 rounded-lg border-2 text-center transition-all ${
+                                theme === 'light'
+                                    ? 'border-primary bg-primary/10'
+                                    : 'border-border hover:border-primary/50'
+                            }`}
+                        >
+                            <Sun className="h-6 w-6 mx-auto mb-2" />
+                            <span className="font-medium">{t('settings.theme.light')}</span>
+                            {theme === 'light' && <CheckCircle className="h-4 w-4 text-primary mx-auto mt-2" />}
+                        </button>
 
-                    {/* Active Sessions */}
-                    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-950 rounded-xl border border-gray-100 dark:border-slate-800">
-                        <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center">
-                                <Shield className="text-green-600 dark:text-green-400" size={24} />
-                            </div>
-                            <div>
-                                <p className="font-bold text-gray-800 dark:text-white">{t('settings.security.sessions')}</p>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">{t('settings.security.sessionsDescription')}</p>
-                            </div>
-                        </div>
-                        <Button variant="outline" size="sm">
-                            {t('settings.security.sessions')}
-                        </Button>
+                        {/* Card Dark */}
+                        <button
+                            onClick={() => setTheme("dark")}
+                            className={`p-4 rounded-lg border-2 text-center transition-all ${
+                                theme === 'dark'
+                                    ? 'border-primary bg-primary/10'
+                                    : 'border-border hover:border-primary/50'
+                            }`}
+                        >
+                            <Moon className="h-6 w-6 mx-auto mb-2" />
+                            <span className="font-medium">{t('settings.theme.dark')}</span>
+                            {theme === 'dark' && <CheckCircle className="h-4 w-4 text-primary mx-auto mt-2" />}
+                        </button>
+
+                        {/* Card System */}
+                        <button
+                            onClick={() => setTheme("system")}
+                            className={`p-4 rounded-lg border-2 text-center transition-all ${
+                                theme === 'system'
+                                    ? 'border-primary bg-primary/10'
+                                    : 'border-border hover:border-primary/50'
+                            }`}
+                        >
+                            <Monitor className="h-6 w-6 mx-auto mb-2" />
+                            <span className="font-medium">{t('settings.theme.system')}</span>
+                            {theme === 'system' && <CheckCircle className="h-4 w-4 text-primary mx-auto mt-2" />}
+                        </button>
                     </div>
                 </CardContent>
             </Card>
 
             {/* Notifications Section */}
-            <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-white/20">
+            <Card>
                 <CardHeader>
-                    <div className="flex items-center gap-2">
-                        <Bell className="text-indigo-500" size={20} />
-                        <CardTitle>🔔 {t('settings.notifications.title')}</CardTitle>
-                    </div>
+                    <CardTitle className="flex items-center gap-2">
+                        <Bell className="h-5 w-5" />
+                        {t('settings.notifications.title')}
+                    </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-950 rounded-xl border border-gray-100 dark:border-slate-800">
-                        <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center">
-                                <Bell className="text-purple-600 dark:text-purple-400" size={24} />
-                            </div>
-                            <div>
-                                <p className="font-bold text-gray-800 dark:text-white">{t('settings.notifications.emailNotifications')}</p>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">{t('settings.notifications.emailNotificationsDescription')}</p>
-                            </div>
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="font-medium">{t('settings.notifications.emailNotifications')}</p>
+                            <p className="text-sm text-muted-foreground">{t('settings.notifications.emailNotificationsDescription')}</p>
                         </div>
                         <Switch
                             checked={emailNotifications}
                             onCheckedChange={setEmailNotifications}
-                            className="data-[state=checked]:bg-indigo-500 data-[state=unchecked]:bg-gray-200"
                         />
-                    </div>
-                </CardContent>
-            </Card>
-
-            {/* Danger Zone Section */}
-            <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-red-500">
-                <CardHeader>
-                    <div className="flex items-center gap-2">
-                        <AlertTriangle className="text-red-500" size={20} />
-                        <CardTitle className="text-red-500">⚠️ {t('settings.dangerZone.title')}</CardTitle>
-                    </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    {/* Export Data */}
-                    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-950 rounded-xl border border-gray-100 dark:border-slate-800">
-                        <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center">
-                                <Download className="text-blue-600 dark:text-blue-400" size={24} />
-                            </div>
-                            <div>
-                                <p className="font-bold text-gray-800 dark:text-white">{t('settings.dangerZone.exportData')}</p>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">{t('settings.dangerZone.exportDataDescription')}</p>
-                            </div>
-                        </div>
-                        <Button variant="outline" size="sm">
-                            {t('settings.dangerZone.exportData')}
-                        </Button>
-                    </div>
-
-                    {/* Delete Account */}
-                    <div className="flex items-center justify-between p-4 bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-200 dark:border-red-800">
-                        <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-xl flex items-center justify-center">
-                                <Trash2 className="text-red-600 dark:text-red-400" size={24} />
-                            </div>
-                            <div>
-                                <p className="font-bold text-gray-800 dark:text-white">{t('settings.dangerZone.deleteAccount')}</p>
-                                <p className="text-sm text-red-600 dark:text-red-400">{t('settings.dangerZone.deleteWarning')}</p>
-                            </div>
-                        </div>
-                        <Button variant="destructive" size="sm">
-                            {t('settings.dangerZone.confirmDelete')}
-                        </Button>
                     </div>
                 </CardContent>
             </Card>

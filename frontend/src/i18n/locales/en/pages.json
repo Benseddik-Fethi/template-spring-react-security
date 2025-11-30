@@ -35,11 +35,27 @@
     "emailStatus": "Email Status",
     "emailVerified": "Verified",
     "emailNotVerified": "Not verified",
-    "notAvailable": "Not available"
+    "notAvailable": "Not available",
+    "security": {
+      "title": "Security",
+      "changePassword": "Change password",
+      "changePasswordDescription": "Update your current password",
+      "sessions": "Active sessions",
+      "sessionsDescription": "Manage your connected devices"
+    },
+    "dangerZone": {
+      "title": "Danger zone",
+      "deleteAccount": "Delete my account",
+      "deleteWarning": "This action cannot be undone. All your data will be permanently deleted."
+    }
   },
   "settings": {
     "title": "Settings",
     "description": "Manage your preferences and account settings",
+    "language": {
+      "title": "Language",
+      "description": "Choose your preferred language"
+    },
     "theme": {
       "title": "Theme",
       "description": "Customize the app appearance",
@@ -47,26 +63,10 @@
       "dark": "Dark",
       "system": "System"
     },
-    "security": {
-      "title": "Security",
-      "changePassword": "Change password",
-      "changePasswordDescription": "Update your current password",
-      "sessions": "Active sessions",
-      "sessionsDescription": "Manage your login sessions"
-    },
     "notifications": {
       "title": "Notifications",
       "emailNotifications": "Email notifications",
       "emailNotificationsDescription": "Receive emails for important updates"
-    },
-    "dangerZone": {
-      "title": "Danger zone",
-      "exportData": "Export my data",
-      "exportDataDescription": "Download a copy of your data",
-      "deleteAccount": "Delete my account",
-      "deleteAccountDescription": "Permanently delete your account and all your data",
-      "deleteWarning": "This action cannot be undone. All your data will be deleted.",
-      "confirmDelete": "Confirm deletion"
     }
   },
   "emailSent": {

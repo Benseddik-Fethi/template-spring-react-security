@@ -35,11 +35,27 @@
     "emailStatus": "Statut de l'email",
     "emailVerified": "Vérifié",
     "emailNotVerified": "Non vérifié",
-    "notAvailable": "Non disponible"
+    "notAvailable": "Non disponible",
+    "security": {
+      "title": "Sécurité",
+      "changePassword": "Changer le mot de passe",
+      "changePasswordDescription": "Modifiez votre mot de passe actuel",
+      "sessions": "Sessions actives",
+      "sessionsDescription": "Gérez vos appareils connectés"
+    },
+    "dangerZone": {
+      "title": "Zone danger",
+      "deleteAccount": "Supprimer mon compte",
+      "deleteWarning": "Cette action est irréversible. Toutes vos données seront supprimées définitivement."
+    }
   },
   "settings": {
     "title": "Paramètres",
     "description": "Gérez vos préférences et les paramètres de votre compte",
+    "language": {
+      "title": "Langue",
+      "description": "Choisissez votre langue préférée"
+    },
     "theme": {
       "title": "Thème",
       "description": "Personnalisez l'apparence de l'application",
@@ -47,26 +63,10 @@
       "dark": "Sombre",
       "system": "Système"
     },
-    "security": {
-      "title": "Sécurité",
-      "changePassword": "Changer le mot de passe",
-      "changePasswordDescription": "Modifiez votre mot de passe actuel",
-      "sessions": "Sessions actives",
-      "sessionsDescription": "Gérez vos sessions de connexion"
-    },
     "notifications": {
       "title": "Notifications",
       "emailNotifications": "Notifications par email",
       "emailNotificationsDescription": "Recevoir des emails pour les mises à jour importantes"
-    },
-    "dangerZone": {
-      "title": "Zone danger",
-      "exportData": "Exporter mes données",
-      "exportDataDescription": "Téléchargez une copie de vos données",
-      "deleteAccount": "Supprimer mon compte",
-      "deleteAccountDescription": "Supprimer définitivement votre compte et toutes vos données",
-      "deleteWarning": "Cette action est irréversible. Toutes vos données seront supprimées.",
-      "confirmDelete": "Confirmer la suppression"
     }
   },
   "emailSent": {
